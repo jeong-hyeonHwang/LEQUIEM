@@ -16,3 +16,5 @@ let pieces2: [String] = ["suit.spade.fill", "suit.heart.fill", "suit.club.fill",
 let pieces3: [String] = ["chevron.left", "chevron.down", "chevron.right", "chevron.up"]
 
 let fontFactor = 0.5
+
+let areaSpace: CGFloat = width * 0.08
