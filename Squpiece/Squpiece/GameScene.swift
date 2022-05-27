@@ -136,8 +136,6 @@ class GameScene: SKScene {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 if let view = self.view {
                     if let scene = SKScene(fileNamed: "GameScene") {
-                        scene.scaleMode = .aspectFit
-                        
                         view.presentScene(scene)
                     }
                 }
