@@ -49,22 +49,23 @@ class GameScene: SKScene {
     
     
     override func didMove(to view: SKView) {
+        
         //https://www.hackingwithswift.com/example-code/games/how-to-write-text-using-sklabelnode
         scoreLabel.text = String(scoreValue)
         scoreLabel.horizontalAlignmentMode = .center
-        scoreLabel.fontSize = 80
-        scoreLabel.position = CGPoint(x:0, y:frame.maxY / 2 + 100)
+        scoreLabel.fontSize = CGFloat(frame.maxY * 0.14)
+        scoreLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.35)
         addChild(scoreLabel)
         
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
         highScoreLabel.text = String(highScoreValue)
-        highScoreLabel.fontSize = 40
-        highScoreLabel.position = CGPoint(x: frame.minX + 120, y:frame.maxY / 2 + 220)
+        highScoreLabel.fontSize = CGFloat(frame.maxY * 0.06)
+        highScoreLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.1, y:frame.maxY - frame.maxY * 0.12)
         highScoreLabel.horizontalAlignmentMode = .left
         addChild(highScoreLabel)
         
         for i in 0...3 {
-            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(90 * i)), endAngle: .degrees(Double(90 * (i+1))), clockwise: false, radius: frame.width * 0.35)
+            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(90 * i)), endAngle: .degrees(Double(90 * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
             pieces[i].fillColor = colors[i]
             pieces[i].strokeColor = colors[i]
@@ -74,8 +75,8 @@ class GameScene: SKScene {
             pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
             pieceSprite[i].name = "p_\(pieceName[i])"
                         
-            pieceSprite[i].size = CGSize(width: 50, height: 50)
-            pieceSprite[i].position = CGPoint(x: cos(Double.pi / 4 * Double(2*i + 1)) * frame.width * 0.25, y: sin(Double.pi / 4 * Double(2*i + 1)) * frame.width * 0.25)
+            pieceSprite[i].size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
+            pieceSprite[i].position = CGPoint(x: cos(Double.pi / 4 * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / 4 * Double(2*i + 1)) * frame.maxX * 0.5)
             pieces[i].addChild(pieceSprite[i])
         }
         
@@ -86,7 +87,7 @@ class GameScene: SKScene {
         
         currentPieceSprite.texture = SKTexture(image: UIImage(systemName: pieceName[currentIndex])!)
         currentPieceSprite.name = "Xp_\(pieceName[currentIndex])"
-        currentPieceSprite.size = CGSize(width: 50, height: 50)
+        currentPieceSprite.size = CGSize(width: frame.maxX * 0.12, height: frame.maxX * 0.12)
         addChild(currentPieceSprite)
         
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
@@ -135,7 +136,8 @@ class GameScene: SKScene {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 if let view = self.view {
                     if let scene = SKScene(fileNamed: "GameScene") {
-                        scene.scaleMode = .aspectFill
+                        scene.scaleMode = .aspectFit
+                        
                         view.presentScene(scene)
                     }
                 }
