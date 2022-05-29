@@ -13,8 +13,14 @@ import GameplayKit
 func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, radius: CGFloat) -> CGPath {
     var path = Path()
     path.addLines([center])
-    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
+    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
     path.addLine(to: center)
+    return path.cgPath
+}
+
+func Cir(center: CGPoint, radius: CGFloat) -> CGPath {
+    var path = Path()
+    path.addArc(center: center, radius: radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
     return path.cgPath
 }
 
@@ -42,25 +48,28 @@ class GameScene: SKScene {
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let restartButton = SKSpriteNode()
     
-    let colors : [UIColor] = [UIColor.systemYellow, UIColor.systemRed, UIColor.systemBlue, UIColor.white]
+    let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor1), UIColor(.pieceColor2), UIColor(.pieceColor3)]
     
     var currentPieceSprite = SKSpriteNode()
-    let pieceName: [String] = ["multiply", "plus", "divide", "minus"]
-    
+    //let pieceName: [String] = ["multiply", "plus", "divide", "minus"]
+    let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
     
     override func didMove(to view: SKView) {
         
+        self.backgroundColor = UIColor(.backgroundColor)
         //https://www.hackingwithswift.com/example-code/games/how-to-write-text-using-sklabelnode
         scoreLabel.text = String(scoreValue)
         scoreLabel.horizontalAlignmentMode = .center
         scoreLabel.fontSize = CGFloat(frame.maxY * 0.14)
-        scoreLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.35)
+        scoreLabel.fontName = "AppleSDGothicNeo-Regular"
+        scoreLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.4)
         addChild(scoreLabel)
         
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
         highScoreLabel.text = String(highScoreValue)
         highScoreLabel.fontSize = CGFloat(frame.maxY * 0.06)
-        highScoreLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.1, y:frame.maxY - frame.maxY * 0.12)
+        highScoreLabel.fontName = "AppleSDGothicNeo-Bold"
+        highScoreLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.08, y:frame.maxY - frame.maxY * 0.15)
         highScoreLabel.horizontalAlignmentMode = .left
         addChild(highScoreLabel)
         
@@ -68,7 +77,8 @@ class GameScene: SKScene {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(90 * i)), endAngle: .degrees(Double(90 * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
             pieces[i].fillColor = colors[i]
-            pieces[i].strokeColor = colors[i]
+            pieces[i].strokeColor = UIColor(.blackColor)
+            pieces[i].lineWidth = 3
             pieces[i].name = "p_\(pieceName[i])"
             addChild(pieces[i])
             
@@ -80,20 +90,21 @@ class GameScene: SKScene {
             pieces[i].addChild(pieceSprite[i])
         }
         
-        currentPiece.path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false, radius: frame.width * 0.1)
-        currentPiece.fillColor = UIColor.lightGray
-        currentPiece.strokeColor = UIColor.lightGray
+        currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
+        currentPiece.fillColor = UIColor.white
+        currentPiece.strokeColor = UIColor(.blackColor)
+        currentPiece.lineWidth = 5
         addChild(currentPiece)
         
         currentPieceSprite.texture = SKTexture(image: UIImage(systemName: pieceName[currentIndex])!)
         currentPieceSprite.name = "Xp_\(pieceName[currentIndex])"
-        currentPieceSprite.size = CGSize(width: frame.maxX * 0.12, height: frame.maxX * 0.12)
+        currentPieceSprite.size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
         addChild(currentPieceSprite)
         
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        shadow.fillColor = UIColor.black
-        shadow.strokeColor = UIColor.black
-        shadow.alpha = 0.6
+        shadow.fillColor = UIColor(.shadowColor)
+        shadow.strokeColor = UIColor(.shadowColor)
+        shadow.alpha = 0.8
         shadow.isHidden = true
         addChild(shadow)
 
