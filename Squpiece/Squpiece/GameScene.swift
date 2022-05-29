@@ -9,6 +9,15 @@ import SwiftUI
 import SpriteKit
 import GameplayKit
 
+
+func timerBar(center: CGPoint, value: Angle, radius: CGFloat) -> CGPath {
+    var path = Path()
+    path.addLines([center])
+    path.addArc(center: center, radius: radius, startAngle: .degrees(90) - value, endAngle: .degrees(90) + value, clockwise: false)
+    path.addLine(to: center)
+    return path.cgPath
+}
+
 //https://gist.github.com/KanshuYokoo/a78223ffec27319a548d52dc09b660e4
 func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, radius: CGFloat) -> CGPath {
     var path = Path()
@@ -33,15 +42,20 @@ func Rect(startPosition: CGPoint, xSize: CGFloat, ySize: CGFloat) -> CGPath {
 class GameScene: SKScene {
     var change = false
     var touched = false
-    var count: Int = 0
+    var incorrect = false
+    var lastIndex = 3
+    var degree: Double = 45
+    var pieceCount: [Int] = [0, 0, 0, 0]
     var currentTouchedObject: String?
-    var currentIndex: Int = Int.random(in: 0...3)
+    var currentIndex: Int = 0
     var scoreValue: Int = 0
     var highScoreValue: Int = 0
     var shadow = SKShapeNode()
     
     var scoreLabel = SKLabelNode()
     var highScoreLabel = SKLabelNode()
+    
+    var timer = SKShapeNode()
     
     let currentPiece = SKShapeNode()
     let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
@@ -73,8 +87,8 @@ class GameScene: SKScene {
         highScoreLabel.horizontalAlignmentMode = .left
         addChild(highScoreLabel)
         
-        for i in 0...3 {
-            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(90 * i)), endAngle: .degrees(Double(90 * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
+        for i in 0...lastIndex {
+            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
             pieces[i].fillColor = colors[i]
             pieces[i].strokeColor = UIColor(.blackColor)
@@ -86,9 +100,17 @@ class GameScene: SKScene {
             pieceSprite[i].name = "p_\(pieceName[i])"
                         
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
-            pieceSprite[i].position = CGPoint(x: cos(Double.pi / 4 * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / 4 * Double(2*i + 1)) * frame.maxX * 0.5)
+            let divideFor = Double(lastIndex + 1)
+            pieceSprite[i].position = CGPoint(x: cos(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5)
             pieces[i].addChild(pieceSprite[i])
+            
+            rotateAction([pieces[i]])
         }
+        
+        timer.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.1), value: .degrees(degree), radius: frame.maxY * 0.6)
+        timer.fillColor = UIColor.white
+        timer.strokeColor = UIColor.white
+        addChild(timer)
         
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
         currentPiece.fillColor = UIColor.white
@@ -115,6 +137,8 @@ class GameScene: SKScene {
         restartButton.isHidden = true
         addChild(restartButton)
         
+        
+        timerAnimation(node: timer)
     }
     
     //https://developer.apple.com/forums/thread/107653
@@ -131,19 +155,27 @@ class GameScene: SKScene {
                 if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
+                    
+                    scaleAction(node: scoreLabel)
+
                     if(scoreValue > highScoreValue)
                     {
                         highScoreValue = scoreValue
                         highScoreLabel.text = String(highScoreValue)
                     }
                     change = true
+                    currentIndex = Int.random(in: 0...lastIndex)
+                    currentPieceSprite.texture = SKTexture(image: UIImage(systemName: self.pieceName[self.currentIndex])!)
+                    currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
+                    scaleAction(node: currentPieceSprite)
+                    
                 } else {
                     print("incorrect...")
-                    restartButton.isHidden = false
-                    shadow.isHidden = false
+                    incorrect = true
                 }
                 touched = true
-            } else if (touchedNode.name == "restartButton") {
+            }
+            if (touchedNode.name == "restartButton") {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 if let view = self.view {
                     if let scene = SKScene(fileNamed: "GameScene") {
@@ -165,12 +197,59 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if(change == true) {
-            currentIndex = Int.random(in: 0...3)
-            currentPieceSprite.texture = SKTexture(image: UIImage(systemName: pieceName[currentIndex])!)
-            currentPieceSprite.name = "Xp_\(pieceName[currentIndex])"
-            change = false
-            count += 1
+        if (incorrect == true) {
+            degree -= 5 // or 3?
+            incorrect = false
         }
+    }
+    
+    func scaleAction (node: SKNode) {
+        let to = SKAction.scale(to: 1.2, duration: 0.1)
+        let end = SKAction.scale(to: 1.0, duration: 0.1)
+        let sequence = SKAction.sequence([to, end])
+
+        node.run(sequence)
+    }
+    
+    func rotateAction (_ nodes: [SKNode]) {
+        for node in nodes {
+            let leftRotate = SKAction.rotate(byAngle: -5, duration: 5)
+            let sequence1 = SKAction.sequence([leftRotate])
+            let action1 = SKAction.repeat(sequence1, count: 3)
+            let rightRotate = SKAction.rotate(byAngle: 5, duration: 5)
+            let sequence2 = SKAction.sequence([rightRotate])
+            let action2 = SKAction.repeat(sequence2, count: 3)
+            let re = SKAction.sequence([action1, action2])
+            let repeater = SKAction.repeatForever(re)
+            
+            node.run(repeater)
+        }
+    }
+    
+    func timerAnimation (node: SKShapeNode) {
+        let wait = SKAction.wait(forDuration: 0.1)
+        let hold = SKAction.run({
+            if(self.change != true) {
+                if(self.degree > 0) {
+                    self.degree -= 0.5
+                    }
+            } else {
+                self.degree += 2
+                self.change = false
+            }
+            
+            if(self.degree > 0) {
+                node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.1), value: .degrees(self.degree), radius: self.frame.maxY * 0.6)
+            } else {
+                node.isHidden = true
+                self.restartButton.isHidden = false
+                self.shadow.isHidden = false
+            }
+        })
+        
+        let sequence = SKAction.sequence([wait, hold])
+        let repeater = SKAction.repeatForever(sequence)
+        
+        node.run(repeater)
     }
 }
