@@ -43,17 +43,24 @@ class GameScene: SKScene {
     var change = false
     var touched = false
     var incorrect = false
+    
     var lastIndex = 3
     var degree: Double = 45
     var pieceCount: [Int] = [0, 0, 0, 0]
     var currentTouchedObject: String?
     var currentIndex: Int = 0
+    
     var scoreValue: Int = 0
     var highScoreValue: Int = 0
+    var comboValue: Int = 0
+    var maxComboValue: Int = 0
+    
     var shadow = SKShapeNode()
     
     var scoreLabel = SKLabelNode()
     var highScoreLabel = SKLabelNode()
+    var comboLabel = SKLabelNode()
+    var maxComboLabel = SKLabelNode()
     
     var timer = SKShapeNode()
     
@@ -86,6 +93,21 @@ class GameScene: SKScene {
         highScoreLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.08, y:frame.maxY - frame.maxY * 0.15)
         highScoreLabel.horizontalAlignmentMode = .left
         addChild(highScoreLabel)
+        
+        comboLabel.text = String(comboValue)
+        comboLabel.horizontalAlignmentMode = .center
+        comboLabel.fontSize = CGFloat(frame.maxY * 0.1)
+        comboLabel.fontName = "AppleSDGothicNeo-SemiBold"
+        comboLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5)
+        addChild(comboLabel)
+        
+        maxComboValue = UserDefaults.standard.integer(forKey: "MaxCombo")
+        maxComboLabel.text = String(maxComboValue)
+        maxComboLabel.fontSize = CGFloat(frame.maxY * 0.036)
+        maxComboLabel.fontName = "AppleSDGothicNeo-Regular"
+        maxComboLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.08, y:frame.maxY - frame.maxY * 0.2)
+        maxComboLabel.horizontalAlignmentMode = .left
+        addChild(maxComboLabel)
         
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
@@ -158,11 +180,23 @@ class GameScene: SKScene {
                     
                     scaleAction(node: scoreLabel)
 
-                    if(scoreValue > highScoreValue)
-                    {
+                    if(scoreValue > highScoreValue) {
                         highScoreValue = scoreValue
                         highScoreLabel.text = String(highScoreValue)
                     }
+                    
+                    comboValue += 1
+                    comboLabel.text = String(comboValue)
+                    
+                    if (comboValue % 50 == 0 && comboValue > 0) {
+                        degree += 10 // or 5?
+                    }
+                    
+                    if(comboValue > maxComboValue) {
+                        maxComboValue = comboValue
+                        maxComboLabel.text = String(maxComboValue)
+                    }
+                    
                     change = true
                     currentIndex = Int.random(in: 0...lastIndex)
                     currentPieceSprite.texture = SKTexture(image: UIImage(systemName: self.pieceName[self.currentIndex])!)
@@ -172,11 +206,15 @@ class GameScene: SKScene {
                 } else {
                     print("incorrect...")
                     incorrect = true
+                    
+                    comboValue = 0
+                    comboLabel.text = String(comboValue)
                 }
                 touched = true
             }
             if (touchedNode.name == "restartButton") {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
+                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
                 if let view = self.view {
                     if let scene = SKScene(fileNamed: "GameScene") {
                         view.presentScene(scene)
@@ -221,8 +259,9 @@ class GameScene: SKScene {
             let action2 = SKAction.repeat(sequence2, count: 3)
             let re = SKAction.sequence([action1, action2])
             let repeater = SKAction.repeatForever(re)
-            
-            node.run(repeater)
+            let wait2sec = SKAction.wait(forDuration: 2)
+            let finalSequence = SKAction.sequence([wait2sec, repeater])
+            node.run(finalSequence)
         }
     }
     
@@ -231,10 +270,10 @@ class GameScene: SKScene {
         let hold = SKAction.run({
             if(self.change != true) {
                 if(self.degree > 0) {
-                    self.degree -= 0.5
+                    self.degree -= 0.1
                     }
             } else {
-                self.degree += 2
+                self.degree += 0.5
                 self.change = false
             }
             
@@ -249,7 +288,8 @@ class GameScene: SKScene {
         
         let sequence = SKAction.sequence([wait, hold])
         let repeater = SKAction.repeatForever(sequence)
-        
-        node.run(repeater)
+        let wait2sec = SKAction.wait(forDuration: 2)
+        let finalSequence = SKAction.sequence([wait2sec, repeater])
+        node.run(finalSequence)
     }
 }
