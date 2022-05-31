@@ -10,47 +10,9 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-func timerBar(center: CGPoint, value: Angle, radius: CGFloat) -> CGPath {
-    var path = Path()
-    path.addLines([center])
-    path.addArc(center: center, radius: radius, startAngle: .degrees(90) - value, endAngle: .degrees(90) + value, clockwise: false)
-    path.addLine(to: center)
-    return path.cgPath
-}
-
-//https://gist.github.com/KanshuYokoo/a78223ffec27319a548d52dc09b660e4
-func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, radius: CGFloat) -> CGPath {
-    var path = Path()
-    path.addLines([center])
-    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: clockwise)
-    path.addLine(to: center)
-    return path.cgPath
-}
-
-func Cir(center: CGPoint, radius: CGFloat) -> CGPath {
-    var path = Path()
-    path.addArc(center: center, radius: radius, startAngle: .degrees(0), endAngle: .degrees(360), clockwise: false)
-    return path.cgPath
-}
-
-func Rect(startPosition: CGPoint, xSize: CGFloat, ySize: CGFloat) -> CGPath {
-    var path = Path()
-    path.addRect(CGRect(x: startPosition.x, y: startPosition.y, width: xSize, height: ySize))
-    return path.cgPath
-}
-
 class GameScene: SKScene {
-    var change = false
-    var touched = false
-    var incorrect = false
     
-    var rotateAngle: CGFloat = 5
-    var rotationStop =  false
-    var randomStop = false
-    
-    var waitSec: Double = 1
     var lastIndex = 3
-    var degree: Double = 55
     var pieceCount: [Int] = [0, 0, 0, 0]
     var currentTouchedObject: String?
     var currentIndex: Int = 0
@@ -87,14 +49,13 @@ class GameScene: SKScene {
     let restartButton = SKSpriteNode()
     
     let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor1), UIColor(.pieceColor2), UIColor(.pieceColor3)]
-    //let pieceName: [String] = ["multiply", "plus", "divide", "minus"]
     let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
     
     override func didMove(to view: SKView) {
         
         self.backgroundColor = UIColor(.backgroundColor)
-        //https://www.hackingwithswift.com/example-code/games/how-to-write-text-using-sklabelnode
         
+        //https://www.hackingwithswift.com/example-code/games/how-to-write-text-using-sklabelnode
         scoreMark.text = String("SCORE")
         scoreMark.horizontalAlignmentMode = .center
         scoreMark.fontSize = CGFloat(frame.maxY * 0.06)
@@ -158,7 +119,7 @@ class GameScene: SKScene {
             pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
             pieceSprite[i].name = "p_\(pieceName[i])"
                         
-            pieceSprite[i].size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
+            pieceSprite[i].size = CGSize(width: frame.maxX * 0.2, height: frame.maxX * 0.2)
             let divideFor = Double(lastIndex + 1)
             pieceSprite[i].position = CGPoint(x: cos(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5)
             pieces[i].addChild(pieceSprite[i])
@@ -207,7 +168,7 @@ class GameScene: SKScene {
         shadow.strokeColor = UIColor(.shadowColor)
         addChild(shadow)
 
-        shadowDisappear(shadow)
+        shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
         
         restartButton.texture = SKTexture(image: UIImage(systemName: "arrow.clockwise")!)
         restartButton.name = "restartButton"
@@ -216,7 +177,7 @@ class GameScene: SKScene {
         restartButton.isHidden = true
         addChild(restartButton)
         
-        timerAnimation(node: timer)
+        timerAnimation(node: self.timer, shadow: self.shadow)
     }
     
     //https://developer.apple.com/forums/thread/107653
@@ -263,8 +224,6 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                     
                 } else {
-                    print("incorrect...")
-                    incorrect = true
                     degree -= 5 // or 3?
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
@@ -303,124 +262,23 @@ class GameScene: SKScene {
         }
     }
     
-    func rotationRestartAction(node: SKNode, rotateNodes: [SKNode]) {
-        
-        for node in rotateNodes {
-            node.removeAction(forKey: "Rotation")
-        }
-        rotateAction(rotateNodes)
-        let wait = SKAction.wait(forDuration: 2)
-        let action = SKAction.run {
-            self.rotationStop = false
-        }
-        let sequence = SKAction.sequence([wait, action])
-        node.run(sequence)
-    }
-    
-    func randomRestartAction(node: SKNode) {
-        let wait = SKAction.wait(forDuration: 2)
-        let action = SKAction.run {
-            self.randomStop = false
-        }
-        let sequence = SKAction.sequence([wait, action])
-        node.run(sequence)
-    }
-    
-    func scaleAction (node: SKNode) {
-        let to = SKAction.scale(to: 1.2, duration: 0.1)
-        let end = SKAction.scale(to: 1.0, duration: 0.1)
-        let sequence = SKAction.sequence([to, end])
-
-        node.run(sequence)
-    }
-    
-    func shadowDisappear(_ node: SKNode) {
-        let labels = [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark]
-        
-        for label in labels {
-            label.alpha = 0.0
-        }
-        let shadowAppear = SKAction.run {
-            node.alpha = 1.0
-            node.isHidden = false
-        }
-        let wait = SKAction.wait(forDuration: waitSec - 0.2)
-        let fadeOut = SKAction.fadeOut(withDuration: 0.2)
-        let shadowDisappear = SKAction.run {
-            self.labelAppear()
-            node.isHidden = true
-            node.alpha = 0.8
-        }
-        let sequence = SKAction.sequence([shadowAppear, wait, fadeOut, shadowDisappear])
-        node.run(sequence)
-    }
-    
-    func shadowAppear(_ node: SKNode) {
-        node.alpha = 0.0
-        node.isHidden = false
-        let fadeIn = SKAction.fadeIn(withDuration: 0.1)
-        let shadowAppear = SKAction.run {
-            self.labelDisappear()
-            self.restartButton.isHidden = false
-        }
-        let sequence = SKAction.sequence([fadeIn, shadowAppear])
-        node.run(sequence)
-    }
-    
-    func labelAppear() {
-        let labels = [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark]
-        
-        for label in labels {
-            label.alpha = 0.0
-            label.isHidden = false
-            
-            let fadeIn = SKAction.fadeIn(withDuration: 0.15)
-            label.run(fadeIn)
-        }
-    }
-    
-    func labelDisappear() {
-        let labels = [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark]
-        
-        for label in labels {
-            let fadeOut = SKAction.fadeOut(withDuration: 0.2)
-            label.run(fadeOut)
-        }
-    }
-    
-    func rotateAction (_ nodes: [SKNode]) {
-        for node in nodes {
-            let leftRotate = SKAction.rotate(byAngle: -rotateAngle, duration: 5)
-            let sequence1 = SKAction.sequence([leftRotate])
-            let action1 = SKAction.repeat(sequence1, count: 3)
-            let rightRotate = SKAction.rotate(byAngle: rotateAngle, duration: 5)
-            let sequence2 = SKAction.sequence([rightRotate])
-            let action2 = SKAction.repeat(sequence2, count: 3)
-            let re = SKAction.sequence([action1, action2])
-            let repeater = SKAction.repeatForever(re)
-            let waitASec = SKAction.wait(forDuration: waitSec)
-            let finalSequence = SKAction.sequence([waitASec, repeater])
-            node.run(finalSequence, withKey: "Rotation")
-        }
-    }
-    
-    func timerAnimation (node: SKShapeNode) {
+    func timerAnimation (node: SKShapeNode, shadow: SKNode) {
         let wait = SKAction.wait(forDuration: 0.1)
         let hold = SKAction.run({
-            if(self.change != true) {
-                if(self.degree > 0) {
-                    self.degree -= 0.1
+            if(change != true) {
+                if(degree > 0) {
+                    degree -= 0.1
                     }
             } else {
-                self.degree += 0.5
-                self.change = false
+                degree += 0.5
+                change = false
             }
             
-            if(self.degree > 0) {
-                node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.3), value: .degrees(self.degree), radius: self.frame.maxY * 0.6)
+            if(degree > 0) {
+                node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.3), value: .degrees(degree), radius: self.frame.maxY * 0.6)
             } else {
                 node.isHidden = true
-                self.shadowAppear(self.shadow)
+                shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
             }
         })
         
@@ -430,4 +288,5 @@ class GameScene: SKScene {
         let finalSequence = SKAction.sequence([wait2sec, repeater])
         node.run(finalSequence)
     }
+
 }
