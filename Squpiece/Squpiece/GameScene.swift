@@ -55,69 +55,42 @@ class GameScene: SKScene {
         
         self.backgroundColor = UIColor(.backgroundColor)
         
-        //https://www.hackingwithswift.com/example-code/games/how-to-write-text-using-sklabelnode
-        scoreMark.text = String("SCORE")
-        scoreMark.horizontalAlignmentMode = .center
-        scoreMark.fontSize = CGFloat(frame.maxY * 0.06)
-        scoreMark.fontName = "AppleSDGothicNeo-Regular"
-        scoreMark.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.28)
-        addChild(scoreMark)
-        
-        scoreLabel.text = String(scoreValue)
-        scoreLabel.horizontalAlignmentMode = .center
-        scoreLabel.fontSize = CGFloat(frame.maxY * 0.14)
-        scoreLabel.fontName = "AppleSDGothicNeo-SemiBold"
-        scoreLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.4)
-        addChild(scoreLabel)
-        
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
-        highScoreLabel.text = String(highScoreValue)
-        highScoreLabel.fontSize = CGFloat(frame.maxY * 0.06)
-        highScoreLabel.fontName = "AppleSDGothicNeo-Bold"
-        highScoreLabel.position = CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17)
-        highScoreLabel.horizontalAlignmentMode = .left
+        labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17))
         addChild(highScoreLabel)
         
-        comboLabel.text = ""
-        comboLabel.horizontalAlignmentMode = .center
-        comboLabel.fontSize = CGFloat(frame.maxY * 0.1)
-        comboLabel.fontName = "AppleSDGothicNeo-SemiBold"
-        comboLabel.position = CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5)
-        addChild(comboLabel)
-        
         maxComboValue = UserDefaults.standard.integer(forKey: "MaxCombo")
-        maxComboLabel.text = String(maxComboValue)
-        maxComboLabel.fontSize = CGFloat(frame.maxY * 0.06)
-        maxComboLabel.fontName = "AppleSDGothicNeo-Bold"
-        maxComboLabel.position = CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17)
-        maxComboLabel.horizontalAlignmentMode = .right
+        labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17))
         addChild(maxComboLabel)
         
-        maxComboMark.text = String("MAX COMBO")
-        maxComboMark.horizontalAlignmentMode = .right
-        maxComboMark.fontSize = CGFloat(frame.maxY * 0.03)
-        maxComboMark.fontName = "AppleSDGothicNeo-SemiBold"
-        maxComboMark.position =  CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12)
+        labelSetting(node: highScoreMark, str: String("HIGHSCORE"), align: .left, fontSize:  CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12))
+        addChild(highScoreMark)
+        
+        labelSetting(node: maxComboMark, str: String("MAX COMBO"), align: .right, fontSize: CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12))
         addChild(maxComboMark)
         
-        highScoreMark.text = String("HIGHSCORE")
-        highScoreMark.horizontalAlignmentMode = .left
-        highScoreMark.fontSize = CGFloat(frame.maxY * 0.03)
-        highScoreMark.fontName = "AppleSDGothicNeo-SemiBold"
-        highScoreMark.position =  CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12)
-        addChild(highScoreMark)
+        
+        labelSetting(node: scoreMark, str: String("SCORE"), align: .center, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.28))
+        addChild(scoreMark)
+        
+        labelSetting(node: scoreLabel, str: String(scoreValue), align: .center, fontSize: CGFloat(frame.maxY * 0.14), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.4))
+        addChild(scoreLabel)
+        
+        labelSetting(node: comboLabel, str: "", align: .center, fontSize: CGFloat(frame.maxY * 0.1), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5))
+        addChild(comboLabel)
+        
+        
         
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            pieces[i].fillColor = colors[i]
-            pieces[i].strokeColor = UIColor(.blackColor)
-            pieces[i].lineWidth = 3
-            pieces[i].name = "p_\(pieceName[i])"
+            shapeNodeColorSetting(node: pieces[i], fillColor: colors[i], strokeColor: UIColor(.blackColor))
+            nodelineWidthSetting(node: pieces[i], width: 3)
+            nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
             addChild(pieces[i])
             
             pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
-            pieceSprite[i].name = "p_\(pieceName[i])"
+            nodeNameSetting(node: pieceSprite[i], name: "p_\(pieceName[i])")
                         
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.2, height: frame.maxX * 0.2)
             let divideFor = Double(lastIndex + 1)
@@ -128,50 +101,44 @@ class GameScene: SKScene {
         }
         
         timerBackground.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.3), value: .degrees(degree), radius: frame.maxY * 0.6)
-        timerBackground.fillColor = UIColor(.timerBackgroundColor)
-        timerBackground.strokeColor = UIColor(.timerBackgroundColor)
+        shapeNodeColorSetting(node: timerBackground, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
         addChild(timerBackground)
         
         timer.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.3), value: .degrees(degree), radius: frame.maxY * 0.6)
-        timer.fillColor = UIColor.white
-        timer.strokeColor = UIColor.white
+        shapeNodeColorSetting(node: timer, fillColor: UIColor.white, strokeColor: UIColor.white)
         addChild(timer)
         
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
-        currentPiece.fillColor = UIColor.white
-        currentPiece.strokeColor = UIColor(.blackColor)
-        currentPiece.lineWidth = 5
+        shapeNodeColorSetting(node: currentPiece, fillColor: UIColor.white, strokeColor: UIColor(.blackColor))
+        nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
         
         currentPieceSprite.texture = SKTexture(image: UIImage(systemName: pieceName[currentIndex])!)
-        currentPieceSprite.name = "Xp_\(pieceName[currentIndex])"
+        nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
         currentPieceSprite.size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
         addChild(currentPieceSprite)
         
         rotationStopButton.path = Cir(center: CGPoint(x: frame.midX - frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
-        rotationStopButton.fillColor = UIColor.black
-        rotationStopButton.strokeColor = UIColor.black
-        rotationStopButton.lineWidth = 5
-        rotationStopButton.name = "XX_RotationSB"
+        shapeNodeColorSetting(node: rotationStopButton, fillColor: UIColor.black, strokeColor: UIColor.black)
+        nodelineWidthSetting(node: rotationStopButton, width: 5)
+        nodeNameSetting(node: rotationStopButton, name: "XX_RotationSB")
         addChild(rotationStopButton)
         
         randomStopButton.path = Cir(center: CGPoint(x: frame.midX + frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
-        randomStopButton.fillColor = UIColor.white
-        randomStopButton.strokeColor = UIColor.white
-        randomStopButton.lineWidth = 5
-        randomStopButton.name = "XX_RandomSB"
+        shapeNodeColorSetting(node: randomStopButton, fillColor: UIColor.white, strokeColor: UIColor.white)
+        nodelineWidthSetting(node: randomStopButton, width: 5)
+        nodeNameSetting(node: randomStopButton, name: "XX_RandomSB")
         addChild(randomStopButton)
         
         
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        shadow.fillColor = UIColor(.shadowColor)
-        shadow.strokeColor = UIColor(.shadowColor)
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor), strokeColor: UIColor(.shadowColor))
         addChild(shadow)
 
         shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
         
         restartButton.texture = SKTexture(image: UIImage(systemName: "arrow.clockwise")!)
-        restartButton.name = "restartButton"
+        nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = CGSize(width: 90, height: 105)
         restartButton.position = CGPoint(x: 0, y: frame.minY + 200)
         restartButton.isHidden = true
