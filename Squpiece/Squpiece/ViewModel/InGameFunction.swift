@@ -105,3 +105,13 @@ func rotateAction (_ nodes: [SKNode]) {
         node.run(finalSequence, withKey: "Rotation")
     }
 }
+
+func resetVar() {
+    change = false
+    touched = false
+    
+    rotationStop =  false
+    randomStop = false
+    
+    degree = Double(55)
+}
