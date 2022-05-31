@@ -52,6 +52,7 @@ class GameScene: SKScene {
     // About Time
     var timer = SKShapeNode()
     var timerBackground = SKShapeNode()
+    var timerBack = SKShapeNode()
     
     // InGame Button
     let rotationStopButton = SKShapeNode()
@@ -61,6 +62,8 @@ class GameScene: SKScene {
     let restartButton = SKSpriteNode()
     
     override func didMove(to view: SKView) {
+        
+        resetVar()
         
         self.backgroundColor = UIColor(.backgroundColor)
         
@@ -94,6 +97,10 @@ class GameScene: SKScene {
         labelSetting(node: comboLabel, str: "", align: .center, fontSize: CGFloat(frame.maxY * 0.1), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5))
         addChild(comboLabel)
         
+        timerBack.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 2)
+        shapeNodeColorSetting(node: timerBack, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
+        addChild(timerBack)
+                              
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
@@ -141,14 +148,14 @@ class GameScene: SKScene {
         shapeNodeColorSetting(node: rotationStopButton, fillColor: UIColor.black, strokeColor: UIColor.black)
         nodelineWidthSetting(node: rotationStopButton, width: 5)
         nodeNameSetting(node: rotationStopButton, name: "XX_RotationSB")
-        addChild(rotationStopButton)
+        //addChild(rotationStopButton)
         
         // Setting: Random Stop Button
         randomStopButton.path = Cir(center: CGPoint(x: frame.midX + frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
         shapeNodeColorSetting(node: randomStopButton, fillColor: UIColor.white, strokeColor: UIColor.white)
         nodelineWidthSetting(node: randomStopButton, width: 5)
         nodeNameSetting(node: randomStopButton, name: "XX_RandomSB")
-        addChild(randomStopButton)
+        //addChild(randomStopButton)
         
         // Setting: Shadow
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
@@ -211,7 +218,7 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                     
                 } else {
-                    degree -= 5 // or 3?
+                    degree -= 10 // or 3?
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
                     comboLabel.text = ""
@@ -263,6 +270,7 @@ class GameScene: SKScene {
             
             if(degree > 0) {
                 node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.frame.maxY * 0.8)
+                self.timerBack.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.frame.maxY * 2)
             } else {
                 node.isHidden = true
                 shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
