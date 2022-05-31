@@ -115,12 +115,12 @@ class GameScene: SKScene {
         }
         
         // Setting: Timer Background
-        timerBackground.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.3), value: .degrees(degree), radius: frame.maxY * 0.6)
+        timerBackground.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 0.8)
         shapeNodeColorSetting(node: timerBackground, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
         addChild(timerBackground)
         
         // Setting: Timer
-        timer.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.3), value: .degrees(degree), radius: frame.maxY * 0.6)
+        timer.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 0.8)
         shapeNodeColorSetting(node: timer, fillColor: UIColor.white, strokeColor: UIColor.white)
         addChild(timer)
         
@@ -262,7 +262,7 @@ class GameScene: SKScene {
             }
             
             if(degree > 0) {
-                node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.3), value: .degrees(degree), radius: self.frame.maxY * 0.6)
+                node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.frame.maxY * 0.8)
             } else {
                 node.isHidden = true
                 shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
