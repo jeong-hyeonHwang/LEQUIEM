@@ -54,35 +54,48 @@ class GameScene: SKScene {
     var timerBackground = SKShapeNode()
     var timerBack = SKShapeNode()
     
+    var upperArea = SKShapeNode()
+    var height: CGFloat = 0
+    var rectTimer = SKShapeNode()
+    
     // InGame Button
     let rotationStopButton = SKShapeNode()
     let randomStopButton = SKShapeNode()
+
     
     // OutGame Button
     let restartButton = SKSpriteNode()
     
+    var radius : CGFloat = 1
+    var bonusValue : Int = 15
+    var plusValue : Int = 0
+    var value: Int = 125
+    var miss = false
+    var missSequenceEnd = true
+    
     override func didMove(to view: SKView) {
         
         resetVar()
-        
+        radius = frame.maxY * 1.5
+        height = frame.height * 0.1
         self.backgroundColor = UIColor(.backgroundColor)
         
         //Setting: High Score Label
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
-        labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17))
+        labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.2))
         addChild(highScoreLabel)
         
         // Setting: Max Combo Label
         maxComboValue = UserDefaults.standard.integer(forKey: "MaxCombo")
-        labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.17))
+        labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.2))
         addChild(maxComboLabel)
         
         // Setting: High Score Mark
-        labelSetting(node: highScoreMark, str: String("HIGHSCORE"), align: .left, fontSize:  CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12))
+        labelSetting(node: highScoreMark, str: String("HIGHSCORE"), align: .left, fontSize:  CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.15))
         addChild(highScoreMark)
         
         // Setting: Max Combo Mark
-        labelSetting(node: maxComboMark, str: String("MAX COMBO"), align: .right, fontSize: CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.12))
+        labelSetting(node: maxComboMark, str: String("MAX COMBO"), align: .right, fontSize: CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.15))
         addChild(maxComboMark)
         
         // Setting: Score Mark
@@ -97,9 +110,17 @@ class GameScene: SKScene {
         labelSetting(node: comboLabel, str: "", align: .center, fontSize: CGFloat(frame.maxY * 0.1), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5))
         addChild(comboLabel)
         
-        timerBack.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 2)
+        rectTimer.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: height)
+        shapeNodeColorSetting(node: rectTimer, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
+        addChild(rectTimer)
+        
+        upperArea.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.maxY - frame.height * 0.28), xSize: frame.width, ySize: frame.height * 0.28)
+        shapeNodeColorSetting(node: upperArea, fillColor:UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
+        addChild(upperArea)
+        
+        timerBack.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: radius)
         shapeNodeColorSetting(node: timerBack, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
-        addChild(timerBack)
+        //addChild(timerBack)
                               
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
@@ -124,12 +145,12 @@ class GameScene: SKScene {
         // Setting: Timer Background
         timerBackground.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 0.8)
         shapeNodeColorSetting(node: timerBackground, fillColor: UIColor(.timerBackgroundColor), strokeColor: UIColor(.timerBackgroundColor))
-        addChild(timerBackground)
+        //addChild(timerBackground)
         
         // Setting: Timer
         timer.path = timerBar(center:  CGPoint(x: 0, y: frame.minY + frame.minY * 0.5), value: .degrees(degree), radius: frame.maxY * 0.8)
         shapeNodeColorSetting(node: timer, fillColor: UIColor.white, strokeColor: UIColor.white)
-        addChild(timer)
+        //addChild(timer)
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
@@ -144,18 +165,19 @@ class GameScene: SKScene {
         addChild(currentPieceSprite)
         
         // Setting: Rotation Stop Button
-        rotationStopButton.path = Cir(center: CGPoint(x: frame.midX - frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
+        rotationStopButton.path = Cir(center: CGPoint(x: frame.midX - frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.1
+                                                      5), radius: frame.width * 0.08)
         shapeNodeColorSetting(node: rotationStopButton, fillColor: UIColor.black, strokeColor: UIColor.black)
         nodelineWidthSetting(node: rotationStopButton, width: 5)
         nodeNameSetting(node: rotationStopButton, name: "XX_RotationSB")
-        //addChild(rotationStopButton)
+        addChild(rotationStopButton)
         
         // Setting: Random Stop Button
-        randomStopButton.path = Cir(center: CGPoint(x: frame.midX + frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
+        randomStopButton.path = Cir(center: CGPoint(x: frame.midX + frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.15), radius: frame.width * 0.08)
         shapeNodeColorSetting(node: randomStopButton, fillColor: UIColor.white, strokeColor: UIColor.white)
         nodelineWidthSetting(node: randomStopButton, width: 5)
         nodeNameSetting(node: randomStopButton, name: "XX_RandomSB")
-        //addChild(randomStopButton)
+        addChild(randomStopButton)
         
         // Setting: Shadow
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
@@ -171,6 +193,7 @@ class GameScene: SKScene {
         addChild(restartButton)
         
         shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
+        rectTimerAnimation(node: self.rectTimer, shadow: self.shadow)
         timerAnimation(node: self.timer, shadow: self.shadow)
     }
     
@@ -186,7 +209,7 @@ class GameScene: SKScene {
                 
                 currentTouchedObject = touchedNode.name
                 if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
-                    scoreValue += 125
+                    scoreValue += value
                     scoreLabel.text = String(scoreValue)
                     HapticManager.instance.impact(style: .soft)
 
@@ -200,6 +223,9 @@ class GameScene: SKScene {
                     scaleAction(node: comboLabel)
                     
                     if (comboValue % 50 == 0 && comboValue > 0) {
+                        plusValue += 1
+                        value = 125 + bonusValue * plusValue
+                        print("COMBO VALUE IS \(comboValue)")
                         degree += 10 // or 5?
                         HapticManager.instance.impact(style: .medium)
                     }
@@ -218,9 +244,14 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                     
                 } else {
-                    degree -= 10 // or 3?
+                    degree -= 5 // or 3?
+                    //height += frame.height * 0.1
+                    miss = true
+                    //touchMissAnimation(node: rectTimer)
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
+                    plusValue = 0
+                    value = 125
                     comboLabel.text = ""
                 }
                 touched = true
@@ -256,21 +287,70 @@ class GameScene: SKScene {
         }
     }
     
+    override func update(_ currentTime: TimeInterval) {
+        if(miss == true) {
+            miss = false
+            touchMissAnimation(node: rectTimer)
+        }
+    }
+    
+    func touchMissAnimation (node: SKShapeNode) {
+        let changeValue = SKAction.run {
+            self.missSequenceEnd = false
+            self.height = self.height + self.frame.height * 0.05
+            self.missSequenceEnd = true
+        }
+        node.run(changeValue)
+    }
+    
+    func rectTimerAnimation (node: SKShapeNode, shadow: SKShapeNode) {
+        let wait = SKAction.wait(forDuration: 0.01)
+        let hold = SKAction.run({
+            if(self.missSequenceEnd == true) {
+                if(change != true) {
+                    if(self.height < self.frame.height * 0.72)
+                    {
+                        self.height += self.frame.height * 0.0001
+                    }
+                } else {
+                    self.height -= self.frame.height * 0.002
+                    change = false
+                }
+            }
+            
+            if(self.height < self.frame.height * 0.72) {
+                self.rectTimer.path = Rect(startPosition: CGPoint(x: self.frame.minX, y: self.frame.minY), xSize: self.frame.width, ySize: self.height)
+            } else {
+                node.isHidden = true
+                shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
+            }
+        })
+        
+        let sequence = SKAction.sequence([wait, hold])
+        let repeater = SKAction.repeatForever(sequence)
+        let wait2sec = SKAction.wait(forDuration: 2)
+        let finalSequence = SKAction.sequence([wait2sec, repeater])
+        node.run(finalSequence)
+    }
+
+    
     func timerAnimation (node: SKShapeNode, shadow: SKNode) {
         let wait = SKAction.wait(forDuration: 0.1)
         let hold = SKAction.run({
+            
             if(change != true) {
                 if(degree > 0) {
                     degree -= 0.1
                     }
             } else {
                 degree += 0.5
+
                 change = false
             }
-            
+
             if(degree > 0) {
                 node.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.frame.maxY * 0.8)
-                self.timerBack.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.frame.maxY * 2)
+                self.timerBack.path = timerBar(center:  CGPoint(x: 0, y: self.frame.minY + self.frame.minY * 0.5), value: .degrees(degree), radius: self.radius)
             } else {
                 node.isHidden = true
                 shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
