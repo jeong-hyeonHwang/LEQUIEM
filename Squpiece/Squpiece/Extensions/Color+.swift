@@ -18,4 +18,6 @@ extension Color {
     static let blackColor = Color("BlackColor")
     static let shadowColor = Color("ShadowColor")
     static let timerBackgroundColor = Color("TimerBackgroundColor")
+    
+    static let parchmentColor = Color("Parchment")
 }

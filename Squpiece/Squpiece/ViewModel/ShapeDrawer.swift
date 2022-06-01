@@ -7,10 +7,18 @@
 
 import SwiftUI
 
-func timerBar(center: CGPoint, value: Angle, radius: CGFloat) -> CGPath {
+//func timerBar(center: CGPoint, value: Angle, radius: CGFloat) -> CGPath {
+//    var path = Path()
+//    path.addLines([center])
+//    path.addArc(center: center, radius: radius, startAngle: .degrees(90) - value, endAngle: .degrees(90) + value, clockwise: false)
+//    path.addLine(to: center)
+//    return path.cgPath
+//}
+
+func timerBar(center: CGPoint, startAngle: Angle, radius: CGFloat) -> CGPath {
     var path = Path()
     path.addLines([center])
-    path.addArc(center: center, radius: radius, startAngle: .degrees(90) - value, endAngle: .degrees(90) + value, clockwise: false)
+    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: .degrees(125), clockwise: false)
     path.addLine(to: center)
     return path.cgPath
 }

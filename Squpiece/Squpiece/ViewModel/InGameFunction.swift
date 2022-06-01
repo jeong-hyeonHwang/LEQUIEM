@@ -39,6 +39,16 @@ func scaleAction (node: SKNode) {
     node.run(sequence)
 }
 
+func labelScaleAction (node: SKNode) {
+    node.alpha = 1.0
+    let to = SKAction.scale(to: 1.2, duration: 0.05)
+    let end = SKAction.scale(to: 1.0, duration: 0.05)
+    let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+    let sequence = SKAction.sequence([to, end, fadeOut])
+
+    node.run(sequence)
+}
+
 func shadowDisappear(node: SKNode, labels: [SKNode]) {
     
     for label in labels {
