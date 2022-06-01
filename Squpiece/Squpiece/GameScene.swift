@@ -181,11 +181,29 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
+            if (touchedNode.name == "restartButton") {
+                UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
+                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
+                if let view = self.view {
+                    if let scene = SKScene(fileNamed: "GameScene") {
+                        view.presentScene(scene)
+                    }
+                }
+            } else if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
+                rotationStop = true
+                rotationRestartAction(node: touchedNode, rotateNodes: pieces)
+                HapticManager.instance.impact(style: .light)
+            } else if (touchedNode.name == "XX_RandomSB" && randomStop == false) {
+                randomStop = true
+                randomRestartAction(node: touchedNode)
+                HapticManager.instance.impact(style: .light)
+            }
+            
             if ((touchedNode.name?.contains("p_")) != nil && touched == false && !touchedNode.name!.contains("XX")) {
-                if(touchedNode.name!.contains("X")) {
+                if(touchedNode.name!.contains("X") || ((abs(location.x) > frame.maxX*0.8) || (abs(location.y) > frame.maxX*0.8))) {
+                    print("outside!")
                     return
                 }
-                
                 currentTouchedObject = touchedNode.name
                 if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
                     scoreValue += 125
@@ -202,7 +220,7 @@ class GameScene: SKScene {
                     labelScaleAction(node: comboLabel)
                     
                     if (comboValue % 50 == 0 && comboValue > 0) {
-                        degree += 10 // or 5?
+                        degree -= 10 // or 5?
                         HapticManager.instance.impact(style: .medium)
                     }
                     
@@ -226,24 +244,6 @@ class GameScene: SKScene {
                     comboLabel.text = ""
                 }
                 touched = true
-            }
-            
-            if (touchedNode.name == "restartButton") {
-                UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
-                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
-                if let view = self.view {
-                    if let scene = SKScene(fileNamed: "GameScene") {
-                        view.presentScene(scene)
-                    }
-                }
-            } else if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
-                rotationStop = true
-                rotationRestartAction(node: touchedNode, rotateNodes: pieces)
-                HapticManager.instance.impact(style: .light)
-            } else if (touchedNode.name == "XX_RandomSB" && randomStop == false) {
-                randomStop = true
-                randomRestartAction(node: touchedNode)
-                HapticManager.instance.impact(style: .light)
             }
         }
     }
