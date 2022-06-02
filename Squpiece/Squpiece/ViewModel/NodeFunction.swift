@@ -22,6 +22,10 @@ func shapeNodeColorSetting(node: SKShapeNode, fillColor: UIColor, strokeColor: U
     node.strokeColor = strokeColor
 }
 
+func labelNodeColor(node: SKLabelNode, color: UIColor) {
+    node.fontColor = color
+}
+
 func nodeNameSetting(node: SKNode, name: String) {
     node.name = name
 }
