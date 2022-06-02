@@ -49,7 +49,7 @@ class GameScene: SKScene {
     var highScoreMark = SKLabelNode()
     var maxComboMark = SKLabelNode()
     
-    // About Time    
+    // About Time
     var circleTimer = SKShapeNode()
     var timerRadius : CGFloat = 5
     
@@ -59,47 +59,76 @@ class GameScene: SKScene {
     
     // OutGame Button
     let restartButton = SKSpriteNode()
+    let fontColor = UIColor.black
+    
+    let background = SKSpriteNode()
+    let zen = SKSpriteNode()
+    
     override func didMove(to view: SKView) {
 
         timerRadius = frame.height * 0.5
         resetVar()
-        
         self.backgroundColor = UIColor(.blackColor)
         
         //Setting: High Score Label
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
         labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
+        highScoreLabel.fontColor = UIColor.black
+        labelNodeColor(node: highScoreLabel, color: fontColor)
         addChild(highScoreLabel)
         
         // Setting: Max Combo Label
         maxComboValue = UserDefaults.standard.integer(forKey: "MaxCombo")
         labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
+        labelNodeColor(node: maxComboLabel, color: fontColor)
         addChild(maxComboLabel)
         
         // Setting: High Score Mark
         labelSetting(node: highScoreMark, str: String("HIGHSCORE"), align: .left, fontSize:  CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.15))
+        labelNodeColor(node: highScoreMark, color: fontColor)
         addChild(highScoreMark)
         
         // Setting: Max Combo Mark
         labelSetting(node: maxComboMark, str: String("MAX COMBO"), align: .right, fontSize: CGFloat(frame.maxY * 0.03), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.15))
+        labelNodeColor(node: maxComboMark, color: fontColor)
         addChild(maxComboMark)
         
         // Setting: Score Mark
         labelSetting(node: scoreMark, str: String("SCORE"), align: .center, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.28))
+        labelNodeColor(node: scoreMark, color: fontColor)
         addChild(scoreMark)
         
         // Setting: Score Label
         labelSetting(node: scoreLabel, str: String(scoreValue), align: .center, fontSize: CGFloat(frame.maxY * 0.14), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.4))
+        labelNodeColor(node: scoreLabel, color: fontColor)
         addChild(scoreLabel)
         
         // Setting: Combo Label
         labelSetting(node: comboLabel, str: "", align: .center, fontSize: CGFloat(frame.maxY * 0.1), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x:0, y:frame.maxY - frame.maxY * 0.5))
+        labelNodeColor(node: comboLabel, color: fontColor)
         addChild(comboLabel)
                 
         // Setting: Circle Timer
         circleTimer.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: timerRadius)
-        shapeNodeColorSetting(node: circleTimer, fillColor: UIColor.black, strokeColor: UIColor.black)
+        shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.yellow), strokeColor: UIColor(.yellow))
+        circleTimer.zPosition = -1
         addChild(circleTimer)
+        
+        let img = UIImage(named: "background.jpg")!
+        let data_ = img.pngData()
+        let newImage_ = UIImage(data:data_!)
+        background.texture = SKTexture(image: newImage_!)
+        background.size = CGSize(width: frame.width, height: frame.height)
+        background.zPosition = -1.5
+        addChild(background)
+        
+        let img2 = UIImage(named: "yellowZen.png")!
+        let data2 = img2.pngData()
+        let newImage2 = UIImage(data:data2!)
+        zen.texture = SKTexture(image: newImage2!)
+        zen.size = CGSize(width: frame.width, height: frame.height)
+        zen.zPosition = -1
+        addChild(zen)
         
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
@@ -143,14 +172,14 @@ class GameScene: SKScene {
         shapeNodeColorSetting(node: rotationStopButton, fillColor: UIColor.black, strokeColor: UIColor.black)
         nodelineWidthSetting(node: rotationStopButton, width: 5)
         nodeNameSetting(node: rotationStopButton, name: "XX_RotationSB")
-        addChild(rotationStopButton)
+        //addChild(rotationStopButton)
         
         // Setting: Random Stop Button
         randomStopButton.path = Cir(center: CGPoint(x: frame.midX + frame.maxX * 0.75, y: frame.minY + frame.maxY * 0.35), radius: frame.width * 0.08)
         shapeNodeColorSetting(node: randomStopButton, fillColor: UIColor.white, strokeColor: UIColor.white)
         nodelineWidthSetting(node: randomStopButton, width: 5)
         nodeNameSetting(node: randomStopButton, name: "XX_RandomSB")
-        addChild(randomStopButton)
+        //addChild(randomStopButton)
         
         // Setting: Shadow
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
@@ -181,11 +210,16 @@ class GameScene: SKScene {
             if (touchedNode.name == "restartButton") {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
-                if let view = self.view {
-                    if let scene = SKScene(fileNamed: "GameScene") {
-                        view.presentScene(scene)
-                    }
+                self.view?.isPaused = true
+                for node in children {
+                    node.removeAllActions()
+                    node.removeAllChildren()
                 }
+                if let scene = SKScene(fileNamed: "GameScene") {
+                    // Present the scene
+                    self.view?.presentScene(scene)
+                }
+                
             } else if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
                 rotationStop = true
                 rotationRestartAction(node: touchedNode, rotateNodes: pieces)
@@ -244,6 +278,9 @@ class GameScene: SKScene {
                 touched = true
             }
         }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
