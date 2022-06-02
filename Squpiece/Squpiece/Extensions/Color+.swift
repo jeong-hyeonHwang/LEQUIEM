@@ -20,4 +20,5 @@ extension Color {
     static let timerBackgroundColor = Color("TimerBackgroundColor")
     
     static let parchmentColor = Color("Parchment")
+    static let yellowColor = Color("Yellow")
 }
