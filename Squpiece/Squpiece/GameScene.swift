@@ -15,12 +15,8 @@ class GameScene: SKScene {
     // Presetting Values
     let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
-    //let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor1), UIColor(.pieceColor2), UIColor(.pieceColor3)]
-    //let colors : [UIColor] = [UIColor(.pieceColor1), UIColor(.pieceColor1), UIColor(.pieceColor1), UIColor(.pieceColor1)]
-    let colors : [UIColor] = [UIColor(.pieceColor2), UIColor(.pieceColor2), UIColor(.pieceColor2), UIColor(.pieceColor2)]
-    //let colors : [UIColor] = [UIColor(.pieceColor3), UIColor(.pieceColor3), UIColor(.pieceColor3), UIColor(.pieceColor3)]
-    //let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor4), UIColor(.pieceColor4), UIColor(.pieceColor4)]
-    let timerStrokeColor = UIColor(.pieceColor2)
+    let pieceColor = UIColor(.pieceColor)
+    let timerStrokeColor = UIColor(.pieceColor)
     let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
     var lastIndex = 3
     
@@ -64,19 +60,12 @@ class GameScene: SKScene {
     
     // OutGame Button
     let restartButton = SKSpriteNode()
-    //let fontColor = UIColor(.fontColor)
-    let fontColor = UIColor(.fontColor3)
-    //let fontColor = UIColor(.fontColor4)
-    //let fontColor = UIColor(.fontColor5)
-    //let fontColor = UIColor(.fontColor6)
+    let fontColor = UIColor(.fontColor)
     
-    //let patternColor = UIColor(.patternColor2)
-    let patternColor = UIColor(.fontColor3)
-    //let patternColor = UIColor(.fontColor4)
-    //let patternColor = UIColor(.fontColor5)
-    //let patternColor = UIColor(.fontColor6)
-    let centerPatternColor = UIColor(.pieceColor2)
-    let timerBackgroundColor = UIColor(.timerColor2)
+    let patternColor = UIColor(.fontColor)
+    let centerPatternColor = UIColor(.pieceColor)
+    let timerBackgroundColor = UIColor(.timerColor)
+    let bgColor = UIColor(.bgColor)
     
     let background = SKSpriteNode()
     let zen = SKSpriteNode()
@@ -85,9 +74,7 @@ class GameScene: SKScene {
 
         timerRadius = frame.height * 0.5
         resetVar()
-        //self.backgroundColor = UIColor(.bgColor)
-        //self.backgroundColor = UIColor(.patternColor1)
-        self.backgroundColor = UIColor(.bgColor2)
+        self.backgroundColor = bgColor
         
         //Setting: High Score Label
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
@@ -155,7 +142,7 @@ class GameScene: SKScene {
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            shapeNodeColorSetting(node: pieces[i], fillColor: colors[i], strokeColor: UIColor(.parchmentColor))
+            shapeNodeColorSetting(node: pieces[i], fillColor: pieceColor, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
             addChild(pieces[i])
@@ -166,7 +153,6 @@ class GameScene: SKScene {
             let newImage = UIImage(data:data!)
             pieceSprite[i].texture = SKTexture(image: newImage!)
             
-            //pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
             nodeNameSetting(node: pieceSprite[i], name: "p_\(pieceName[i])")
                         
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
