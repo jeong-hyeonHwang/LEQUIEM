@@ -58,23 +58,23 @@ func shadowDisappear(node: SKNode, labels: [SKNode]) {
         node.alpha = 1.0
         node.isHidden = false
     }
-    let wait = SKAction.wait(forDuration: waitSec - 0.2)
-    let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+    //let wait = SKAction.wait(forDuration: waitSec - 0.2)
+    let fadeOut = SKAction.fadeOut(withDuration: waitSec/2)
     let shadowDisappear = SKAction.run {
         labelAppear(labels: labels)
         node.isHidden = true
         node.alpha = 0.8
     }
-    let sequence = SKAction.sequence([shadowAppear, wait, fadeOut, shadowDisappear])
+    //let sequence = SKAction.sequence([shadowAppear, wait, fadeOut, shadowDisappear])
+    let sequence = SKAction.sequence([shadowAppear, fadeOut, shadowDisappear])
     node.run(sequence)
 }
 
-func shadowAppear(node: SKNode, restartButton: SKNode, labels: [SKNode]) {
+func shadowAppear(node: SKNode, restartButton: SKNode) {
     node.alpha = 0.0
     node.isHidden = false
-    let fadeIn = SKAction.fadeIn(withDuration: 0.1)
+    let fadeIn = SKAction.fadeIn(withDuration: waitSec/2)
     let shadowAppear = SKAction.run {
-        labelDisappear(labels: labels)
         restartButton.isHidden = false
     }
     let sequence = SKAction.sequence([fadeIn, shadowAppear])
@@ -89,14 +89,6 @@ func labelAppear(labels: [SKNode]) {
         
         let fadeIn = SKAction.fadeIn(withDuration: 0.15)
         label.run(fadeIn)
-    }
-}
-
-func labelDisappear(labels: [SKNode]) {
-    
-    for label in labels {
-        let fadeOut = SKAction.fadeOut(withDuration: 0.2)
-        label.run(fadeOut)
     }
 }
 

@@ -73,6 +73,7 @@ class GameScene: SKScene {
     let zen = SKSpriteNode()
     
     var touchCount: Int = 0
+    var nodeOpen: Bool = false
     
     override func didMove(to view: SKView) {
 
@@ -204,7 +205,9 @@ class GameScene: SKScene {
         
         // Setting: Shadow
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor), strokeColor: UIColor(.shadowColor))
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor.opacity(0.5)), strokeColor: UIColor(.shadowColor.opacity(0.5)))
+        shadow.name = "shadow"
+        shadow.zPosition = 0
         addChild(shadow)
 
         //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
@@ -215,6 +218,7 @@ class GameScene: SKScene {
         nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = CGSize(width: 45, height: 52.5)
         restartButton.position = CGPoint(x: 0, y: frame.minY + 200)
+        restartButton.zPosition = 2
         restartButton.isHidden = true
         addChild(restartButton)
         
@@ -225,26 +229,25 @@ class GameScene: SKScene {
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            if(touchCount != 0) {
+            if (nodeOpen == false) {
+                print("NODE NOT YET OPEN")
                 return
-            }
-            else {
-                touchCount += 1
+            } else {
+                print("NODE CLICKED!!!")
             }
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-            
             if (touchedNode.name == "restartButton") {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
-                self.view?.isPaused = true
-                for node in children {
-                    node.removeAllActions()
-                    node.removeAllChildren()
-                }
                 if let scene = SKScene(fileNamed: "GameScene") {
+                    let fade = SKTransition.fade(withDuration: 1)
+                    for node in children {
+                        node.removeAllActions()
+                        node.removeAllChildren()
+                    }
                     // Present the scene
-                    self.view?.presentScene(scene)
+                    self.view?.presentScene(scene, transition: fade)
                 }
                 
             } else if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
@@ -261,6 +264,14 @@ class GameScene: SKScene {
                 if(touchedNode.name!.contains("X") || ((abs(location.x) > frame.maxX*0.8) || (abs(location.y) > frame.maxX*0.8))) {
                     return
                 }
+                
+                if(touchCount != 0) {
+                    return
+                }
+                else {
+                    touchCount += 1
+                }
+
                 currentTouchedObject = touchedNode.name
                 if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
                     scoreValue += 125
@@ -338,14 +349,18 @@ class GameScene: SKScene {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 node.isHidden = true
-                shadowAppear(node: self.shadow, restartButton: self.restartButton, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
+                shadowAppear(node: self.shadow, restartButton: self.restartButton)
             }
         })
         
         let sequence = SKAction.sequence([wait, hold])
         let repeater = SKAction.repeatForever(sequence)
-        let wait2sec = SKAction.wait(forDuration: 2)
-        let finalSequence = SKAction.sequence([wait2sec, repeater])
+        let waitSec = SKAction.wait(forDuration: waitSec)
+        let nodeOpenAction = SKAction.run {
+            self.nodeOpen = true
+            print("NODE OPEN!")
+        }
+        let finalSequence = SKAction.sequence([waitSec, nodeOpenAction, repeater])
         node.run(finalSequence)
     }
 }
