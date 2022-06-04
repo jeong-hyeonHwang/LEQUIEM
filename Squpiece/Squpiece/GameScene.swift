@@ -217,7 +217,7 @@ class GameScene: SKScene {
         restartButton.texture = SKTexture(image: newImage!)
         nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = CGSize(width: 45, height: 52.5)
-        restartButton.position = CGPoint(x: 0, y: frame.minY + 200)
+        restartButton.position = CGPoint(x: 0, y: frame.minY + frame.height * 0.15)
         restartButton.zPosition = 2
         restartButton.isHidden = true
         addChild(restartButton)
@@ -230,10 +230,7 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             if (nodeOpen == false) {
-                print("NODE NOT YET OPEN")
                 return
-            } else {
-                print("NODE CLICKED!!!")
             }
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
@@ -358,7 +355,6 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
-            print("NODE OPEN!")
         }
         let finalSequence = SKAction.sequence([waitSec, nodeOpenAction, repeater])
         node.run(finalSequence)
