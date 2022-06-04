@@ -64,11 +64,19 @@ class GameScene: SKScene {
     
     // OutGame Button
     let restartButton = SKSpriteNode()
-    let fontColor = UIColor(.fontColor)
+    //let fontColor = UIColor(.fontColor)
+    let fontColor = UIColor(.fontColor3)
+    //let fontColor = UIColor(.fontColor4)
+    //let fontColor = UIColor(.fontColor5)
+    //let fontColor = UIColor(.fontColor6)
     
-    let patternColor = UIColor(.patternColor2)
+    //let patternColor = UIColor(.patternColor2)
+    let patternColor = UIColor(.fontColor3)
+    //let patternColor = UIColor(.fontColor4)
+    //let patternColor = UIColor(.fontColor5)
+    //let patternColor = UIColor(.fontColor6)
     let centerPatternColor = UIColor(.pieceColor2)
-    let timerBackgroundColor = UIColor(.timerColor)
+    let timerBackgroundColor = UIColor(.timerColor2)
     
     let background = SKSpriteNode()
     let zen = SKSpriteNode()
@@ -77,7 +85,9 @@ class GameScene: SKScene {
 
         timerRadius = frame.height * 0.5
         resetVar()
-        self.backgroundColor = UIColor(.bgColor)
+        //self.backgroundColor = UIColor(.bgColor)
+        //self.backgroundColor = UIColor(.patternColor1)
+        self.backgroundColor = UIColor(.bgColor2)
         
         //Setting: High Score Label
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
@@ -121,24 +131,25 @@ class GameScene: SKScene {
         circleTimer.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: timerRadius)
         //shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.timerColor), strokeColor: UIColor(.timerColor))
         shapeNodeColorSetting(node: circleTimer, fillColor: timerBackgroundColor, strokeColor: timerBackgroundColor)
-        circleTimer.zPosition = -1
+        circleTimer.zPosition = -1.8
         addChild(circleTimer)
         
-//        let img = UIImage(named: "background.jpg")!
-//        let data_ = img.pngData()
-//        let newImage_ = UIImage(data:data_!)
-//        background.texture = SKTexture(image: newImage_!)
-//        background.size = CGSize(width: frame.width, height: frame.height)
-//        background.zPosition = -1.5
-//        addChild(background)
-//
-//        let img2 = UIImage(named: "yellowZen.png")!
-//        let data2 = img2.pngData()
-//        let newImage2 = UIImage(data:data2!)
-//        zen.texture = SKTexture(image: newImage2!)
-//        zen.size = CGSize(width: frame.width, height: frame.height)
-//        zen.zPosition = -1
-//        addChild(zen)
+        let img = UIImage(named: "background.jpg")!
+        let data_ = img.pngData()
+        let newImage_ = UIImage(data:data_!)
+        background.texture = SKTexture(image: newImage_!)
+        background.size = CGSize(width: frame.width, height: frame.height)
+        background.zPosition = -1.5
+        background.alpha = 0.5
+        addChild(background)
+
+        let img2 = UIImage(named: "zen___.png")!
+        let data2 = img2.pngData()
+        let newImage2 = UIImage(data:data2!)
+        zen.texture = SKTexture(image: newImage2!)
+        zen.size = CGSize(width: frame.width, height: frame.height)
+        zen.zPosition = -1
+        addChild(zen)
         
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {

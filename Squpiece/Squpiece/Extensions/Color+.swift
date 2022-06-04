@@ -23,9 +23,16 @@ extension Color {
     static let parchmentColor = Color("Parchment")
     
     static let timerColor = Color("TimerColor")
+    static let timerColor2 = Color("TimerColor2")
     static let bgColor = Color("Background")
+    static let bgColor2 = Color("BackgroundColor2")
     
     static let fontColor = Color("FontColor")
+    static let fontColor2 = Color("FontColor2")
+    static let fontColor3 = Color("FontColor3")
+    static let fontColor4 = Color("FontColor4")
+    static let fontColor5 = Color("FontColor5")
+    static let fontColor6 = Color("FontColor6")
     
     static let patternColor1 = Color("PatternColor1")
     static let patternColor2 = Color("PatternColor2")
