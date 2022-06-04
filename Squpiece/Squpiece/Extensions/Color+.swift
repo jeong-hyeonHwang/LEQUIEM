@@ -10,14 +10,20 @@ import SwiftUI
 // MARK: Color extension
 extension Color {
     static let backgroundColor = Color("BackgroundColor")
-    static let pieceColor1 = Color("PieceColor1")
-    static let pieceColor2 = Color("PieceColor2")
-    static let pieceColor3 = Color("PieceColor3")
-    static let pieceColor4 = Color("PieceColor4")
+    static let pieceColor = Color("PieceColor")
     
     static let blackColor = Color("BlackColor")
     static let shadowColor = Color("ShadowColor")
     static let timerBackgroundColor = Color("TimerBackgroundColor")
     
     static let parchmentColor = Color("Parchment")
+    
+    static let timerColor = Color("TimerColor")
+    static let bgColor = Color("BackgroundColor")
+    
+    //static let fontColor = Color("FontColor")
+    static let fontColor = Color("FontColor")
+    
+//    static let patternColor1 = Color("PatternColor1")
+//    static let patternColor2 = Color("PatternColor2")
 }
