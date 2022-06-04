@@ -346,6 +346,7 @@ class GameScene: SKScene {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 node.isHidden = true
+                self.nodeOpen = false
                 shadowAppear(node: self.shadow, restartButton: self.restartButton)
             }
         })
