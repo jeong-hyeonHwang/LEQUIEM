@@ -229,9 +229,6 @@ class GameScene: SKScene {
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            if (nodeOpen == false) {
-                return
-            }
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
@@ -247,7 +244,13 @@ class GameScene: SKScene {
                     self.view?.presentScene(scene, transition: fade)
                 }
                 
-            } else if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
+            }
+            
+            if (nodeOpen == false) {
+                return
+            }
+            
+            if (touchedNode.name == "XX_RotationSB" && rotationStop == false) {
                 rotationStop = true
                 rotationRestartAction(node: touchedNode, rotateNodes: pieces)
                 HapticManager.instance.impact(style: .light)
