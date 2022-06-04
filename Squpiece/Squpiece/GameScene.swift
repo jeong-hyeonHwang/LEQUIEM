@@ -58,6 +58,8 @@ class GameScene: SKScene {
     let rotationStopButton = SKShapeNode()
     let randomStopButton = SKShapeNode()
     
+    let pieceBackground = SKShapeNode()
+    
     // OutGame Button
     let restartButton = SKSpriteNode()
     let fontColor = UIColor(.fontColor)
@@ -138,11 +140,17 @@ class GameScene: SKScene {
         zen.zPosition = -1
         addChild(zen)
         
+        pieceBackground.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.maxX * 0.8)
+        pieceBackground.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        pieceBackground.fillColor = .white
+        pieceBackground.alpha = 0.8
+        addChild(pieceBackground)
+        
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            shapeNodeColorSetting(node: pieces[i], fillColor: pieceColor, strokeColor: UIColor(.parchmentColor))
+            shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
             addChild(pieces[i])
@@ -165,7 +173,7 @@ class GameScene: SKScene {
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
-        shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: timerStrokeColor)
+        shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
         nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
         
