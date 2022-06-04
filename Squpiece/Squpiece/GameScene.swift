@@ -5,7 +5,7 @@
 //  Created by 황정현 on 2022/05/28.
 //
 
-import SwiftUI
+//import SwiftUI
 import SpriteKit
 import GameplayKit
 import AVFoundation
@@ -15,7 +15,12 @@ class GameScene: SKScene {
     // Presetting Values
     let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
-    let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor1), UIColor(.pieceColor2), UIColor(.pieceColor3)]
+    //let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor1), UIColor(.pieceColor2), UIColor(.pieceColor3)]
+    //let colors : [UIColor] = [UIColor(.pieceColor1), UIColor(.pieceColor1), UIColor(.pieceColor1), UIColor(.pieceColor1)]
+    let colors : [UIColor] = [UIColor(.pieceColor2), UIColor(.pieceColor2), UIColor(.pieceColor2), UIColor(.pieceColor2)]
+    //let colors : [UIColor] = [UIColor(.pieceColor3), UIColor(.pieceColor3), UIColor(.pieceColor3), UIColor(.pieceColor3)]
+    //let colors : [UIColor] = [UIColor(.pieceColor4), UIColor(.pieceColor4), UIColor(.pieceColor4), UIColor(.pieceColor4)]
+    let timerStrokeColor = UIColor(.pieceColor2)
     let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
     var lastIndex = 3
     
@@ -59,7 +64,11 @@ class GameScene: SKScene {
     
     // OutGame Button
     let restartButton = SKSpriteNode()
-    let fontColor = UIColor.black
+    let fontColor = UIColor(.fontColor)
+    
+    let patternColor = UIColor(.patternColor2)
+    let centerPatternColor = UIColor(.pieceColor2)
+    let timerBackgroundColor = UIColor(.timerColor)
     
     let background = SKSpriteNode()
     let zen = SKSpriteNode()
@@ -68,7 +77,7 @@ class GameScene: SKScene {
 
         timerRadius = frame.height * 0.5
         resetVar()
-        self.backgroundColor = UIColor(.blackColor)
+        self.backgroundColor = UIColor(.bgColor)
         
         //Setting: High Score Label
         highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
@@ -110,44 +119,46 @@ class GameScene: SKScene {
                 
         // Setting: Circle Timer
         circleTimer.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: timerRadius)
-        shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.yellow), strokeColor: UIColor(.yellow))
+        //shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.timerColor), strokeColor: UIColor(.timerColor))
+        shapeNodeColorSetting(node: circleTimer, fillColor: timerBackgroundColor, strokeColor: timerBackgroundColor)
         circleTimer.zPosition = -1
         addChild(circleTimer)
         
-        let img = UIImage(named: "background.jpg")!
-        let data_ = img.pngData()
-        let newImage_ = UIImage(data:data_!)
-        background.texture = SKTexture(image: newImage_!)
-        background.size = CGSize(width: frame.width, height: frame.height)
-        background.zPosition = -1.5
-        addChild(background)
-        
-        let img2 = UIImage(named: "yellowZen.png")!
-        let data2 = img2.pngData()
-        let newImage2 = UIImage(data:data2!)
-        zen.texture = SKTexture(image: newImage2!)
-        zen.size = CGSize(width: frame.width, height: frame.height)
-        zen.zPosition = -1
-        addChild(zen)
+//        let img = UIImage(named: "background.jpg")!
+//        let data_ = img.pngData()
+//        let newImage_ = UIImage(data:data_!)
+//        background.texture = SKTexture(image: newImage_!)
+//        background.size = CGSize(width: frame.width, height: frame.height)
+//        background.zPosition = -1.5
+//        addChild(background)
+//
+//        let img2 = UIImage(named: "yellowZen.png")!
+//        let data2 = img2.pngData()
+//        let newImage2 = UIImage(data:data2!)
+//        zen.texture = SKTexture(image: newImage2!)
+//        zen.size = CGSize(width: frame.width, height: frame.height)
+//        zen.zPosition = -1
+//        addChild(zen)
         
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            shapeNodeColorSetting(node: pieces[i], fillColor: colors[i], strokeColor: UIColor(.blackColor))
+            shapeNodeColorSetting(node: pieces[i], fillColor: colors[i], strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-//            let image = UIImage(systemName: pieceName[i])!.withTintColor(.white)
-//            let data = image.pngData()
-//            let newImage = UIImage(data:data!)
-//            pieceSprite[i].texture = SKTexture(image: newImage!)
-            pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
+            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
+            let data = image.pngData()
+            let newImage = UIImage(data:data!)
+            pieceSprite[i].texture = SKTexture(image: newImage!)
+            
+            //pieceSprite[i].texture = SKTexture(image: UIImage(systemName: pieceName[i])!)
             nodeNameSetting(node: pieceSprite[i], name: "p_\(pieceName[i])")
                         
-            pieceSprite[i].size = CGSize(width: frame.maxX * 0.2, height: frame.maxX * 0.2)
+            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             let divideFor = Double(lastIndex + 1)
             pieceSprite[i].position = CGPoint(x: cos(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5)
             pieces[i].addChild(pieceSprite[i])
@@ -157,14 +168,17 @@ class GameScene: SKScene {
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
-        shapeNodeColorSetting(node: currentPiece, fillColor: UIColor.white, strokeColor: UIColor(.blackColor))
+        shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: timerStrokeColor)
         nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
         
         // Setting: Current Piece Sprite
-        currentPieceSprite.texture = SKTexture(image: UIImage(systemName: pieceName[currentIndex])!)
+        let patternImg = UIImage(systemName: pieceName[0])!.withTintColor(centerPatternColor)
+        let patternData = patternImg.pngData()
+        let newImg = UIImage(data:patternData!)
+        currentPieceSprite.texture = SKTexture(image: newImg!)
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
-        currentPieceSprite.size = CGSize(width: frame.maxX * 0.15, height: frame.maxX * 0.15)
+        currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
         
         // Setting: Rotation Stop Button
@@ -264,7 +278,10 @@ class GameScene: SKScene {
                     if(randomStop == false) {
                         currentIndex = Int.random(in: 0...lastIndex)
                     }
-                    currentPieceSprite.texture = SKTexture(image: UIImage(systemName: self.pieceName[self.currentIndex])!)
+                    let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
+                    let patternData = patternImg.pngData()
+                    let newImg = UIImage(data:patternData!)
+                    currentPieceSprite.texture = SKTexture(image: newImg!)
                     currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
                     

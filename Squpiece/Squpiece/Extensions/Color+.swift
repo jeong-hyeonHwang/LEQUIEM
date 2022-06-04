@@ -14,11 +14,19 @@ extension Color {
     static let pieceColor2 = Color("PieceColor2")
     static let pieceColor3 = Color("PieceColor3")
     static let pieceColor4 = Color("PieceColor4")
+    static let pieceColor5 = Color("PieceColor5")
     
     static let blackColor = Color("BlackColor")
     static let shadowColor = Color("ShadowColor")
     static let timerBackgroundColor = Color("TimerBackgroundColor")
     
     static let parchmentColor = Color("Parchment")
-    static let yellowColor = Color("Yellow")
+    
+    static let timerColor = Color("TimerColor")
+    static let bgColor = Color("Background")
+    
+    static let fontColor = Color("FontColor")
+    
+    static let patternColor1 = Color("PatternColor1")
+    static let patternColor2 = Color("PatternColor2")
 }
