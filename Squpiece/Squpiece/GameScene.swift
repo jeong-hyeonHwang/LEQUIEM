@@ -72,6 +72,8 @@ class GameScene: SKScene {
     let background = SKSpriteNode()
     let zen = SKSpriteNode()
     
+    var touchCount: Int = 0
+    
     override func didMove(to view: SKView) {
 
         timerRadius = frame.height * 0.5
@@ -223,6 +225,12 @@ class GameScene: SKScene {
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
+            if(touchCount != 0) {
+                return
+            }
+            else {
+                touchCount += 1
+            }
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
@@ -306,11 +314,10 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            if(touched == true && currentTouchedObject == touchedNode.name) {
+        for _ in touches {
+            if(touched == true && touchCount == 1) {
                 touched = false
+                touchCount = 0
             }
         }
     }
