@@ -18,7 +18,7 @@ class GameScene: SKScene {
     let pieceColor = UIColor(.pieceColor)
     let timerStrokeColor = UIColor(.pieceColor)
     let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
-    var lastIndex = 3
+    var lastIndex : Int = numberOfPiece - 1
     
     // Current Object Information
     var currentTouchedObject: String?
