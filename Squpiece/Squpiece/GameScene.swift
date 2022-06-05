@@ -13,6 +13,7 @@ import AVFoundation
 class GameScene: SKScene {
     
     // Presetting Values
+    var circleRadius: CGFloat = 1
     let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let pieceColor = UIColor(.pieceColor)
@@ -79,6 +80,7 @@ class GameScene: SKScene {
     
     let colorTest: [UIColor] = [UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black]
     override func didMove(to view: SKView) {
+        circleRadius = frame.maxX * 0.8
         timerRadius = frame.height * 0.5
         resetVar()
         self.backgroundColor = bgColor
@@ -145,15 +147,19 @@ class GameScene: SKScene {
         zen.zPosition = -1
         addChild(zen)
         
-        pieceBackground.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.maxX * 0.8)
+        pieceBackground.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius)
         pieceBackground.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
         pieceBackground.fillColor = .white
         pieceBackground.alpha = 0.8
         addChild(pieceBackground)
         
+        let angle: CGFloat = CGFloat(180/(lastIndex+1))
+        let rotateAngle = CGFloat(Double(2) * CGFloat.pi / Double(numberOfPiece))
+        var currentAngle: CGFloat = 0
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
-            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: frame.maxX * 0.8)
+//            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(Double(360/(lastIndex+1) * i)), endAngle: .degrees(Double(360/(lastIndex+1) * (i+1))), clockwise: false, radius: circleRadius)
+            pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90-angle), endAngle: .degrees(90+angle), clockwise: false, radius: circleRadius)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
@@ -169,9 +175,11 @@ class GameScene: SKScene {
             nodeNameSetting(node: pieceSprite[i], name: "p_\(pieceName[i])")
                         
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
-            let divideFor = Double(lastIndex + 1)
-            pieceSprite[i].position = CGPoint(x: cos(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5, y: sin(Double.pi / divideFor * Double(2*i + 1)) * frame.maxX * 0.5)
+            pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
+            
+            pieces[i].zRotation = currentAngle
+            currentAngle += rotateAngle
             
             rotateAction([pieces[i]])
         }
@@ -246,8 +254,11 @@ class GameScene: SKScene {
         returnHomeButton.isHidden = true
         addChild(returnHomeButton)
         
-        shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
+        shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark], action: {
+            self.changeLayer(nodes: self.pieces, currentIndex: self.currentIndex)
+        })
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
+        
     }
     
     //https://developer.apple.com/forums/thread/107653
@@ -392,7 +403,7 @@ class GameScene: SKScene {
         let wait = SKAction.wait(forDuration: 0.1)
         let hold = SKAction.run({
             if(change != true) {
-                if(self.timerRadius > self.frame.maxX * 0.8) {
+                if(self.timerRadius > self.circleRadius) {
                     self.timerRadius -= self.frame.maxY * 0.001
                     }
             } else {
@@ -400,7 +411,7 @@ class GameScene: SKScene {
                 change = false
             }
             
-            if(self.timerRadius > self.frame.maxX * 0.8) {
+            if(self.timerRadius > self.circleRadius) {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 node.isHidden = true
