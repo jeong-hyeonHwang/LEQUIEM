@@ -19,3 +19,5 @@ var waitSec: Double = 1
 var degree: Double = 55
 
 var numberOfPiece: Int = 2
+
+let bgColor = UIColor(.bgColor)

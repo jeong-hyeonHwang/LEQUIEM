@@ -13,11 +13,11 @@ import AVFoundation
 class GameScene: SKScene {
     
     // Presetting Values
-    let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
-    let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
+    let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let pieceColor = UIColor(.pieceColor)
     let timerStrokeColor = UIColor(.pieceColor)
-    let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill"]
+    let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill", "staroflife.fill", "star.fill"]
     var lastIndex : Int = numberOfPiece - 1
     
     // Current Object Information
@@ -70,7 +70,6 @@ class GameScene: SKScene {
     let patternColor = UIColor(.fontColor)
     let centerPatternColor = UIColor(.pieceColor)
     let timerBackgroundColor = UIColor(.timerColor)
-    let bgColor = UIColor(.bgColor)
     
     let background = SKSpriteNode()
     let zen = SKSpriteNode()
@@ -78,8 +77,8 @@ class GameScene: SKScene {
     var touchCount: Int = 0
     var nodeOpen: Bool = false
     
+    let colorTest: [UIColor] = [UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black]
     override func didMove(to view: SKView) {
-
         timerRadius = frame.height * 0.5
         resetVar()
         self.backgroundColor = bgColor
@@ -254,6 +253,7 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
+            print(touchedNode.name ?? "NIL")
             if (touchedNode.name == "restartButton") {
                 UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
                 UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
@@ -335,7 +335,8 @@ class GameScene: SKScene {
                     
                     change = true
                     if(randomStop == false) {
-                        currentIndex = Int.random(in: 0...lastIndex)
+//                        currentIndex = Int.random(in: 0...lastIndex)
+                        currentIndex = 2
                     }
                     let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
                     let patternData = patternImg.pngData()

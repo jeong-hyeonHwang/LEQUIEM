@@ -26,12 +26,6 @@ class GameViewController: UIViewController {
                 view.presentScene(scene, transition: fade)
             }
             
-//            if let scene = SKScene(fileNamed: "GameScene") {
-//                let fade = SKTransition.fade(withDuration: 2)
-//                // Present the scene
-//                view.presentScene(scene, transition: fade)
-//            }
-            
             view.ignoresSiblingOrder = true
             
             view.showsFPS = false
