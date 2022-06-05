@@ -11,23 +11,15 @@ import AVFoundation
 
 class SelectScene: SKScene {
 
-    func pieceRotation(node: [SKShapeNode]) {
-        //let rotateAngle = CGFloat(360/pieceNum)
-        let rotateAngle = CGFloat(Double(2) * CGFloat.pi / Double(numberOfPiece))
-        var currentAngle: CGFloat = 0
-        for i in 0..<numberOfPiece {
-            node[i].isHidden = false
-            //node[i].angle
-            node[i].zRotation = currentAngle
-            currentAngle += rotateAngle
-        }
-        for i in numberOfPiece..<node.count {
-            node[i].isHidden = true
-        }
-    }
+    var stageNameLabel = SKLabelNode()
     var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    let stageNameList: [String] = ["Incarnation", "Agony", "Enlightenment", "Fallen", "Transcendence"]
     let pieceAngle: Double = 30
     override func didMove(to view: SKView) {
+        labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.35))
+        stageNameLabel.fontColor = UIColor.black
+        labelNodeColor(node: stageNameLabel, color: UIColor.black)
+        addChild(stageNameLabel)
         for i in 0..<pieces.count {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90 - pieceAngle/2), endAngle: .degrees(90 + pieceAngle/2), clockwise: false, radius: frame.maxX * 0.8)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
@@ -44,6 +36,7 @@ class SelectScene: SKScene {
             numberOfPiece = 2
         }
         pieceRotation(node: pieces)
+        changeStageName(node: stageNameLabel, nameList: stageNameList)
     }
 }
 
