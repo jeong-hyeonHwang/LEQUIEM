@@ -70,12 +70,14 @@ func shadowDisappear(node: SKNode, labels: [SKNode]) {
     node.run(sequence)
 }
 
-func shadowAppear(node: SKNode, restartButton: SKNode) {
+func shadowAppear(node: SKNode, hiddenNodes: [SKNode]) {
     node.alpha = 0.0
     node.isHidden = false
     let fadeIn = SKAction.fadeIn(withDuration: waitSec/2)
     let shadowAppear = SKAction.run {
-        restartButton.isHidden = false
+        for node in hiddenNodes {
+            node.isHidden = false
+        }
     }
     let sequence = SKAction.sequence([fadeIn, shadowAppear])
     node.run(sequence)

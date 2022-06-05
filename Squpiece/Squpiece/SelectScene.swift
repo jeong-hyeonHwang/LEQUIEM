@@ -12,6 +12,7 @@ import AVFoundation
 class SelectScene: SKScene {
 
     var stageNameLabel = SKLabelNode()
+    var startButtonLabel = SKLabelNode()
     var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     let stageNameList: [String] = ["Incarnation", "Agony", "Enlightenment", "Fallen", "Transcendence"]
     let pieceAngle: Double = 30
@@ -28,8 +29,31 @@ class SelectScene: SKScene {
             addChild(pieces[i])
         }
         pieceRotation(node: pieces)
+        
+        labelSetting(node: startButtonLabel, str: "START", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + frame.maxY * 0.25))
+        startButtonLabel.fontColor = UIColor.black
+        labelNodeColor(node: startButtonLabel, color: UIColor.black)
+        nodeNameSetting(node: startButtonLabel, name: "startButton")
+        addChild(startButtonLabel)
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            let touchedNode = atPoint(location)
+            if (touchedNode.name == "startButton") {
+                if let scene = SKScene(fileNamed: "GameScene") {
+                    let fade = SKTransition.fade(withDuration: 1)
+                    for node in children {
+                        node.removeAllActions()
+                        node.removeAllChildren()
+                    }
+                    // Present the scene
+                    self.view?.presentScene(scene, transition: fade)
+                }
+                return
+            }
+        }
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
         } else {

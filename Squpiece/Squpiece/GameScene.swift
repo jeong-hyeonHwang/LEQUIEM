@@ -62,6 +62,9 @@ class GameScene: SKScene {
     
     // OutGame Button
     let restartButton = SKSpriteNode()
+    //let restartButton = SKLabelNode()
+    let returnHomeButton = SKSpriteNode()
+    
     let fontColor = UIColor(.fontColor)
     
     let patternColor = UIColor(.fontColor)
@@ -211,16 +214,36 @@ class GameScene: SKScene {
         addChild(shadow)
 
         //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
+        //Restart Button : VER.SPRITE NODE
         let image = UIImage(systemName: "arrow.clockwise")!.withTintColor(.white)
         let data = image.pngData()
         let newImage = UIImage(data:data!)
         restartButton.texture = SKTexture(image: newImage!)
         nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = CGSize(width: 45, height: 52.5)
-        restartButton.position = CGPoint(x: 0, y: frame.minY + frame.height * 0.15)
+        restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
         restartButton.zPosition = 2
         restartButton.isHidden = true
         addChild(restartButton)
+        
+        //Restart Button : VER.LABEL
+//        labelSetting(node: restartButton, str: "RESTART", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + frame.height * 0.15))
+//        labelNodeColor(node: restartButton, color: UIColor.white)
+//        nodeNameSetting(node: restartButton, name: "restartButton")
+//        restartButton.zPosition = 2
+//        restartButton.isHidden = true
+//        addChild(restartButton)
+        
+        let houseImg = UIImage(systemName: "house")!.withTintColor(.white)
+        let hData = houseImg.pngData()
+        let hImage = UIImage(data:hData!)
+        returnHomeButton.texture = SKTexture(image: hImage!)
+        nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
+        returnHomeButton.size = CGSize(width: 45, height: 45)
+        returnHomeButton.position = CGPoint(x: frame.midX - frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
+        returnHomeButton.zPosition = 2
+        returnHomeButton.isHidden = true
+        addChild(returnHomeButton)
         
         shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
@@ -244,6 +267,18 @@ class GameScene: SKScene {
                     self.view?.presentScene(scene, transition: fade)
                 }
                 
+            } else if (touchedNode.name == "returnHomeButton") {
+                UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
+                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
+                if let scene = SKScene(fileNamed: "SelectScene") {
+                    let fade = SKTransition.fade(withDuration: 1)
+                    for node in children {
+                        node.removeAllActions()
+                        node.removeAllChildren()
+                    }
+                    // Present the scene
+                    self.view?.presentScene(scene, transition: fade)
+                }
             }
             
             if (nodeOpen == false) {
@@ -350,7 +385,7 @@ class GameScene: SKScene {
             } else {
                 node.isHidden = true
                 self.nodeOpen = false
-                shadowAppear(node: self.shadow, restartButton: self.restartButton)
+                shadowAppear(node: self.shadow, hiddenNodes: [self.restartButton, self.returnHomeButton])
             }
         })
         
