@@ -178,6 +178,7 @@ class GameScene: SKScene {
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
+        currentPiece.zPosition = 1.1
         shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
         nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
@@ -187,6 +188,7 @@ class GameScene: SKScene {
         let patternData = patternImg.pngData()
         let newImg = UIImage(data:patternData!)
         currentPieceSprite.texture = SKTexture(image: newImg!)
+        currentPieceSprite.zPosition = 2
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
         currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
@@ -335,8 +337,8 @@ class GameScene: SKScene {
                     
                     change = true
                     if(randomStop == false) {
-//                        currentIndex = Int.random(in: 0...lastIndex)
-                        currentIndex = 2
+                        currentIndex = Int.random(in: 0...lastIndex)
+                        changeLayer(nodes: pieces, currentIndex: currentIndex)
                     }
                     let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
                     let patternData = patternImg.pngData()
@@ -357,15 +359,32 @@ class GameScene: SKScene {
         }
     }
     
-    override func update(_ currentTime: TimeInterval) {
-    }
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for _ in touches {
             if(touched == true && touchCount == 1) {
                 touched = false
                 touchCount = 0
             }
+        }
+    }
+    
+    func changeLayer(nodes: [SKShapeNode], currentIndex: Int) {
+        for i in 0...lastIndex {
+            if i != currentIndex {
+                nodes[i].zPosition = 0
+            } else {
+                nodes[i].zPosition = 0.5
+            }
+        }
+    }
+    
+    func layerReturn(nodes: [SKShapeNode], currentPieceNodes: [SKNode]) {
+        for node in nodes {
+            node.zPosition = 0
+        }
+        
+        for node in currentPieceNodes {
+            node.zPosition = 0
         }
     }
     
@@ -386,6 +405,7 @@ class GameScene: SKScene {
             } else {
                 node.isHidden = true
                 self.nodeOpen = false
+                self.layerReturn(nodes: self.pieces, currentPieceNodes: [self.currentPiece, self.currentPieceSprite])
                 shadowAppear(node: self.shadow, hiddenNodes: [self.restartButton, self.returnHomeButton])
             }
         })
