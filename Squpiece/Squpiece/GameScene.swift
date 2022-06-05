@@ -82,16 +82,16 @@ class GameScene: SKScene {
         timerRadius = frame.height * 0.5
         resetVar()
         self.backgroundColor = bgColor
-        
+
         //Setting: High Score Label
-        highScoreValue = UserDefaults.standard.integer(forKey: "HighScore")
+        highScoreValue = dataGet(key: highScoreNameList[lastIndex-1])
         labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         highScoreLabel.fontColor = UIColor.black
         labelNodeColor(node: highScoreLabel, color: fontColor)
         addChild(highScoreLabel)
         
         // Setting: Max Combo Label
-        maxComboValue = UserDefaults.standard.integer(forKey: "MaxCombo")
+        maxComboValue = dataGet(key: maxComboNameList[lastIndex-1])
         labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         labelNodeColor(node: maxComboLabel, color: fontColor)
         addChild(maxComboLabel)
@@ -257,8 +257,8 @@ class GameScene: SKScene {
             let touchedNode = atPoint(location)
             print(touchedNode.name ?? "NIL")
             if (touchedNode.name == "restartButton") {
-                UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
-                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
+                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
+                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -270,8 +270,8 @@ class GameScene: SKScene {
                 }
                 
             } else if (touchedNode.name == "returnHomeButton") {
-                UserDefaults.standard.set(highScoreValue, forKey: "HighScore")
-                UserDefaults.standard.set(maxComboValue, forKey: "MaxCombo")
+                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
+                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
                 if let scene = SKScene(fileNamed: "SelectScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
