@@ -175,14 +175,8 @@ class GameScene: SKScene {
             let data = image.pngData()
             let newImage = UIImage(data:data!)
             pieceSprite[i].texture = SKTexture(image: newImage!)
-            
-            nodeNameSetting(node: pieceSprite[i], name: "p_\(pieceName[i])")
-                        
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
-            pieceSprite[i].physicsBody = SKPhysicsBody(rectangleOf: pieceSprite[i].size)
-            pieceSprite[i].physicsBody!.affectedByGravity = false
-            pieceSprite[i].physicsBody!.isDynamic = false
             pieces[i].addChild(pieceSprite[i])
             
             pieces[i].zRotation = currentAngle
@@ -273,8 +267,7 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             var touchedNode = atPoint(location)
-            print("NODE \(physicsWorld.body(at: location)?.node?.name)")
-            //print(touchedNode.name ?? "NIL")
+            //print("NODE \(physicsWorld.body(at: location)?.node)")
             if (touchedNode.name == "restartButton") {
                 dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
                 dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
@@ -315,10 +308,9 @@ class GameScene: SKScene {
                 randomRestartAction(node: touchedNode)
                 HapticManager.instance.impact(style: .light)
             }
-            
-            //print("BEFORE \(touchedNode.name)")
+
             touchedNode = physicsWorld.body(at: location)!.node!
-            //print("AFTER \(touchedNode.name)")
+            
             if (((touchedNode.name?.contains("p_")) != nil) && touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
                 
                 if(touchCount != 0) {
