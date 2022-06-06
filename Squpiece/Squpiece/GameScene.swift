@@ -164,6 +164,10 @@ class GameScene: SKScene {
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
+            //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
+            pieces[i].physicsBody = SKPhysicsBody(polygonFrom: pieces[i].path!)
+            pieces[i].physicsBody!.affectedByGravity = false
+            pieces[i].physicsBody!.isDynamic = false
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
@@ -176,6 +180,9 @@ class GameScene: SKScene {
                         
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
+            pieceSprite[i].physicsBody = SKPhysicsBody(rectangleOf: pieceSprite[i].size)
+            pieceSprite[i].physicsBody!.affectedByGravity = false
+            pieceSprite[i].physicsBody!.isDynamic = false
             pieces[i].addChild(pieceSprite[i])
             
             pieces[i].zRotation = currentAngle
@@ -265,8 +272,9 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            print(touchedNode.name ?? "NIL")
+            var touchedNode = atPoint(location)
+            print("NODE \(physicsWorld.body(at: location)?.node?.name)")
+            //print(touchedNode.name ?? "NIL")
             if (touchedNode.name == "restartButton") {
                 dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
                 dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
@@ -308,10 +316,10 @@ class GameScene: SKScene {
                 HapticManager.instance.impact(style: .light)
             }
             
-            if ((touchedNode.name?.contains("p_")) != nil && touched == false && !touchedNode.name!.contains("XX")) {
-                if(touchedNode.name!.contains("X") || ((abs(location.x) > frame.maxX*0.8) || (abs(location.y) > frame.maxX*0.8))) {
-                    return
-                }
+            //print("BEFORE \(touchedNode.name)")
+            touchedNode = physicsWorld.body(at: location)!.node!
+            //print("AFTER \(touchedNode.name)")
+            if (((touchedNode.name?.contains("p_")) != nil) && touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
                 
                 if(touchCount != 0) {
                     return
@@ -319,7 +327,7 @@ class GameScene: SKScene {
                 else {
                     touchCount += 1
                 }
-
+                
                 currentTouchedObject = touchedNode.name
                 if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
                     scoreValue += 125
@@ -393,7 +401,7 @@ class GameScene: SKScene {
         for node in nodes {
             node.zPosition = 0
         }
-        
+
         for node in currentPieceNodes {
             node.zPosition = 0
         }

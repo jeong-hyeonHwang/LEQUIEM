@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "SelectScene") {
+            //if let scene = SKScene(fileNamed: "TestScene") {
                 let fade = SKTransition.fade(withDuration: 2)
                 // Present the scene
                 view.presentScene(scene, transition: fade)
@@ -30,6 +31,7 @@ class GameViewController: UIViewController {
             
             view.showsFPS = false
             view.showsNodeCount = false
+            view.showsPhysics = true
         }
     }
 
