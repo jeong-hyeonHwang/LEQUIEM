@@ -21,15 +21,16 @@ class GameViewController: UIViewController {
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "SelectScene") {
+//            if let scene = SKScene(fileNamed: "Test") {
                 let fade = SKTransition.fade(withDuration: 2)
                 // Present the scene
                 view.presentScene(scene, transition: fade)
             }
             
-            view.ignoresSiblingOrder = true
+            //view.ignoresSiblingOrder = true
             
-            view.showsFPS = false
-            view.showsNodeCount = false
+            view.showsFPS = true
+            view.showsNodeCount = true
             view.showsPhysics = true
         }
     }
