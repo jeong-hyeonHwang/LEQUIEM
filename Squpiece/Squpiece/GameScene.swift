@@ -10,6 +10,26 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
+//https://www.hackingwithswift.com/example-code/language/how-to-convert-radians-to-degrees
+func rad2deg(_ number: Double) -> Double {
+    return number * 180 / .pi
+}
+
+extension CGPath {
+    static func arcWithWidth(center: CGPoint, start:CGFloat, end:CGFloat, radius:CGFloat, clockwise:Bool) -> UIBezierPath {
+        // The radius parameter specifies the middle of the arc; adjust this as needed
+
+        // Note the arc is upside down because CGPath uses UIKit coordinates
+        let path = UIBezierPath()
+        // Add inner ring.
+        path.addArc(withCenter: center, radius: radius, startAngle: start, endAngle: end, clockwise: true)
+        path.addLine(to: center)
+        path.close()
+
+        return path
+    }
+}
+
 class GameScene: SKScene {
     
     // Presetting Values
@@ -80,8 +100,6 @@ class GameScene: SKScene {
     
     let colorTest: [UIColor] = [UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white]
     override func didMove(to view: SKView) {
-        numberOfPiece = 5
-        lastIndex = numberOfPiece - 1
         
         circleRadius = frame.maxX * 0.8
         timerRadius = frame.height * 0.5
@@ -156,50 +174,48 @@ class GameScene: SKScene {
         pieceBackground.alpha = 0.8
         addChild(pieceBackground)
         
-        let angle: CGFloat = CGFloat(180/(lastIndex+1))
         let rotateAngle = (CGFloat(2) * CGFloat.pi / CGFloat(numberOfPiece))
         let rotateAngle5: [CGFloat] = [-rotateAngle * 2, rotateAngle, 0, rotateAngle * 2, -rotateAngle]
         
 //                UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white
 
+        let angle = CGFloat(180/(self.lastIndex+1))
         let sAngle: CGFloat = 90 - angle
         let eAngle: CGFloat = 90 + angle
+//        let sA = sAngle * .pi / 180
+//        let eA = eAngle * .pi / 180
         // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
-            print("\(sAngle) & \(eAngle)")
-            print("p_\(pieceName[i])")
-            
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
-            pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            pieces[i].zPosition = 3
+            //pieces[i].path = CGPath.arcWithWidth(center: CGPoint(x: frame.midX, y: frame.midY), start: sA, end: eA, radius: circleRadius, clockwise: false).cgPath
+            //pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
+            //pieces[i].zPosition = 3
             shapeNodeColorSetting(node: pieces[i], fillColor: colorTest[i], strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
 //            //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
+            
             pieces[i].physicsBody = SKPhysicsBody(polygonFrom: pieces[i].path!)
             pieces[i].physicsBody!.isDynamic = false
             
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-//            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
-//            let data = image.pngData()
-//            let newImage = UIImage(data:data!)
-//            pieceSprite[i].texture = SKTexture(image: newImage!)
-//            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
-//            pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
-//            pieces[i].addChild(pieceSprite[i])
+            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
+            let data = image.pngData()
+            let newImage = UIImage(data:data!)
+            pieceSprite[i].texture = SKTexture(image: newImage!)
+            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
+            pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
+            pieces[i].addChild(pieceSprite[i])
             nodeNameSetting(node: pieceSprite[i], name:  "p_\(pieceName[i])")
             if(numberOfPiece == 5) {
                 pieces[i].zRotation = rotateAngle5[i]
             } else {
                 pieces[i].zRotation = rotateAngle * CGFloat(i)
             }
-//            else if (numberOfPiece == 6) {
-//                pieces[i].zRotation = rotateAngle6[i]
-//            }
-            //rotate(node: pieces[i], index: i)
+//            rotate(node: pieces[i], index: i)
             rotateAction([pieces[i]])
         }
         
@@ -288,7 +304,8 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             var touchedNode = atPoint(location)
-            print("NODE \(physicsWorld.body(at: location)?.node)")
+            //print("TOUCHED NODE IS \(String(describing: touchedNode.name))")
+            //print("NODE \(physicsWorld.body(at: location)?.node)")
             if (touchedNode.name == "restartButton") {
                 dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
                 dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
@@ -330,9 +347,10 @@ class GameScene: SKScene {
                 HapticManager.instance.impact(style: .light)
             }
 
-            touchedNode = physicsWorld.body(at: location)!.node!
+            //touchedNode = physicsWorld.body(at: location)!.node!
 
             if (((touchedNode.name?.contains("p_")) != nil) && touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
+
 
                 if(touchCount != 0) {
                     return
@@ -340,9 +358,15 @@ class GameScene: SKScene {
                 else {
                     touchCount += 1
                 }
-
-                currentTouchedObject = touchedNode.name
-                if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
+                
+                let currentZR = rad2deg(pieces[currentIndex].zRotation)
+                let angle = CGFloat(180/(self.lastIndex+1))
+                let sAngle = currentZR - angle + 90
+                let eAngle = currentZR + angle + 90
+                //print("\(sAngle) \(eAngle)")
+                let temp = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
+                if(temp.contains(location)) {
+                    print("YES!")
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
                     HapticManager.instance.impact(style: .soft)
@@ -378,14 +402,60 @@ class GameScene: SKScene {
                     currentPieceSprite.texture = SKTexture(image: newImg!)
                     currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
-
                 } else {
+                    print("NO...")
                     degree += 10 // or 3?
                     //timerRadius -= frame.maxY * 0.12
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
                     comboLabel.text = ""
                 }
+                
+//                currentTouchedObject = touchedNode.name
+//                if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
+//                    scoreValue += 125
+//                    scoreLabel.text = String(scoreValue)
+//                    HapticManager.instance.impact(style: .soft)
+//
+//                    if(scoreValue > highScoreValue) {
+//                        highScoreValue = scoreValue
+//                        highScoreLabel.text = String(highScoreValue)
+//                    }
+//
+//                    comboValue += 1
+//                    comboLabel.text = "\(String(comboValue)) COMBO"
+//                    labelScaleAction(node: comboLabel)
+//
+//                    if (comboValue % 50 == 0 && comboValue > 0) {
+//                        degree -= 10 // or 5?
+//                        timerRadius += frame.maxY * 0.15
+//                        HapticManager.instance.impact(style: .medium)
+//                    }
+//
+//                    if(comboValue > maxComboValue) {
+//                        maxComboValue = comboValue
+//                        maxComboLabel.text = String(maxComboValue)
+//                    }
+//
+//                    change = true
+//                    if(randomStop == false) {
+//                        currentIndex = Int.random(in: 0...lastIndex)
+//                        changeLayer(nodes: pieces, currentIndex: currentIndex)
+//                    }
+//                    let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
+//                    let patternData = patternImg.pngData()
+//                    let newImg = UIImage(data:patternData!)
+//                    currentPieceSprite.texture = SKTexture(image: newImg!)
+//                    currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
+//                    scaleAction(node: currentPieceSprite)
+//
+//                } else {
+//                    degree += 10 // or 3?
+//                    //timerRadius -= frame.maxY * 0.12
+//                    HapticManager.instance.impact(style: .heavy)
+//                    comboValue = 0
+//                    comboLabel.text = ""
+//                }
                 touched = true
             }
         }

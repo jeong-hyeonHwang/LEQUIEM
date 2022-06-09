@@ -32,13 +32,26 @@ func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, r
     return path.cgPath
 }
 
-func Donut(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, radius: CGFloat, width: CGFloat) -> CGPath {
+func Donut_(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, radius: CGFloat, width: CGFloat) -> CGPath {
     var path = Path()
     let s: CGFloat = CGFloat(startAngle) * .pi / 180
     let e = CGFloat(endAngle) * .pi / 180
     let sA: Angle = .degrees(startAngle)
     let eA: Angle = .degrees(endAngle)
     path.move(to: CGPoint(x: radius * cos(s), y: radius * sin(s)))
+    path.addArc(center: center, radius: radius-width, startAngle: sA, endAngle: eA, clockwise: clockwise)
+    path.addLine(to: CGPoint(x: radius * cos(e), y: radius * sin(e)))
+    path.addArc(center: center, radius: radius, startAngle: eA, endAngle: sA, clockwise: !clockwise)
+    path.addLine(to: CGPoint(x: (radius-width) * cos(s), y: (radius-width) * sin(s)))
+    return path.cgPath
+}
+
+func Donut(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, radius: CGFloat, width: CGFloat) -> CGPath {
+    var path = Path()
+    let s: CGFloat = CGFloat(startAngle) * .pi / 180
+    let e = CGFloat(endAngle) * .pi / 180
+    let sA: Angle = .degrees(startAngle)
+    let eA: Angle = .degrees(endAngle)
     path.addArc(center: center, radius: radius-width, startAngle: sA, endAngle: eA, clockwise: clockwise)
     path.addLine(to: CGPoint(x: radius * cos(e), y: radius * sin(e)))
     path.addArc(center: center, radius: radius, startAngle: eA, endAngle: sA, clockwise: !clockwise)
