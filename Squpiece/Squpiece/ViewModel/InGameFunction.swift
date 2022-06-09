@@ -8,6 +8,11 @@
 import Foundation
 import SpriteKit
 
+//https://www.hackingwithswift.com/example-code/language/how-to-convert-radians-to-degrees
+func rad2deg(_ number: Double) -> Double {
+    return number * 180 / .pi
+}
+
 func rotationRestartAction(node: SKNode, rotateNodes: [SKNode]) {
     
     for node in rotateNodes {
@@ -58,24 +63,27 @@ func shadowDisappear(node: SKNode, labels: [SKNode]) {
         node.alpha = 1.0
         node.isHidden = false
     }
-    let wait = SKAction.wait(forDuration: waitSec - 0.2)
-    let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+    //let wait = SKAction.wait(forDuration: waitSec - 0.2)
+    let fadeOut = SKAction.fadeOut(withDuration: waitSec/2)
     let shadowDisappear = SKAction.run {
         labelAppear(labels: labels)
         node.isHidden = true
         node.alpha = 0.8
     }
-    let sequence = SKAction.sequence([shadowAppear, wait, fadeOut, shadowDisappear])
+    
+    //let sequence = SKAction.sequence([shadowAppear, wait, fadeOut, shadowDisappear])
+    let sequence = SKAction.sequence([shadowAppear, fadeOut, shadowDisappear])
     node.run(sequence)
 }
 
-func shadowAppear(node: SKNode, restartButton: SKNode, labels: [SKNode]) {
+func shadowAppear(node: SKNode, hiddenNodes: [SKNode]) {
     node.alpha = 0.0
     node.isHidden = false
-    let fadeIn = SKAction.fadeIn(withDuration: 0.1)
+    let fadeIn = SKAction.fadeIn(withDuration: waitSec/2)
     let shadowAppear = SKAction.run {
-        labelDisappear(labels: labels)
-        restartButton.isHidden = false
+        for node in hiddenNodes {
+            node.isHidden = false
+        }
     }
     let sequence = SKAction.sequence([fadeIn, shadowAppear])
     node.run(sequence)
@@ -92,12 +100,9 @@ func labelAppear(labels: [SKNode]) {
     }
 }
 
-func labelDisappear(labels: [SKNode]) {
-    
-    for label in labels {
-        let fadeOut = SKAction.fadeOut(withDuration: 0.2)
-        label.run(fadeOut)
-    }
+func pieceRotation (node: SKShapeNode, index: Int) {
+    let rotateAction = SKAction.rotate(toAngle: 2 * .pi/CGFloat(numberOfPiece) * CGFloat(index), duration: 0)
+    node.run(rotateAction)
 }
 
 func rotateAction (_ nodes: [SKNode]) {
