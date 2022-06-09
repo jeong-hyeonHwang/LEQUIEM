@@ -96,6 +96,11 @@ func labelAppear(labels: [SKNode]) {
     }
 }
 
+func pieceRotation (node: SKShapeNode, index: Int) {
+    let rotateAction = SKAction.rotate(toAngle: 2 * .pi/CGFloat(numberOfPiece) * CGFloat(index), duration: 0)
+    node.run(rotateAction)
+}
+
 func rotateAction (_ nodes: [SKNode]) {
     for node in nodes {
         let leftRotate = SKAction.rotate(byAngle: -rotateAngle, duration: 5)

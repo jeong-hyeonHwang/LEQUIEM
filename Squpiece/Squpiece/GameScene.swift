@@ -97,8 +97,7 @@ class GameScene: SKScene {
     
     var touchCount: Int = 0
     var nodeOpen: Bool = false
-    
-    let colorTest: [UIColor] = [UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white]
+
     override func didMove(to view: SKView) {
         
         circleRadius = frame.maxX * 0.8
@@ -173,25 +172,14 @@ class GameScene: SKScene {
         pieceBackground.fillColor = .white
         pieceBackground.alpha = 0.8
         addChild(pieceBackground)
-        
-        let rotateAngle = (CGFloat(2) * CGFloat.pi / CGFloat(numberOfPiece))
-        let rotateAngle5: [CGFloat] = [-rotateAngle * 2, rotateAngle, 0, rotateAngle * 2, -rotateAngle]
-        
-//                UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white
 
         let angle = CGFloat(180/(self.lastIndex+1))
         let sAngle: CGFloat = 90 - angle
         let eAngle: CGFloat = 90 + angle
-//        let sA = sAngle * .pi / 180
-//        let eA = eAngle * .pi / 180
-        // Setting: Piece & Piece Sprite
         for i in 0...lastIndex {
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
-            //pieces[i].path = CGPath.arcWithWidth(center: CGPoint(x: frame.midX, y: frame.midY), start: sA, end: eA, radius: circleRadius, clockwise: false).cgPath
-            //pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
-            //pieces[i].zPosition = 3
-            shapeNodeColorSetting(node: pieces[i], fillColor: colorTest[i], strokeColor: UIColor(.parchmentColor))
+            shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
 //            //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
@@ -210,12 +198,7 @@ class GameScene: SKScene {
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
             nodeNameSetting(node: pieceSprite[i], name:  "p_\(pieceName[i])")
-            if(numberOfPiece == 5) {
-                pieces[i].zRotation = rotateAngle5[i]
-            } else {
-                pieces[i].zRotation = rotateAngle * CGFloat(i)
-            }
-//            rotate(node: pieces[i], index: i)
+            pieceRotation(node: pieces[i], index: i)
             rotateAction([pieces[i]])
         }
         
@@ -295,10 +278,7 @@ class GameScene: SKScene {
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
         
     }
-    func rotate(node: SKShapeNode, index: Int) {
-        let rotateAction = SKAction.rotate(toAngle: .pi/3 * CGFloat(index), duration: 0)
-        node.run(rotateAction)
-    }
+    
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
