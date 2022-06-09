@@ -175,12 +175,6 @@ class GameScene: SKScene {
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
-            nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
-//            //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
-            
-            pieces[i].physicsBody = SKPhysicsBody(polygonFrom: pieces[i].path!)
-            pieces[i].physicsBody!.isDynamic = false
-            
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
@@ -191,7 +185,6 @@ class GameScene: SKScene {
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
-            nodeNameSetting(node: pieceSprite[i], name:  "p_\(pieceName[i])")
             pieceRotation(node: pieces[i], index: i)
             rotateAction([pieces[i]])
         }
