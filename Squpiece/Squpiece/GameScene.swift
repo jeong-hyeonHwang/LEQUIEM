@@ -268,7 +268,7 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            var touchedNode = atPoint(location)
+            let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
                 dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
                 dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
