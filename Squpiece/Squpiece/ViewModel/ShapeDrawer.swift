@@ -38,6 +38,7 @@ func Donut(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: B
     let e = CGFloat(endAngle) * .pi / 180
     let sA: Angle = .degrees(startAngle)
     let eA: Angle = .degrees(endAngle)
+    path.move(to: CGPoint(x: radius * cos(s), y: radius * sin(s)))
     path.addArc(center: center, radius: radius-width, startAngle: sA, endAngle: eA, clockwise: clockwise)
     path.addLine(to: CGPoint(x: radius * cos(e), y: radius * sin(e)))
     path.addArc(center: center, radius: radius, startAngle: eA, endAngle: sA, clockwise: !clockwise)
