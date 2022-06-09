@@ -15,7 +15,6 @@ class GameScene: SKScene {
     // Presetting Values
     var circleRadius: CGFloat = 1
     let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
-    var physicsB: [SKPhysicsBody] = [SKPhysicsBody(), SKPhysicsBody(), SKPhysicsBody(), SKPhysicsBody(), SKPhysicsBody(), SKPhysicsBody()]
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let pieceColor = UIColor(.pieceColor)
     let timerStrokeColor = UIColor(.pieceColor)
@@ -81,7 +80,7 @@ class GameScene: SKScene {
     
     let colorTest: [UIColor] = [UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white]
     override func didMove(to view: SKView) {
-        numberOfPiece = 6
+        numberOfPiece = 5
         lastIndex = numberOfPiece - 1
         
         circleRadius = frame.maxX * 0.8
@@ -129,7 +128,7 @@ class GameScene: SKScene {
 
         // Setting: Circle Timer
         circleTimer.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: timerRadius)
-        //shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.timerColor), strokeColor: UIColor(.timerColor))
+        shapeNodeColorSetting(node: circleTimer, fillColor: UIColor(.timerColor), strokeColor: UIColor(.timerColor))
         shapeNodeColorSetting(node: circleTimer, fillColor: timerBackgroundColor, strokeColor: timerBackgroundColor)
         circleTimer.zPosition = -1.8
         addChild(circleTimer)
@@ -160,92 +159,48 @@ class GameScene: SKScene {
         let angle: CGFloat = CGFloat(180/(lastIndex+1))
         let rotateAngle = (CGFloat(2) * CGFloat.pi / CGFloat(numberOfPiece))
         let rotateAngle5: [CGFloat] = [-rotateAngle * 2, rotateAngle, 0, rotateAngle * 2, -rotateAngle]
-    
+        
+//                UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white
 
-        let rotateAngle6: [CGFloat] = [ rotateAngle * 1, rotateAngle * 2, rotateAngle * -1, rotateAngle * -2, rotateAngle * 3, rotateAngle * 0 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * 1, rotateAngle * 2, rotateAngle * -1, rotateAngle * -2, rotateAngle * 3, rotateAngle * 0 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * 1, rotateAngle * -2, rotateAngle * 0, rotateAngle * 3, rotateAngle * 2 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 3, rotateAngle * 2, rotateAngle * 1, rotateAngle * 0 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 3, rotateAngle * 2, rotateAngle * 0, rotateAngle * 1 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 3, rotateAngle * 0, rotateAngle * 2, rotateAngle * 1 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 2, rotateAngle * 3, rotateAngle * 1, rotateAngle * 0 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 2, rotateAngle * 3, rotateAngle * 0, rotateAngle * 1 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 1, rotateAngle * 2, rotateAngle * 0, rotateAngle * 3 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -1, rotateAngle * -2, rotateAngle * 1, rotateAngle * 0, rotateAngle * 2, rotateAngle * 3 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -2, rotateAngle * 3, rotateAngle * 1, rotateAngle * 2, rotateAngle * 0, rotateAngle * -1 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -2, rotateAngle * 3, rotateAngle * 1, rotateAngle * 2, rotateAngle * -1, rotateAngle * 0 ]
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * -2, rotateAngle * 2, rotateAngle * -1, rotateAngle * 1, rotateAngle * 3, rotateAngle * 0 ]
-        // 4: let rotateAngle6: [CGFloat] = [rotateAngle * 3, rotateAngle * 2, -rotateAngle, 0, -rotateAngle * 2, rotateAngle]
-        //4: let rotateAngle6: [CGFloat] = [rotateAngle * 3, rotateAngle * 2, -rotateAngle, -rotateAngle * 2, rotateAngle, 0]
-        //4: let rotateAngle6: [CGFloat] = [-rotateAngle, -rotateAngle * 2, rotateAngle, 0, rotateAngle * 2, rotateAngle * 3]
-        // 4: let rotateAngle6: [CGFloat] = [rotateAngle * 2, -rotateAngle * 2, rotateAngle, -rotateAngle, 0, -rotateAngle * 3]
-        // 4: let rotateAngle6: [CGFloat] = [-rotateAngle, rotateAngle, -rotateAngle * 3, rotateAngle * 2, 0, -rotateAngle * 2]
-        // 4: let rotateAngle6: [CGFloat] = [-rotateAngle, rotateAngle, -rotateAngle * 3, 0, rotateAngle * 2, -rotateAngle * 2]
-        // 4: let rotateAngle6: [CGFloat] = [-rotateAngle * 2, rotateAngle, -rotateAngle * 3, 0, rotateAngle * 2, -rotateAngle]
-        // 4: let rotateAngle6: [CGFloat] = [ -rotateAngle * 3, -rotateAngle * 2, rotateAngle, 0, rotateAngle * 2, -rotateAngle]
-        //4 : let rotateAngle6: [CGFloat] = [-rotateAngle * 2, -rotateAngle * 3, rotateAngle, 0, rotateAngle * 2, -rotateAngle]
-//        let rotateAngle6: [CGFloat] = [rotateAngle, -rotateAngle, -rotateAngle * 2, 0, rotateAngle * 2, -rotateAngle * 3]
-        
-        
-        
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * 3, rotateAngle * -1, rotateAngle * 2, rotateAngle * 0, rotateAngle * 1, rotateAngle * -2 ]
-//        let rotateAngle6: [CGFloat] = [-rotateAngle * 2, -rotateAngle * 1, 0, rotateAngle, rotateAngle * 2, -rotateAngle * 3]
-        
-        //let rotateAngle = angle * 2
+        let sAngle: CGFloat = 90 - angle
+        let eAngle: CGFloat = 90 + angle
         // Setting: Piece & Piece Sprite
-//        for i in 0...lastIndex {
-        
-//        UIColor.red, UIColor.green, UIColor.yellow, UIColor.blue, UIColor.black, UIColor.white
-//        let rotateAngle6: [CGFloat] = [ rotateAngle * 3, rotateAngle * 0, rotateAngle * 1, rotateAngle * -1, rotateAngle * 2, rotateAngle * -2 ]
-//        let donuts = [
-//            Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: 30, endAngle: -30, clockwise: true, radius: circleRadius, width: circleRadius - frame.width * 0.1),
-//            Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: 135, endAngle: -165, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1),
-//            Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: 15, endAngle: 75, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1),
-//            Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: 135, endAngle: 75, clockwise: true, radius: circleRadius, width: circleRadius - frame.width * 0.1),
-//
-//        ]
-        
-        for i in 0...3 {
-            let sAngle: CGFloat = 90 - angle
-            let eAngle: CGFloat = 90 + angle
+        for i in 0...lastIndex {
             print("\(sAngle) & \(eAngle)")
             print("p_\(pieceName[i])")
-            let donut = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
             
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
-            pieces[i].path = donut
+            pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.midY)
             pieces[i].zPosition = 3
             shapeNodeColorSetting(node: pieces[i], fillColor: colorTest[i], strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             nodeNameSetting(node: pieces[i], name:  "p_\(pieceName[i])")
 //            //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
-            physicsB[i] = SKPhysicsBody(polygonFrom: pieces[i].path!)
-            pieces[i].physicsBody = physicsB[i]
+            pieces[i].physicsBody = SKPhysicsBody(polygonFrom: pieces[i].path!)
             pieces[i].physicsBody!.isDynamic = false
             
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
-            let data = image.pngData()
-            let newImage = UIImage(data:data!)
-            pieceSprite[i].texture = SKTexture(image: newImage!)
-            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
-            pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
+//            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
+//            let data = image.pngData()
+//            let newImage = UIImage(data:data!)
+//            pieceSprite[i].texture = SKTexture(image: newImage!)
+//            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
+//            pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
 //            pieces[i].addChild(pieceSprite[i])
             nodeNameSetting(node: pieceSprite[i], name:  "p_\(pieceName[i])")
             if(numberOfPiece == 5) {
                 pieces[i].zRotation = rotateAngle5[i]
+            } else {
+                pieces[i].zRotation = rotateAngle * CGFloat(i)
             }
 //            else if (numberOfPiece == 6) {
 //                pieces[i].zRotation = rotateAngle6[i]
-//            } else {
-//                pieces[i].zRotation = rotateAngle * CGFloat(i)
 //            }
-            //(CGFloat(2) * CGFloat.pi / CGFloat(numberOfPiece)) * CGFloat(i)
-            rotate(node: pieces[i], index: i)
-            //rotateAction([pieces[i]])
+            //rotate(node: pieces[i], index: i)
+            rotateAction([pieces[i]])
         }
         
         // Setting: Current Piece
