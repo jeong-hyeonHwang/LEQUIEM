@@ -10,11 +10,6 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-//https://www.hackingwithswift.com/example-code/language/how-to-convert-radians-to-degrees
-func rad2deg(_ number: Double) -> Double {
-    return number * 180 / .pi
-}
-
 extension CGPath {
     static func arcWithWidth(center: CGPoint, start:CGFloat, end:CGFloat, radius:CGFloat, clockwise:Bool) -> UIBezierPath {
         // The radius parameter specifies the middle of the arc; adjust this as needed

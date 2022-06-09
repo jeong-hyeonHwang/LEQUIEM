@@ -8,6 +8,11 @@
 import Foundation
 import SpriteKit
 
+//https://www.hackingwithswift.com/example-code/language/how-to-convert-radians-to-degrees
+func rad2deg(_ number: Double) -> Double {
+    return number * 180 / .pi
+}
+
 func rotationRestartAction(node: SKNode, rotateNodes: [SKNode]) {
     
     for node in rotateNodes {
