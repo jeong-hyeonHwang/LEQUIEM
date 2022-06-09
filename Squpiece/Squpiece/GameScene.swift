@@ -42,7 +42,6 @@ class GameScene: SKScene {
     var lastIndex : Int = numberOfPiece - 1
     
     // Current Object Information
-    var currentTouchedObject: String?
     var currentIndex: Int = 0
     
     // Past Value
@@ -272,9 +271,7 @@ class GameScene: SKScene {
         returnHomeButton.isHidden = true
         addChild(returnHomeButton)
         
-        shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark], action: {
-            self.changeLayer(nodes: self.pieces, currentIndex: self.currentIndex)
-        })
+        shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
         
     }
@@ -284,8 +281,6 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             var touchedNode = atPoint(location)
-            //print("TOUCHED NODE IS \(String(describing: touchedNode.name))")
-            //print("NODE \(physicsWorld.body(at: location)?.node)")
             if (touchedNode.name == "restartButton") {
                 dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
                 dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
@@ -327,11 +322,7 @@ class GameScene: SKScene {
                 HapticManager.instance.impact(style: .light)
             }
 
-            //touchedNode = physicsWorld.body(at: location)!.node!
-
-            if (((touchedNode.name?.contains("p_")) != nil) && touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
-
-
+            if (touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
                 if(touchCount != 0) {
                     return
                 }
@@ -343,7 +334,6 @@ class GameScene: SKScene {
                 let angle = CGFloat(180/(self.lastIndex+1))
                 let sAngle = currentZR - angle + 90
                 let eAngle = currentZR + angle + 90
-                //print("\(sAngle) \(eAngle)")
                 let temp = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
                 if(temp.contains(location)) {
                     print("YES!")
@@ -374,7 +364,6 @@ class GameScene: SKScene {
                     change = true
                     if(randomStop == false) {
                         currentIndex = Int.random(in: 0...lastIndex)
-                        changeLayer(nodes: pieces, currentIndex: currentIndex)
                     }
                     let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
                     let patternData = patternImg.pngData()
@@ -385,57 +374,12 @@ class GameScene: SKScene {
                 } else {
                     print("NO...")
                     degree += 10 // or 3?
-                    //timerRadius -= frame.maxY * 0.12
+                    timerRadius -= frame.maxY * 0.12
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
                     comboLabel.text = ""
                 }
                 
-//                currentTouchedObject = touchedNode.name
-//                if((currentPieceSprite.name!.contains(currentTouchedObject!))) {
-//                    scoreValue += 125
-//                    scoreLabel.text = String(scoreValue)
-//                    HapticManager.instance.impact(style: .soft)
-//
-//                    if(scoreValue > highScoreValue) {
-//                        highScoreValue = scoreValue
-//                        highScoreLabel.text = String(highScoreValue)
-//                    }
-//
-//                    comboValue += 1
-//                    comboLabel.text = "\(String(comboValue)) COMBO"
-//                    labelScaleAction(node: comboLabel)
-//
-//                    if (comboValue % 50 == 0 && comboValue > 0) {
-//                        degree -= 10 // or 5?
-//                        timerRadius += frame.maxY * 0.15
-//                        HapticManager.instance.impact(style: .medium)
-//                    }
-//
-//                    if(comboValue > maxComboValue) {
-//                        maxComboValue = comboValue
-//                        maxComboLabel.text = String(maxComboValue)
-//                    }
-//
-//                    change = true
-//                    if(randomStop == false) {
-//                        currentIndex = Int.random(in: 0...lastIndex)
-//                        changeLayer(nodes: pieces, currentIndex: currentIndex)
-//                    }
-//                    let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
-//                    let patternData = patternImg.pngData()
-//                    let newImg = UIImage(data:patternData!)
-//                    currentPieceSprite.texture = SKTexture(image: newImg!)
-//                    currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
-//                    scaleAction(node: currentPieceSprite)
-//
-//                } else {
-//                    degree += 10 // or 3?
-//                    //timerRadius -= frame.maxY * 0.12
-//                    HapticManager.instance.impact(style: .heavy)
-//                    comboValue = 0
-//                    comboLabel.text = ""
-//                }
                 touched = true
             }
         }
@@ -448,26 +392,6 @@ class GameScene: SKScene {
                 touchCount = 0
             }
         }
-    }
-    
-    func changeLayer(nodes: [SKShapeNode], currentIndex: Int) {
-//        for i in 0...lastIndex {
-//            if i != currentIndex {
-//                nodes[i].zPosition = 0
-//            } else {
-//                nodes[i].zPosition = 0.5
-//            }
-//        }
-    }
-    
-    func layerReturn(nodes: [SKShapeNode], currentPieceNodes: [SKNode]) {
-//        for node in nodes {
-//            node.zPosition = 0
-//        }
-//
-//        for node in currentPieceNodes {
-//            node.zPosition = 0
-//        }
     }
     
     func timerAnimation (node: SKShapeNode, shadow: SKNode) {
@@ -487,7 +411,6 @@ class GameScene: SKScene {
             } else {
                 node.isHidden = true
                 self.nodeOpen = false
-                self.layerReturn(nodes: self.pieces, currentPieceNodes: [self.currentPiece, self.currentPieceSprite])
                 shadowAppear(node: self.shadow, hiddenNodes: [self.restartButton, self.returnHomeButton])
             }
         })
