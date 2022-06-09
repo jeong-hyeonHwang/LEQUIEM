@@ -316,13 +316,15 @@ class GameScene: SKScene {
                 rotationStop = true
                 rotationRestartAction(node: touchedNode, rotateNodes: pieces)
                 HapticManager.instance.impact(style: .light)
+                return
             } else if (touchedNode.name == "XX_RandomSB" && randomStop == false) {
                 randomStop = true
                 randomRestartAction(node: touchedNode)
                 HapticManager.instance.impact(style: .light)
+                return
             }
 
-            if (touched == false && !(touchedNode.name?.contains("XX") ?? false)) {
+            if (touched == false && pieceBackground.contains(location)) {
                 if(touchCount != 0) {
                     return
                 }
