@@ -100,14 +100,14 @@ class GameScene: SKScene {
         self.backgroundColor = bgColor
 
         //Setting: High Score Label
-        highScoreValue = dataGet(key: highScoreNameList[lastIndex-1])
+        highScoreValue = dataGet(key: highScoreNameList[numberOfPiece - 2])
         labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         highScoreLabel.fontColor = UIColor.black
         labelNodeColor(node: highScoreLabel, color: fontColor)
         addChild(highScoreLabel)
 
         // Setting: Max Combo Label
-        maxComboValue = dataGet(key: maxComboNameList[lastIndex-1])
+        maxComboValue = dataGet(key: maxComboNameList[numberOfPiece - 2])
         labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         labelNodeColor(node: maxComboLabel, color: fontColor)
         addChild(maxComboLabel)
@@ -270,8 +270,8 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
-                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
-                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
+                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
+                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -283,8 +283,8 @@ class GameScene: SKScene {
                 }
 
             } else if (touchedNode.name == "returnHomeButton") {
-                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
-                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
+                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
+                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "SelectScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {

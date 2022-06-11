@@ -32,3 +32,10 @@ func changeStageName(node: SKLabelNode, nameList: [String]) {
     node.run(sequence)
 }
 
+func pastRecord(scoreNode: SKLabelNode, comboNode: SKLabelNode) {
+    let highScoreValue = dataGet(key: highScoreNameList[numberOfPiece - 2])
+    let maxComboValue = dataGet(key: maxComboNameList[numberOfPiece - 2])
+    scoreNode.text = String(highScoreValue)
+    comboNode.text = String(maxComboValue)
+}
+
