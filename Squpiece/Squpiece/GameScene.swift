@@ -193,7 +193,6 @@ class GameScene: SKScene {
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
-        currentPiece.zPosition = 1.1
         shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
         nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
@@ -203,7 +202,6 @@ class GameScene: SKScene {
         let patternData = patternImg.pngData()
         let newImg = UIImage(data:patternData!)
         currentPieceSprite.texture = SKTexture(image: newImg!)
-        currentPieceSprite.zPosition = 2
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
         currentPieceSprite.size = newImg?.size ?? CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
