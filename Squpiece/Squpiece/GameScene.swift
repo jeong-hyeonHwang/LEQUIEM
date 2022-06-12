@@ -170,6 +170,8 @@ class GameScene: SKScene {
         let angle = CGFloat(180/(self.lastIndex+1))
         let sAngle: CGFloat = 90 - angle
         let eAngle: CGFloat = 90 + angle
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 13.5, weight: .semibold, scale: .default)
+        let currentSymbolConfig = UIImage.SymbolConfiguration(pointSize: 13.2, weight: .semibold, scale: .default)
         for i in 0...lastIndex {
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
@@ -178,11 +180,11 @@ class GameScene: SKScene {
             addChild(pieces[i])
             
             //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
+            let image = UIImage(systemName: pieceName[i], withConfiguration: symbolConfig)!.withTintColor(patternColor)
             let data = image.pngData()
             let newImage = UIImage(data:data!)
             pieceSprite[i].texture = SKTexture(image: newImage!)
-            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
+            pieceSprite[i].size = newImage?.size ??  CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
             pieceRotation(node: pieces[i], index: i)
@@ -197,13 +199,13 @@ class GameScene: SKScene {
         addChild(currentPiece)
 
         // Setting: Current Piece Sprite
-        let patternImg = UIImage(systemName: pieceName[0])!.withTintColor(centerPatternColor)
+        let patternImg = UIImage(systemName: pieceName[0], withConfiguration: currentSymbolConfig)!.withTintColor(centerPatternColor)
         let patternData = patternImg.pngData()
         let newImg = UIImage(data:patternData!)
         currentPieceSprite.texture = SKTexture(image: newImg!)
         currentPieceSprite.zPosition = 2
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
-        currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
+        currentPieceSprite.size = newImg?.size ?? CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
 
         // Setting: Rotation Stop Button
@@ -227,14 +229,17 @@ class GameScene: SKScene {
         shadow.zPosition = 0
         addChild(shadow)
 
+        //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold, scale: .default)
+        
         //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
         //Restart Button : VER.SPRITE NODE
-        let image = UIImage(systemName: "arrow.clockwise")!.withTintColor(.white)
+        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config)!.withTintColor(.white)
         let data = image.pngData()
-        let newImage = UIImage(data:data!)
-        restartButton.texture = SKTexture(image: newImage!)
+        let rImage = UIImage(data:data!)
+        restartButton.texture = SKTexture(image: rImage!)
         nodeNameSetting(node: restartButton, name: "restartButton")
-        restartButton.size = CGSize(width: 45, height: 52.5)
+        restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
         restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
         restartButton.zPosition = 2
         restartButton.isHidden = true
@@ -247,13 +252,13 @@ class GameScene: SKScene {
 //        restartButton.zPosition = 2
 //        restartButton.isHidden = true
 //        addChild(restartButton)
-        
-        let houseImg = UIImage(systemName: "house")!.withTintColor(.white)
+
+        let houseImg = UIImage(systemName: "house", withConfiguration: config)!.withTintColor(.white)
         let hData = houseImg.pngData()
         let hImage = UIImage(data:hData!)
         returnHomeButton.texture = SKTexture(image: hImage!)
         nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
-        returnHomeButton.size = CGSize(width: 45, height: 45)
+        returnHomeButton.size = hImage?.size ?? CGSize(width: 45, height: 45)
         returnHomeButton.position = CGPoint(x: frame.midX - frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
         returnHomeButton.zPosition = 2
         returnHomeButton.isHidden = true
