@@ -30,6 +30,11 @@ class SelectScene: SKScene {
     let gameCenterImageLine = SKShapeNode()
     
     let pieceAngle: Double = 30
+    
+    let fontColor = UIColor(.fontColor)
+    let centerFontColor = UIColor(.parchmentColor)
+    let centerImageColor = UIColor(.pieceColor)
+    
     override func didMove(to view: SKView) {
         
         let circleRadius = frame.maxX * 0.8
@@ -45,9 +50,15 @@ class SelectScene: SKScene {
         background.alpha = 0.8
         addChild(background)
         
+        let backgroundClipping = SKShapeNode()
+        backgroundClipping.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
+        backgroundClipping.fillColor = UIColor.white.withAlphaComponent(0.2)
+        background.zPosition = -1.8
+        addChild(backgroundClipping)
+        
         labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.5))
         stageNameLabel.fontColor = UIColor.black
-        labelNodeColor(node: stageNameLabel, color: UIColor.black)
+        labelNodeColor(node: stageNameLabel, color: UIColor.black.withAlphaComponent(0.8))
         addChild(stageNameLabel)
         
 //        labelSetting(node: pieceNumberLabel, str: "2", align: .center, fontSize: CGFloat(frame.maxX * 0.3), fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.midX, y:frame.maxY - frame.maxY * 0.3))
@@ -66,41 +77,57 @@ class SelectScene: SKScene {
         pieceRotation(node: pieces)
         
         stageImageLine.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius)
-        shapeNodeColorSetting(node: stageImageLine, fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
-        stageImageLine.lineWidth = 3
+        stageImageLine.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        shapeNodeColorSetting(node: stageImageLine, fillColor: UIColor.white.withAlphaComponent(0.6), strokeColor: UIColor.clear)
         addChild(stageImageLine)
         
         gameCenterImageLine.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY - frame.maxY * 0.25), radius: circleRadius * 0.18)
-        gameCenterImageLine.strokeColor = UIColor(.parchmentColor)
+        shapeNodeColorSetting(node: gameCenterImageLine, fillColor: centerFontColor.withAlphaComponent(0.25), strokeColor: centerFontColor.withAlphaComponent(0.25))
         gameCenterImageLine.lineWidth = 3
-        addChild(gameCenterImageLine)
+        gameCenterImageLine.zPosition = 2
+        //addChild(gameCenterImageLine)
+        
+        let underAreaBack = SKShapeNode()
+        underAreaBack.path = Arc2(radius: circleRadius, angle: 74)
+        //shapeNodeColorSetting(node: underAreaBack, fillColor: centerFontColor.withAlphaComponent(0.2), strokeColor: UIColor.clear)
+        shapeNodeColorSetting(node: underAreaBack, fillColor: .black.withAlphaComponent(0.2), strokeColor: UIColor.clear)
+        addChild(underAreaBack)
         
         stageImageUnderArea.path = Arc2(radius: circleRadius, angle: 72)
-        shapeNodeColorSetting(node: stageImageUnderArea, fillColor: UIColor(.parchmentColor).withAlphaComponent(0.4), strokeColor: UIColor(.parchmentColor))
+        shapeNodeColorSetting(node: stageImageUnderArea, fillColor: centerFontColor, strokeColor: UIColor.clear)
+        let texture = SKTexture(imageNamed: "SelectUnderPattern_Half.png")
+        stageImageUnderArea.blendMode = .add
+        stageImageUnderArea.fillTexture = texture
         stageImageUnderArea.lineWidth = 3
-        stageImageUnderArea.zPosition = -1
+        stageImageUnderArea.zPosition = 0
         addChild(stageImageUnderArea)
         
-        labelSetting(node: highScoreMark, str: "HIGHSCORE", align: .center, fontSize: frame.maxY * 0.05, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: frame.minY * 0.18))
+        labelSetting(node: highScoreMark, str: "HIGHSCORE", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: frame.minY * 0.17))
+        labelNodeColor(node: highScoreMark, color: centerFontColor)
         addChild(highScoreMark)
-        labelSetting(node: maxComboMark, str: "MAXCOMBO", align: .center, fontSize: frame.maxY * 0.05, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: frame.minY * 0.18))
+        labelSetting(node: maxComboMark, str: "MAXCOMBO", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: frame.minY * 0.17))
+        labelNodeColor(node: maxComboMark, color: centerFontColor)
+        maxComboMark.zPosition = 3
         addChild(maxComboMark)
         
         labelSetting(node: highScoreLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: frame.minY * 0.25))
-        labelNodeColor(node: highScoreLabel, color: UIColor(.parchmentColor))
+        labelNodeColor(node: highScoreLabel, color: centerFontColor)
+        highScoreLabel.zPosition = 3
         addChild(highScoreLabel)
 
         labelSetting(node: maxComboLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: frame.minY * 0.25))
-        labelNodeColor(node: maxComboLabel, color: UIColor(.parchmentColor))
+        labelNodeColor(node: maxComboLabel, color: centerFontColor)
+        maxComboLabel.zPosition = 3
         addChild(maxComboLabel)
         
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         
         labelSetting(node: startButtonLabel, str: "START", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + labelPosition))
-        startButtonLabel.fontColor = UIColor.black
-        labelNodeColor(node: startButtonLabel, color: UIColor.black)
+        labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
+        highScoreLabel.zPosition = 3
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         addChild(startButtonLabel)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
