@@ -18,6 +18,8 @@ class SelectScene: SKScene {
     var startButtonLabel = SKLabelNode()
     
     var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    var pieceSprites: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Incar_0.png"), SKSpriteNode(imageNamed: "Incar_1.png"), SKSpriteNode(imageNamed: "Incar_2.png"), SKSpriteNode(imageNamed: "Incar_3.png"), SKSpriteNode(imageNamed: "Incar_4.png")]
+    var pieceSpriteLine = SKShapeNode()
    
     let stageNameList: [String] = ["Incarnation", "Agony", "Enlightenment", "Fallen", "Transcendence"]
    
@@ -50,11 +52,11 @@ class SelectScene: SKScene {
         background.alpha = 0.8
         addChild(background)
         
-        let backgroundClipping = SKShapeNode()
-        backgroundClipping.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        backgroundClipping.fillColor = UIColor.white.withAlphaComponent(0.2)
-        background.zPosition = -1.8
-        addChild(backgroundClipping)
+//        let backgroundClipping = SKShapeNode()
+//        backgroundClipping.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
+//        backgroundClipping.fillColor = UIColor.white.withAlphaComponent(0.2)
+//        background.zPosition = -1.8
+//        addChild(backgroundClipping)
         
         labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.5))
         stageNameLabel.fontColor = UIColor.black
@@ -75,6 +77,22 @@ class SelectScene: SKScene {
             addChild(pieces[i])
         }
         pieceRotation(node: pieces)
+        
+        for i in 0..<pieceSprites.count {
+            pieceSprites[i].position = CGPoint(x: frame.midX, y:frame.midY)
+            pieceSprites[i].size = CGSize(width: frame.maxX * 0.8, height: frame.maxX * 0.8)
+            pieceSprites[i].zPosition = 0.5
+            addChild(pieceSprites[i])
+        }
+        changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
+        
+        pieceSpriteLine.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius)
+        pieceSpriteLine.fillTexture = SKTexture(imageNamed: "PieceSpriteDecoline1.png")
+        pieceSpriteLine.zPosition = 0.3
+        pieceSpriteLine.blendMode = .add
+        shapeNodeColorSetting(node: pieceSpriteLine, fillColor: UIColor.white.withAlphaComponent(0.6), strokeColor: UIColor.clear)
+        addChild(pieceSpriteLine)
+
         
         stageImageLine.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius)
         stageImageLine.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
@@ -155,6 +173,7 @@ class SelectScene: SKScene {
         pieceRotation(node: pieces)
         changeStageName(node: stageNameLabel, nameList: stageNameList)
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
+        changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
     }
 }
 

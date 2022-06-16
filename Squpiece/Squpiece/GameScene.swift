@@ -228,17 +228,18 @@ class GameScene: SKScene {
         addChild(shadow)
 
         //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold, scale: .default)
-        
+        let config1 = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
+        let config2 = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold, scale: .default)
         //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
         //Restart Button : VER.SPRITE NODE
-        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config)!.withTintColor(.white)
+        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config1)!.withTintColor(.white)
         let data = image.pngData()
         let rImage = UIImage(data:data!)
         restartButton.texture = SKTexture(image: rImage!)
         nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
-        restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
+//        restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
+        restartButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.12)
         restartButton.zPosition = 2
         restartButton.isHidden = true
         addChild(restartButton)
@@ -251,13 +252,14 @@ class GameScene: SKScene {
 //        restartButton.isHidden = true
 //        addChild(restartButton)
 
-        let houseImg = UIImage(systemName: "house", withConfiguration: config)!.withTintColor(.white)
+        let houseImg = UIImage(systemName: "house", withConfiguration: config2)!.withTintColor(.white)
         let hData = houseImg.pngData()
         let hImage = UIImage(data:hData!)
         returnHomeButton.texture = SKTexture(image: hImage!)
         nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
         returnHomeButton.size = hImage?.size ?? CGSize(width: 45, height: 45)
-        returnHomeButton.position = CGPoint(x: frame.midX - frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
+//        returnHomeButton.position = CGPoint(x: frame.midX - frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
+        returnHomeButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.22)
         returnHomeButton.zPosition = 2
         returnHomeButton.isHidden = true
         addChild(returnHomeButton)

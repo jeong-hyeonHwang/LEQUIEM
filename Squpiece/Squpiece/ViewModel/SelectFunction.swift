@@ -39,3 +39,13 @@ func pastRecord(scoreNode: SKLabelNode, comboNode: SKLabelNode) {
     comboNode.text = String(maxComboValue)
 }
 
+func changeStageSprite(index: Int, nodes: [SKSpriteNode]) {
+    for i in 0..<nodes.count {
+        if(i != index) {
+            nodes[i].isHidden =  true
+        } else {
+            nodes[i].isHidden = false
+        }
+    }
+}
+
