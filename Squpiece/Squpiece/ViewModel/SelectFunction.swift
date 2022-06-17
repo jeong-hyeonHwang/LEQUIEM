@@ -49,3 +49,10 @@ func changeStageSprite(index: Int, nodes: [SKSpriteNode]) {
     }
 }
 
+func selectPieceRotation (_ node: SKNode) {
+    let rotate = SKAction.rotate(byAngle: -rotateAngle, duration: 5)
+    let sequence = SKAction.sequence([rotate])
+    let action = SKAction.repeatForever(sequence)
+    node.run(action, withKey: "SelectPieceRotation")
+}
+
