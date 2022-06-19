@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import SwiftUI
 
 func pieceRotation(node: [SKShapeNode]) {
     //let rotateAngle = CGFloat(360/pieceNum)
@@ -54,5 +55,55 @@ func selectPieceRotation (_ node: SKNode) {
     let sequence = SKAction.sequence([rotate])
     let action = SKAction.repeatForever(sequence)
     node.run(action, withKey: "SelectPieceRotation")
+}
+
+func patternPiecePositionSetter(width: CGFloat, patternSprites: [SKShapeNode]) {
+    let distance = CGFloat(width * 0.16)
+    if numberOfPiece % 2 == 0 {
+        var xPoint = -distance * CGFloat(numberOfPiece/2 - 1) - distance * 0.5
+        for i in 0..<numberOfPiece {
+            patternSprites[i].isHidden = false
+            patternSprites[i].position = CGPoint(x: xPoint, y: 0)
+            xPoint += distance
+        }
+    } else {
+        var xPoint = -distance * CGFloat(numberOfPiece/2)
+        for i in 0..<numberOfPiece {
+            patternSprites[i].isHidden = false
+            patternSprites[i].position = CGPoint(x: xPoint, y: 0)
+            xPoint += distance
+        }
+    }
+    for i in numberOfPiece ..< patternSprites.count {
+        patternSprites[i].isHidden = true
+    }
+}
+
+func patternPiecePositionSetterAsCircleType(circleRadius: CGFloat, frame: CGRect, patternSprites: [SKShapeNode]) {
+    let angleFloat: CGFloat = 21
+    let radius = circleRadius * 1.3
+    if numberOfPiece % 2 == 0 {
+        let value: CGFloat = CGFloat(numberOfPiece/2 - 1) + 0.5
+        let startAngle : CGFloat = -90-(angleFloat * value)
+        var radianValue = deg2rad(startAngle)
+        for i in 0..<numberOfPiece {
+            patternSprites[i].isHidden = false
+            patternSprites[i].position = CGPoint(x: radius * cos(radianValue), y: radius * sin(radianValue))
+            radianValue += deg2rad(angleFloat)
+        }
+    }
+    else {
+        let value: CGFloat = CGFloat(numberOfPiece/2)
+        let startAngle : CGFloat = -90-(angleFloat * value)
+        var radianValue = deg2rad(startAngle)
+        for i in 0..<numberOfPiece {
+            patternSprites[i].isHidden = false
+            patternSprites[i].position = CGPoint(x: radius * cos(radianValue), y: radius * sin(radianValue))
+            radianValue += deg2rad(angleFloat)
+        }
+    }
+    for i in numberOfPiece ..< patternSprites.count {
+        patternSprites[i].isHidden = true
+    }
 }
 
