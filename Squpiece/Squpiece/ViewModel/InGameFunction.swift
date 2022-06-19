@@ -13,6 +13,11 @@ func rad2deg(_ number: Double) -> Double {
     return number * 180 / .pi
 }
 
+//https://www.hackingwithswift.com/example-code/language/how-to-convert-degrees-to-radians
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
+}
+
 func rotationRestartAction(node: SKNode, rotateNodes: [SKNode]) {
     
     for node in rotateNodes {
