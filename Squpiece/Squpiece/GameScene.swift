@@ -33,7 +33,6 @@ class GameScene: SKScene {
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let pieceColor = UIColor(.pieceColor)
     let timerStrokeColor = UIColor(.pieceColor)
-    let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill", "staroflife.fill", "star.fill"]
     var lastIndex : Int = numberOfPiece - 1
     
     // Current Object Information
@@ -170,21 +169,17 @@ class GameScene: SKScene {
         let angle = CGFloat(180/(self.lastIndex+1))
         let sAngle: CGFloat = 90 - angle
         let eAngle: CGFloat = 90 + angle
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 13.5, weight: .semibold, scale: .default)
-        let currentSymbolConfig = UIImage.SymbolConfiguration(pointSize: 13.2, weight: .semibold, scale: .default)
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 13.5, weight: .semibold, scale: .default)
+//        let currentSymbolConfig = UIImage.SymbolConfiguration(pointSize: 13.2, weight: .semibold, scale: .default)
         for i in 0...lastIndex {
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             addChild(pieces[i])
-            
-            //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-            let image = UIImage(systemName: pieceName[i], withConfiguration: symbolConfig)!.withTintColor(patternColor)
-            let data = image.pngData()
-            let newImage = UIImage(data:data!)
-            pieceSprite[i].texture = SKTexture(image: newImage!)
-            pieceSprite[i].size = newImage?.size ??  CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
+
+            pieceSprite[i].texture = SKTexture(imageNamed: "\(pieceName[i]).png")
+            pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
             pieceRotation(node: pieces[i], index: i)
@@ -198,12 +193,9 @@ class GameScene: SKScene {
         addChild(currentPiece)
 
         // Setting: Current Piece Sprite
-        let patternImg = UIImage(systemName: pieceName[0], withConfiguration: currentSymbolConfig)!.withTintColor(centerPatternColor)
-        let patternData = patternImg.pngData()
-        let newImg = UIImage(data:patternData!)
-        currentPieceSprite.texture = SKTexture(image: newImg!)
+        currentPieceSprite.texture = SKTexture(imageNamed: "\(pieceName[0]).png")
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
-        currentPieceSprite.size = newImg?.size ?? CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
+        currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
 
         // Setting: Rotation Stop Button
@@ -360,11 +352,8 @@ class GameScene: SKScene {
                     if(randomStop == false) {
                         currentIndex = Int.random(in: 0...lastIndex)
                     }
-                    let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
-                    let patternData = patternImg.pngData()
-                    let newImg = UIImage(data:patternData!)
-                    currentPieceSprite.texture = SKTexture(image: newImg!)
-                    currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
+                    currentPieceSprite.texture = SKTexture(imageNamed: "\(pieceName[currentIndex]).png")
+                    currentPieceSprite.name = "Xp_\(pieceName[self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
                 } else {
                     print("NO...")
