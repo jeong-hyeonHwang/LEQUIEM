@@ -22,9 +22,9 @@ class SelectScene: SKScene {
     var pieceSpriteLine = SKShapeNode()
     var pieceSpriteLineBackground = SKShapeNode()
    
-    var patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    var patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
     
-    let stageNameList: [String] = ["Incarnation", "Agony", "Enlightenment", "Fallen", "Transcendence"]
+    let stageNameList: [String] = ["Incarnation", "Tranquility", "Agony", "Enlightenment", "Transcendence"]
    
     let stageImageLine = SKShapeNode()
     let stageImageUnderArea = SKShapeNode()
@@ -39,10 +39,10 @@ class SelectScene: SKScene {
     let fontColor = UIColor(.fontColor)
     let centerFontColor = UIColor(.parchmentColor)
     let centerImageColor = UIColor(.pieceColor)
-    
+    var circleRadius: CGFloat = 0
     override func didMove(to view: SKView) {
         
-        let circleRadius = frame.maxX * 0.8
+        circleRadius = frame.maxX * 0.8
         let labelPosition = frame.maxY * 0.25
         self.backgroundColor = bgColor
         
@@ -69,8 +69,9 @@ class SelectScene: SKScene {
         for i in 0..<pieces.count {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90 - pieceAngle/2), endAngle: .degrees(90 + pieceAngle/2), clockwise: false, radius: frame.maxX * 0.2)
             pieces[i].position = CGPoint(x: frame.midX, y:frame.maxY - labelPosition)
-            pieces[i].alpha = 0.6
-            shapeNodeColorSetting(node: pieces[i], fillColor: UIColor(.fontColor), strokeColor: UIColor(.fontColor))
+            pieces[i].alpha = 0.5
+            shapeNodeColorSetting(node: pieces[i], fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
+            pieces[i].blendMode = .add
             nodelineWidthSetting(node: pieces[i], width: 3)
             addChild(pieces[i])
         }
@@ -115,11 +116,19 @@ class SelectScene: SKScene {
         
         
         for i in 0..<patternSprites.count {
-            patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY - frame.maxY * 0.5), radius: circleRadius * 0.15)
-            shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor.clear, strokeColor: fontColor.withAlphaComponent(0.25))
-            patternSprites[i].lineWidth = 3
+            patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius * 0.13)
+            shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor(.selectLineColor), strokeColor: UIColor(.selectLineColor))
+            patternSprites[i].blendMode = .add
+            patternSprites[i].lineWidth = 2
+            patternSprites[i].zPosition = 1
+            let temp = SKShapeNode(path: Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius * 0.08))
+            temp.fillTexture = SKTexture(imageNamed: "\(pieceName[i]).png")
+            shapeNodeColorSetting(node: temp, fillColor: UIColor.white, strokeColor: UIColor.clear)
+            patternSprites[i].addChild(temp)
             addChild(patternSprites[i])
         }
+        //patternPiecePositionSetter(width: frame.width, patternSprites: patternSprites)
+        patternPiecePositionSetterAsCircleType(circleRadius: circleRadius, frame: frame, patternSprites: patternSprites)
 
         let underAreaBack = SKShapeNode()
         underAreaBack.path = Arc2(radius: circleRadius, angle: 74)
@@ -189,6 +198,8 @@ class SelectScene: SKScene {
         changeStageName(node: stageNameLabel, nameList: stageNameList)
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
+//        patternPiecePositionSetter(width: frame.width, patternSprites: patternSprites)
+        patternPiecePositionSetterAsCircleType(circleRadius: self.circleRadius, frame: frame, patternSprites: patternSprites)
     }
 }
 
