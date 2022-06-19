@@ -117,8 +117,7 @@ class SelectScene: SKScene {
         
         for i in 0..<patternSprites.count {
             patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius * 0.13)
-            shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor(.selectLineColor), strokeColor: UIColor(.selectLineColor))
-            patternSprites[i].blendMode = .add
+            shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor(.selectLineColor).withAlphaComponent(0.8), strokeColor: UIColor(.selectLineColor)) 
             patternSprites[i].lineWidth = 2
             patternSprites[i].zPosition = 1
             let temp = SKShapeNode(path: Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius * 0.08))
