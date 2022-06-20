@@ -8,17 +8,17 @@
 import SpriteKit
 import SwiftUI
 
-func pieceRotation(node: [SKShapeNode]) {
+func pieceRotation(node: [SKShapeNode], num: Int) {
     //let rotateAngle = CGFloat(360/pieceNum)
-    let rotateAngle = CGFloat(Double(2) * CGFloat.pi / Double(numberOfPiece))
+    let rotateAngle = CGFloat(Double(2) * CGFloat.pi / Double(num))
     var currentAngle: CGFloat = 0
-    for i in 0..<numberOfPiece {
+    for i in 0..<num {
         node[i].isHidden = false
         //node[i].angle
         node[i].zRotation = currentAngle
         currentAngle += rotateAngle
     }
-    for i in numberOfPiece..<node.count {
+    for i in num..<node.count {
         node[i].isHidden = true
     }
 }

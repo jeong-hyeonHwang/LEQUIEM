@@ -22,6 +22,9 @@ class SelectScene: SKScene {
     var startButtonLabel = SKLabelNode()
     
     var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    var leftPieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    var rightPieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    
     var pieceSprites: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Incar_0.png"), SKSpriteNode(imageNamed: "Incar_1.png"), SKSpriteNode(imageNamed: "Incar_2.png"), SKSpriteNode(imageNamed: "Incar_3.png"), SKSpriteNode(imageNamed: "Incar_4.png")]
     var pieceSpriteLine = SKShapeNode()
     var pieceSpriteLineBackground = SKShapeNode()
@@ -96,11 +99,26 @@ class SelectScene: SKScene {
             pieces[i].blendMode = .add
             nodelineWidthSetting(node: pieces[i], width: 3)
             addChild(pieces[i])
+            
+            leftPieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90 - pieceAngle/2), endAngle: .degrees(90 + pieceAngle/2), clockwise: false, radius: frame.maxX * 0.12)
+            leftPieces[i].position = CGPoint(x: frame.minX * 0.7, y:frame.maxY - piecePosition)
+            leftPieces[i].alpha = 0.3
+            shapeNodeColorSetting(node: leftPieces[i], fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
+            leftPieces[i].blendMode = .add
+            nodelineWidthSetting(node: leftPieces[i], width: 3)
+            addChild(leftPieces[i])
+            
+            rightPieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90 - pieceAngle/2), endAngle: .degrees(90 + pieceAngle/2), clockwise: false, radius: frame.maxX * 0.12)
+            rightPieces[i].position = CGPoint(x: frame.maxX * 0.7, y:frame.maxY - piecePosition)
+            rightPieces[i].alpha = 0.3
+            shapeNodeColorSetting(node: rightPieces[i], fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
+            rightPieces[i].blendMode = .add
+            nodelineWidthSetting(node: rightPieces[i], width: 3)
+            addChild(rightPieces[i])
         }
-        pieceRotation(node: pieces)
-//        for i in 0..<pieces.count {
-//            selectPieceRotation(pieces[i])
-//        }
+        pieceRotation(node: pieces, num: numberOfPiece)
+        pieceRotation(node: leftPieces, num: numberOfPiece != 2 ? numberOfPiece-1 : 6)
+        pieceRotation(node: rightPieces, num: numberOfPiece != 6 ? numberOfPiece+1 : 2)
         
         for i in 0..<pieceSprites.count {
             pieceSprites[i].position = CGPoint(x: frame.midX, y:frame.midY)
@@ -221,7 +239,9 @@ class SelectScene: SKScene {
                 numberOfPiece = 2
             }
         }
-        pieceRotation(node: pieces)
+        pieceRotation(node: pieces, num: numberOfPiece)
+        pieceRotation(node: leftPieces, num: numberOfPiece != 2 ? numberOfPiece-1 : 6)
+        pieceRotation(node: rightPieces, num: numberOfPiece != 6 ? numberOfPiece+1 : 2)
         changeStageName(node: stageNameLabel, nameList: stageNameList)
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
