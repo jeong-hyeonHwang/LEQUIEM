@@ -13,11 +13,12 @@ class SelectScene: SKScene {
 
     let shadow = SKShapeNode()
     let stageInactiveNoticer = SKLabelNode()
-    
     let background = SKSpriteNode()
     
     var pieceNumberLabel = SKLabelNode()
     var stageNameLabel = SKLabelNode()
+    
+    var startButton = SKShapeNode()
     var startButtonLabel = SKLabelNode()
     
     var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
@@ -185,10 +186,16 @@ class SelectScene: SKScene {
         
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         
+        let buttonWidth = frame.width * 0.6
+        let buttonHeight = frame.height * 0.1
+        startButton.path = UIBezierPath(roundedRect: CGRect(x: frame.midX - buttonWidth * 0.5, y: frame.minY + labelPosition - buttonHeight * 0.3, width: buttonWidth, height: buttonHeight), cornerRadius: 10).cgPath
+        startButton.strokeColor = UIColor.clear
+        startButton.name = "startButton"
+        addChild(startButton)
         labelSetting(node: startButtonLabel, str: "START", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + labelPosition))
         labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
-        addChild(startButtonLabel)
+        startButton.addChild(startButtonLabel)
         
     }
     
