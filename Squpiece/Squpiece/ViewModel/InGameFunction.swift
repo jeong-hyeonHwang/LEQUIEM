@@ -132,6 +132,4 @@ func resetVar() {
     
     rotationStop =  false
     randomStop = false
-    
-    degree = Double(55)
 }
