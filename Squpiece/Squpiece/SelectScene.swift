@@ -40,10 +40,21 @@ class SelectScene: SKScene {
     let centerFontColor = UIColor(.parchmentColor)
     let centerImageColor = UIColor(.pieceColor)
     var circleRadius: CGFloat = 0
+    
+    //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
+    var hasTopNotch: Bool {
+        if #available(iOS 11.0, tvOS 11.0, *) {
+            return UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 20
+        }
+        return false
+    }
+    
     override func didMove(to view: SKView) {
         
         circleRadius = frame.maxX * 0.8
-        let labelPosition = frame.maxY * 0.25
+        let labelPosition = hasTopNotch == true ? frame.maxY * 0.25 : frame.maxY * 0.17
+        let markYPosition = hasTopNotch == true ? frame.minY * 0.17 : frame.minY * 0.2
+        let scoreYPosition = hasTopNotch == true ? frame.minY * 0.25 : frame.minY * 0.28
         self.backgroundColor = bgColor
         
         let img = UIImage(named: "background.jpg")!
@@ -54,12 +65,6 @@ class SelectScene: SKScene {
         background.zPosition = -1.5
         background.alpha = 0.8
         addChild(background)
-        
-//        let backgroundClipping = SKShapeNode()
-//        backgroundClipping.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-//        backgroundClipping.fillColor = UIColor.white.withAlphaComponent(0.2)
-//        background.zPosition = -1.8
-//        addChild(backgroundClipping)
         
         labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.5))
         stageNameLabel.fontColor = UIColor.black
@@ -143,21 +148,21 @@ class SelectScene: SKScene {
         stageImageUnderArea.zPosition = 0
         addChild(stageImageUnderArea)
         
-        labelSetting(node: highScoreMark, str: "HIGHSCORE", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: frame.minY * 0.17))
+        labelSetting(node: highScoreMark, str: "HIGHSCORE", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: markYPosition))
         labelNodeColor(node: highScoreMark, color: centerFontColor)
         highScoreMark.zPosition = 3
         addChild(highScoreMark)
-        labelSetting(node: maxComboMark, str: "MAXCOMBO", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: frame.minY * 0.17))
+        labelSetting(node: maxComboMark, str: "MAXCOMBO", align: .center, fontSize: frame.maxY * 0.055, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: markYPosition))
         labelNodeColor(node: maxComboMark, color: centerFontColor)
         maxComboMark.zPosition = 3
         addChild(maxComboMark)
         
-        labelSetting(node: highScoreLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: frame.minY * 0.25))
+        labelSetting(node: highScoreLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.minX * 0.55, y: scoreYPosition))
         labelNodeColor(node: highScoreLabel, color: centerFontColor)
         highScoreLabel.zPosition = 3
         addChild(highScoreLabel)
 
-        labelSetting(node: maxComboLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: frame.minY * 0.25))
+        labelSetting(node: maxComboLabel, str: "", align: .center, fontSize: frame.maxY * 0.08, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: frame.maxX * 0.55, y: scoreYPosition))
         labelNodeColor(node: maxComboLabel, color: centerFontColor)
         maxComboLabel.zPosition = 3
         addChild(maxComboLabel)
@@ -197,7 +202,6 @@ class SelectScene: SKScene {
         changeStageName(node: stageNameLabel, nameList: stageNameList)
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
-//        patternPiecePositionSetter(width: frame.width, patternSprites: patternSprites)
         patternPiecePositionSetterAsCircleType(circleRadius: self.circleRadius, frame: frame, patternSprites: patternSprites)
     }
 }
