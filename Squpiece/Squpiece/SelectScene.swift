@@ -11,6 +11,9 @@ import AVFoundation
 
 class SelectScene: SKScene {
 
+    let shadow = SKShapeNode()
+    let stageInactiveNoticer = SKLabelNode()
+    
     let background = SKSpriteNode()
     
     var pieceNumberLabel = SKLabelNode()
@@ -53,9 +56,22 @@ class SelectScene: SKScene {
         
         circleRadius = frame.maxX * 0.8
         let labelPosition = hasTopNotch == true ? frame.maxY * 0.25 : frame.maxY * 0.17
+        let piecePosition = hasTopNotch == true ? frame.maxY * 0.25 : frame.maxY * 0.23
         let markYPosition = hasTopNotch == true ? frame.minY * 0.17 : frame.minY * 0.2
         let scoreYPosition = hasTopNotch == true ? frame.minY * 0.25 : frame.minY * 0.28
         self.backgroundColor = bgColor
+        
+        shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor.black, strokeColor: UIColor.black)
+        shadow.alpha = 0.5
+        shadow.zPosition = 5
+        addChild(shadow)
+        
+        labelSetting(node: stageInactiveNoticer, str: "LOCKED STAGE", align: .center, fontSize: frame.maxY * 0.1, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: 0, y: 0))
+        stageInactiveNoticer.zPosition = 6
+        addChild(stageInactiveNoticer)
+        
+        stageUnlock()
         
         let img = UIImage(named: "background.jpg")!
         let data_ = img.pngData()
@@ -73,7 +89,7 @@ class SelectScene: SKScene {
 
         for i in 0..<pieces.count {
             pieces[i].path = Arc(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: .degrees(90 - pieceAngle/2), endAngle: .degrees(90 + pieceAngle/2), clockwise: false, radius: frame.maxX * 0.2)
-            pieces[i].position = CGPoint(x: frame.midX, y:frame.maxY - labelPosition)
+            pieces[i].position = CGPoint(x: frame.midX, y:frame.maxY - piecePosition)
             pieces[i].alpha = 0.5
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
             pieces[i].blendMode = .add
@@ -125,13 +141,13 @@ class SelectScene: SKScene {
             shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor(.selectLineColor).withAlphaComponent(0.8), strokeColor: UIColor(.selectLineColor)) 
             patternSprites[i].lineWidth = 2
             patternSprites[i].zPosition = 1
-            let temp = SKShapeNode(path: Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius * 0.08))
+            let tempSize = circleRadius * 0.08
+            let temp = SKShapeNode(path: Rect(startPosition: CGPoint(x: frame.midX - tempSize, y: frame.midY - tempSize), xSize: tempSize * 2, ySize: tempSize * 2))
             temp.fillTexture = SKTexture(imageNamed: "\(pieceName[i]).png")
             shapeNodeColorSetting(node: temp, fillColor: UIColor.white, strokeColor: UIColor.clear)
             patternSprites[i].addChild(temp)
             addChild(patternSprites[i])
         }
-        //patternPiecePositionSetter(width: frame.width, patternSprites: patternSprites)
         patternPiecePositionSetterAsCircleType(circleRadius: circleRadius, frame: frame, patternSprites: patternSprites)
 
         let underAreaBack = SKShapeNode()
@@ -192,17 +208,27 @@ class SelectScene: SKScene {
                 }
                 return
             }
-        }
-        if(numberOfPiece != pieces.count) {
-            numberOfPiece += 1
-        } else {
-            numberOfPiece = 2
+            if(numberOfPiece != pieces.count) {
+                numberOfPiece += 1
+            } else {
+                numberOfPiece = 2
+            }
         }
         pieceRotation(node: pieces)
         changeStageName(node: stageNameLabel, nameList: stageNameList)
         pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
         changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
         patternPiecePositionSetterAsCircleType(circleRadius: self.circleRadius, frame: frame, patternSprites: patternSprites)
+    }
+    
+    func stageUnlock() {
+        shadow.isHidden = true
+        stageInactiveNoticer.isHidden = true
+    }
+    
+    func stageLock() {
+        shadow.isHidden = false
+        stageInactiveNoticer.isHidden = false
     }
 }
 
