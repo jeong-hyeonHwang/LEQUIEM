@@ -338,7 +338,6 @@ class GameScene: SKScene {
                     labelScaleAction(node: comboLabel)
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
-                        degree -= 10 // or 5?
                         timerRadius += frame.maxY * 0.15
                         HapticManager.instance.impact(style: .medium)
                     }
@@ -357,7 +356,6 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                 } else {
                     print("NO...")
-                    degree += 10 // or 3?
                     timerRadius -= frame.maxY * 0.12
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
