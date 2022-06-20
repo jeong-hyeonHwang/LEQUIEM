@@ -80,7 +80,13 @@ func patternPiecePositionSetter(width: CGFloat, patternSprites: [SKShapeNode]) {
 }
 
 func patternPiecePositionSetterAsCircleType(circleRadius: CGFloat, frame: CGRect, patternSprites: [SKShapeNode]) {
-    let angleFloat: CGFloat = 21
+//    let angleFloat: CGFloat = 21
+//    let radius = circleRadius * 1.3
+//    let angleFloat: CGFloat = 18
+//    let radius = circleRadius * 1.4
+//    let angleFloat: CGFloat = 19
+//    let radius = circleRadius * 1.35
+    let angleFloat: CGFloat = 18
     let radius = circleRadius * 1.3
     if numberOfPiece % 2 == 0 {
         let value: CGFloat = CGFloat(numberOfPiece/2 - 1) + 0.5
