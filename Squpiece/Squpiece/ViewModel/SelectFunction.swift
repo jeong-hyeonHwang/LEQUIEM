@@ -38,8 +38,6 @@ func pastRecord(scoreNode: SKLabelNode, comboNode: SKLabelNode, frame: CGRect) {
     let highScoreValue = dataGet(key: highScoreNameList[numberOfPiece - 2])
     let maxComboValue = dataGet(key: maxComboNameList[numberOfPiece - 2])
     
-    print(highScoreValue)
-    print(maxComboValue)
     let sHS = String(highScoreValue)
     let sMC = String(maxComboValue)
     
