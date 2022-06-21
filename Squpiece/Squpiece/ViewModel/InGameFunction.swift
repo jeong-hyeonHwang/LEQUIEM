@@ -85,12 +85,16 @@ func shadowAppear(node: SKNode, hiddenNodes: [SKNode]) {
     node.alpha = 0.0
     node.isHidden = false
     let fadeIn = SKAction.fadeIn(withDuration: waitSec/2)
+    let wait = SKAction.wait(forDuration: waitSec/2)
+    let fadeInHalf = SKAction.fadeIn(withDuration: waitSec/4)
     let shadowAppear = SKAction.run {
         for node in hiddenNodes {
+            node.alpha = 0.4
             node.isHidden = false
+            node.run(fadeInHalf)
         }
     }
-    let sequence = SKAction.sequence([fadeIn, shadowAppear])
+    let sequence = SKAction.sequence([fadeIn, wait, shadowAppear])
     node.run(sequence)
 }
 
