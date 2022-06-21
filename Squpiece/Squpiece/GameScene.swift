@@ -91,10 +91,15 @@ class GameScene: SKScene {
     var touchCount: Int = 0
     var nodeOpen: Bool = false
 
+    var firstCall: Date?
     override func didMove(to view: SKView) {
-        
+        firstCall = Date()
         circleRadius = frame.maxX * 0.8
-        timerRadius = frame.height * 0.5
+        timerRadius = circleRadius * 2.7
+        print(timerRadius)
+        print(CGFloat(circleRadius * 0.002))
+        print(CGFloat(circleRadius * 0.006))
+        
         resetVar()
         self.backgroundColor = bgColor
 
@@ -338,7 +343,7 @@ class GameScene: SKScene {
                     labelScaleAction(node: comboLabel)
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
-                        timerRadius += frame.maxY * 0.15
+                        timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
                     }
 
@@ -356,7 +361,8 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                 } else {
                     print("NO...")
-                    timerRadius -= frame.maxY * 0.12
+                    //timerRadius -= frame.maxY * 0.12
+                    timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
                     comboLabel.text = ""
@@ -381,16 +387,19 @@ class GameScene: SKScene {
         let hold = SKAction.run({
             if(change != true) {
                 if(self.timerRadius > self.circleRadius) {
-                    self.timerRadius -= self.frame.maxY * 0.001
+//                    self.timerRadius -= self.frame.maxY * 0.001
+                    self.timerRadius -= self.circleRadius * 0.002
                     }
             } else {
-                self.timerRadius += self.frame.maxY * 0.003
+//                self.timerRadius += self.frame.maxY * 0.003
+                self.timerRadius += self.circleRadius * 0.006
                 change = false
             }
             
             if(self.timerRadius > self.circleRadius) {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
+                print(DateInterval(start: self.firstCall ?? Date(), end: Date()))
                 node.isHidden = true
                 self.nodeOpen = false
                 shadowAppear(node: self.shadow, hiddenNodes: [self.restartButton, self.returnHomeButton])
