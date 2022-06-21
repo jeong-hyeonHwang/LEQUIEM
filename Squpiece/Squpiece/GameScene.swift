@@ -235,7 +235,6 @@ class GameScene: SKScene {
         restartButton.texture = SKTexture(image: rImage!)
         nodeNameSetting(node: restartButton, name: "restartButton")
         restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
-//        restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
         restartButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.12)
         restartButton.zPosition = 2
         restartButton.isHidden = true
@@ -361,7 +360,6 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                 } else {
                     print("NO...")
-                    //timerRadius -= frame.maxY * 0.12
                     timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
@@ -387,11 +385,9 @@ class GameScene: SKScene {
         let hold = SKAction.run({
             if(change != true) {
                 if(self.timerRadius > self.circleRadius) {
-//                    self.timerRadius -= self.frame.maxY * 0.001
                     self.timerRadius -= self.circleRadius * 0.002
                     }
             } else {
-//                self.timerRadius += self.frame.maxY * 0.003
                 self.timerRadius += self.circleRadius * 0.006
                 change = false
             }
