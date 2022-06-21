@@ -365,8 +365,12 @@ class GameScene: SKScene {
                     }
 
                     comboValue += 1
-                    comboLabel.text = "\(String(comboValue)) COMBO"
-                    labelScaleAction(node: comboLabel)
+                    if(comboValue >= 3) {
+                        comboLabel.text = "\(String(comboValue)) COMBO"
+                        labelScaleAction(node: comboLabel)
+                    } else {
+                        comboLabel.text = ""
+                    }
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
                         timerRadius += circleRadius * 0.15
