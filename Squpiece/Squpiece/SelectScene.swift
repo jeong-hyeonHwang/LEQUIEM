@@ -46,8 +46,7 @@ class SelectScene: SKScene {
     let centerImageColor = UIColor(.pieceColor)
     var circleRadius: CGFloat = 0
     
-    let topReturnButton = SKShapeNode()
-    let bottomReturnButton = SKShapeNode()
+//    let topReturnButton = SKShapeNode()
     //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
     var hasTopNotch: Bool {
         if #available(iOS 11.0, tvOS 11.0, *) {
@@ -55,6 +54,9 @@ class SelectScene: SKScene {
         }
         return false
     }
+    
+    private let hapticProperties: [HapticProperty] = [
+               HapticProperty(count: 1, interval: [0.06], intensity: [0.5], sharpness: [0.5])]
     
     override func didMove(to view: SKView) {
         
@@ -197,14 +199,14 @@ class SelectScene: SKScene {
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
         
-        topReturnButton.path = Arc(center: CGPoint(x: 0, y: frame.maxY * 1.1), startAngle: .degrees(-45), endAngle: .degrees(-135), clockwise: false, radius: frame.maxY * 0.8)
-        shapeNodeColorSetting(node: topReturnButton, fillColor: UIColor(.parchmentColor), strokeColor: UIColor.clear)
-        topReturnButton.blendMode = .add
-        topReturnButton.alpha = 0.3
-        topReturnButton.name = "returnMainButton"
-        topReturnButton.physicsBody = SKPhysicsBody(polygonFrom: topReturnButton.path ?? UIBezierPath(rect: CGRect(x: 0, y: 0, width: 0, height: 0)).cgPath)
-        topReturnButton.physicsBody?.isDynamic = false
-        addChild(topReturnButton)
+//        topReturnButton.path = Arc(center: CGPoint(x: 0, y: frame.maxY * 1.1), startAngle: .degrees(-45), endAngle: .degrees(-135), clockwise: false, radius: frame.maxY * 0.8)
+//        shapeNodeColorSetting(node: topReturnButton, fillColor: UIColor(.parchmentColor), strokeColor: UIColor.clear)
+//        topReturnButton.blendMode = .add
+//        topReturnButton.alpha = 0.3
+//        topReturnButton.name = "returnMainButton"
+//        topReturnButton.physicsBody = SKPhysicsBody(polygonFrom: topReturnButton.path ?? UIBezierPath(rect: CGRect(x: 0, y: 0, width: 0, height: 0)).cgPath)
+//        topReturnButton.physicsBody?.isDynamic = false
+//        addChild(topReturnButton)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -212,6 +214,7 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
+                CustomizeHaptic.instance.haptic(hapticCase: Haptic.dynamic, hapticProperty: hapticProperties[0])
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -222,21 +225,22 @@ class SelectScene: SKScene {
                     self.view?.presentScene(scene, transition: fade)
                 }
                 return
-            } else if(touchedNode.name == "returnMainButton") {
-                if(topReturnButton.path?.contains(location) == false) {
-                    break
-                }
-                if let scene = SKScene(fileNamed: "StartScene") {
-                    let fade = SKTransition.doorsCloseHorizontal(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
-                    }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
-                return
             }
+//            else if(touchedNode.name == "returnMainButton") {
+//                if(topReturnButton.path?.contains(location) == false) {
+//                    break
+//                }
+//                if let scene = SKScene(fileNamed: "StartScene") {
+//                    let fade = SKTransition.doorsCloseHorizontal(withDuration: 1)
+//                    for node in children {
+//                        node.removeAllActions()
+//                        node.removeAllChildren()
+//                    }
+//                    // Present the scene
+//                    self.view?.presentScene(scene, transition: fade)
+//                }
+//                return
+//            }
         }
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
