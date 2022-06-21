@@ -13,6 +13,11 @@ func rad2deg(_ number: Double) -> Double {
     return number * 180 / .pi
 }
 
+//https://www.hackingwithswift.com/example-code/language/how-to-convert-degrees-to-radians
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
+}
+
 func rotationRestartAction(node: SKNode, rotateNodes: [SKNode]) {
     
     for node in rotateNodes {
@@ -80,12 +85,16 @@ func shadowAppear(node: SKNode, hiddenNodes: [SKNode]) {
     node.alpha = 0.0
     node.isHidden = false
     let fadeIn = SKAction.fadeIn(withDuration: waitSec/2)
+    let wait = SKAction.wait(forDuration: waitSec/2)
+    let fadeInHalf = SKAction.fadeIn(withDuration: waitSec/4)
     let shadowAppear = SKAction.run {
         for node in hiddenNodes {
+            node.alpha = 0.4
             node.isHidden = false
+            node.run(fadeInHalf)
         }
     }
-    let sequence = SKAction.sequence([fadeIn, shadowAppear])
+    let sequence = SKAction.sequence([fadeIn, wait, shadowAppear])
     node.run(sequence)
 }
 
@@ -127,6 +136,4 @@ func resetVar() {
     
     rotationStop =  false
     randomStop = false
-    
-    degree = Double(55)
 }

@@ -24,6 +24,8 @@ extension Color {
     //static let fontColor = Color("FontColor")
     static let fontColor = Color("FontColor")
     
+    static let selectLineColor = Color("SelectLineColor")
+    
 //    static let patternColor1 = Color("PatternColor1")
 //    static let patternColor2 = Color("PatternColor2")
 }

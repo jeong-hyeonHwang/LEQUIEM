@@ -33,8 +33,10 @@ class GameScene: SKScene {
     let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     let pieceColor = UIColor(.pieceColor)
     let timerStrokeColor = UIColor(.pieceColor)
-    let pieceName: [String] = ["suit.heart.fill", "suit.club.fill", "suit.spade.fill", "suit.diamond.fill", "staroflife.fill", "star.fill"]
     var lastIndex : Int = numberOfPiece - 1
+    
+    var returnButtonBackground = SKShapeNode()
+    var restartButtonBackground = SKShapeNode()
     
     // Current Object Information
     var currentIndex: Int = 0
@@ -76,9 +78,10 @@ class GameScene: SKScene {
     let pieceBackground = SKShapeNode()
     
     // OutGame Button
-    let restartButton = SKSpriteNode()
-    //let restartButton = SKLabelNode()
-    let returnHomeButton = SKSpriteNode()
+    //let restartButton = SKSpriteNode()
+    let restartButton = SKLabelNode()
+    //let returnHomeButton = SKSpriteNode()
+    let returnHomeButton = SKLabelNode()
     
     let fontColor = UIColor(.fontColor)
     
@@ -92,22 +95,24 @@ class GameScene: SKScene {
     var touchCount: Int = 0
     var nodeOpen: Bool = false
 
+    var firstCall: Date?
     override func didMove(to view: SKView) {
-        
+        firstCall = Date()
         circleRadius = frame.maxX * 0.8
-        timerRadius = frame.height * 0.5
+        timerRadius = circleRadius * 2.3
+        
         resetVar()
         self.backgroundColor = bgColor
 
         //Setting: High Score Label
-        highScoreValue = dataGet(key: highScoreNameList[lastIndex-1])
+        highScoreValue = dataGet(key: highScoreNameList[numberOfPiece - 2])
         labelSetting(node: highScoreLabel, str: String(highScoreValue), align: .left, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.minX + frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         highScoreLabel.fontColor = UIColor.black
         labelNodeColor(node: highScoreLabel, color: fontColor)
         addChild(highScoreLabel)
 
         // Setting: Max Combo Label
-        maxComboValue = dataGet(key: maxComboNameList[lastIndex-1])
+        maxComboValue = dataGet(key: maxComboNameList[numberOfPiece - 2])
         labelSetting(node: maxComboLabel, str: String(maxComboValue), align: .right, fontSize: CGFloat(frame.maxY * 0.06), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.maxX - frame.maxY * 0.05, y:frame.maxY - frame.maxY * 0.21))
         labelNodeColor(node: maxComboLabel, color: fontColor)
         addChild(maxComboLabel)
@@ -170,18 +175,16 @@ class GameScene: SKScene {
         let angle = CGFloat(180/(self.lastIndex+1))
         let sAngle: CGFloat = 90 - angle
         let eAngle: CGFloat = 90 + angle
+//        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 13.5, weight: .semibold, scale: .default)
+//        let currentSymbolConfig = UIImage.SymbolConfiguration(pointSize: 13.2, weight: .semibold, scale: .default)
         for i in 0...lastIndex {
             //https://developer.apple.com/documentation/spritekit/sknode/getting_started_with_physics_bodies
             pieces[i].path = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
             shapeNodeColorSetting(node: pieces[i], fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
             nodelineWidthSetting(node: pieces[i], width: 3)
             addChild(pieces[i])
-            
-            //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-            let image = UIImage(systemName: pieceName[i])!.withTintColor(patternColor)
-            let data = image.pngData()
-            let newImage = UIImage(data:data!)
-            pieceSprite[i].texture = SKTexture(image: newImage!)
+
+            pieceSprite[i].texture = SKTexture(imageNamed: "\(pieceName[i]).png")
             pieceSprite[i].size = CGSize(width: frame.maxX * 0.25, height: frame.maxX * 0.25)
             pieceSprite[i].position = CGPoint(x: 0, y: circleRadius * 0.65)
             pieces[i].addChild(pieceSprite[i])
@@ -191,17 +194,12 @@ class GameScene: SKScene {
         
         // Setting: Current Piece
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
-        currentPiece.zPosition = 1.1
         shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
         nodelineWidthSetting(node: currentPiece, width: 5)
         addChild(currentPiece)
 
         // Setting: Current Piece Sprite
-        let patternImg = UIImage(systemName: pieceName[0])!.withTintColor(centerPatternColor)
-        let patternData = patternImg.pngData()
-        let newImg = UIImage(data:patternData!)
-        currentPieceSprite.texture = SKTexture(image: newImg!)
-        currentPieceSprite.zPosition = 2
+        currentPieceSprite.texture = SKTexture(imageNamed: "\(pieceName[0]).png")
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
         currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
         addChild(currentPieceSprite)
@@ -222,45 +220,75 @@ class GameScene: SKScene {
 
         // Setting: Shadow
         shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor.opacity(0.5)), strokeColor: UIColor(.shadowColor.opacity(0.5)))
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor.opacity(0.8)), strokeColor: UIColor(.shadowColor.opacity(0.8)))
         shadow.name = "shadow"
         shadow.zPosition = 0
         addChild(shadow)
 
+        //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
+//        let config1 = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
         //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
         //Restart Button : VER.SPRITE NODE
-        let image = UIImage(systemName: "arrow.clockwise")!.withTintColor(.white)
-        let data = image.pngData()
-        let newImage = UIImage(data:data!)
-        restartButton.texture = SKTexture(image: newImage!)
-        nodeNameSetting(node: restartButton, name: "restartButton")
-        restartButton.size = CGSize(width: 45, height: 52.5)
-        restartButton.position = CGPoint(x: frame.midX + frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
-        restartButton.zPosition = 2
-        restartButton.isHidden = true
-        addChild(restartButton)
-        
-        //Restart Button : VER.LABEL
-//        labelSetting(node: restartButton, str: "RESTART", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + frame.height * 0.15))
-//        labelNodeColor(node: restartButton, color: UIColor.white)
+//        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config1)!.withTintColor(.white)
+//        let data = image.pngData()
+//        let rImage = UIImage(data:data!)
+//        restartButton.texture = SKTexture(image: rImage!)
 //        nodeNameSetting(node: restartButton, name: "restartButton")
+//        restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
+//        restartButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.12)
 //        restartButton.zPosition = 2
 //        restartButton.isHidden = true
 //        addChild(restartButton)
         
-        let houseImg = UIImage(systemName: "house")!.withTintColor(.white)
-        let hData = houseImg.pngData()
-        let hImage = UIImage(data:hData!)
-        returnHomeButton.texture = SKTexture(image: hImage!)
+        //Return Button : VER.SPRITE NODE
+//        let houseImg = UIImage(systemName: "house", withConfiguration: config1)!.withTintColor(.white)
+//        let hData = houseImg.pngData()
+//        let hImage = UIImage(data:hData!)
+//        returnHomeButton.texture = SKTexture(image: hImage!)
+//        nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
+//        returnHomeButton.size = hImage?.size ?? CGSize(width: 45, height: 45)
+//        returnHomeButton.position = CGPoint(x: frame.midX, y: frame.midY + circleRadius * 0.5)
+//        returnHomeButton.zPosition = 2
+//        addChild(returnHomeButton)
+        
+        restartButtonBackground.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(-180), clockwise: true, radius: circleRadius)
+        restartButtonBackground.zPosition = 1
+        restartButtonBackground.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        restartButtonBackground.fillColor = .white
+        restartButtonBackground.strokeColor = UIColor(.parchmentColor)
+        nodelineWidthSetting(node: restartButtonBackground, width: 3)
+        nodeNameSetting(node: restartButtonBackground, name: "restartButton")
+        addChild(restartButtonBackground)
+        
+        returnButtonBackground.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(180), clockwise: false, radius: circleRadius)
+        returnButtonBackground.zPosition = 1
+        returnButtonBackground.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        returnButtonBackground.fillColor = .white
+        returnButtonBackground.strokeColor = UIColor(.parchmentColor)
+        nodelineWidthSetting(node: returnButtonBackground, width: 3)
+        nodeNameSetting(node: returnButtonBackground, name: "returnHomeButton")
+        addChild(returnButtonBackground)
+        
+        //Restart Button : VER.LABEL
+        labelSetting(node: restartButton, str: "RESTART", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX, y: -circleRadius * 0.45))
+        restartButton.verticalAlignmentMode = .center
+        labelNodeColor(node: restartButton, color: UIColor.white)
+        nodeNameSetting(node: restartButton, name: "restartButton")
+        restartButton.zPosition = 2
+        addChild(restartButton)
+        
+        //Return Button : VER.LABEL
+        labelSetting(node: returnHomeButton, str: "HOME", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX, y: frame.midY+circleRadius * 0.45))
+        returnHomeButton.verticalAlignmentMode = .center
+        labelNodeColor(node: returnHomeButton, color: UIColor.white)
         nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
-        returnHomeButton.size = CGSize(width: 45, height: 45)
-        returnHomeButton.position = CGPoint(x: frame.midX - frame.maxX * 0.2, y: frame.minY + frame.height * 0.15)
         returnHomeButton.zPosition = 2
-        returnHomeButton.isHidden = true
         addChild(returnHomeButton)
+
         
         shadowDisappear(node: shadow, labels: [self.scoreMark, self.scoreLabel, self.highScoreLabel, self.comboLabel, self.maxComboLabel, self.highScoreMark, self.maxComboMark])
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
+        endGameButtonDisable()
         
     }
     
@@ -270,8 +298,8 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
-                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
-                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
+                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
+                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -283,8 +311,8 @@ class GameScene: SKScene {
                 }
 
             } else if (touchedNode.name == "returnHomeButton") {
-                dataSet(value: highScoreValue, key: highScoreNameList[lastIndex-1])
-                dataSet(value: maxComboValue, key: maxComboNameList[lastIndex-1])
+                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
+                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "SelectScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -326,7 +354,7 @@ class GameScene: SKScene {
                 let eAngle = currentZR + angle + 90
                 let temp = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
                 if(temp.contains(location)) {
-                    print("YES!")
+//                    print("YES!")
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
                     HapticManager.instance.impact(style: .soft)
@@ -341,8 +369,7 @@ class GameScene: SKScene {
                     labelScaleAction(node: comboLabel)
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
-                        degree -= 10 // or 5?
-                        timerRadius += frame.maxY * 0.15
+                        timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
                     }
 
@@ -355,16 +382,12 @@ class GameScene: SKScene {
                     if(randomStop == false) {
                         currentIndex = Int.random(in: 0...lastIndex)
                     }
-                    let patternImg = UIImage(systemName: pieceName[currentIndex])!.withTintColor(centerPatternColor)
-                    let patternData = patternImg.pngData()
-                    let newImg = UIImage(data:patternData!)
-                    currentPieceSprite.texture = SKTexture(image: newImg!)
-                    currentPieceSprite.name = "Xp_\(self.pieceName[self.self.currentIndex])"
+                    currentPieceSprite.texture = SKTexture(imageNamed: "\(pieceName[currentIndex]).png")
+                    currentPieceSprite.name = "Xp_\(pieceName[self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
                 } else {
-                    print("NO...")
-                    degree += 10 // or 3?
-                    timerRadius -= frame.maxY * 0.12
+//                    print("NO...")
+                    timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0
                     comboLabel.text = ""
@@ -389,19 +412,20 @@ class GameScene: SKScene {
         let hold = SKAction.run({
             if(change != true) {
                 if(self.timerRadius > self.circleRadius) {
-                    self.timerRadius -= self.frame.maxY * 0.001
+                    self.timerRadius -= self.circleRadius * 0.002
                     }
             } else {
-                self.timerRadius += self.frame.maxY * 0.003
+                self.timerRadius += self.circleRadius * 0.006
                 change = false
             }
             
             if(self.timerRadius > self.circleRadius) {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
+//                print(DateInterval(start: self.firstCall ?? Date(), end: Date()))
                 node.isHidden = true
                 self.nodeOpen = false
-                shadowAppear(node: self.shadow, hiddenNodes: [self.restartButton, self.returnHomeButton])
+                shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
             }
         })
         
@@ -413,5 +437,12 @@ class GameScene: SKScene {
         }
         let finalSequence = SKAction.sequence([waitSec, nodeOpenAction, repeater])
         node.run(finalSequence)
+    }
+    
+    func endGameButtonDisable() {
+        returnButtonBackground.isHidden = true
+        restartButtonBackground.isHidden = true
+        returnHomeButton.isHidden = true
+        restartButton.isHidden = true
     }
 }
