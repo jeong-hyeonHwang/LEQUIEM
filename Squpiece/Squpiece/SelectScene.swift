@@ -182,7 +182,7 @@ class SelectScene: SKScene {
         maxComboLabel.zPosition = 3
         addChild(maxComboLabel)
         
-        pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
+        pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel, frame: frame)
         
         let buttonWidth = frame.width * 0.6
         let buttonHeight = frame.height * 0.1
@@ -221,7 +221,7 @@ class SelectScene: SKScene {
         }
         pieceRotation(node: pieces, num: numberOfPiece)
         changeStageName(node: stageNameLabel, nameList: stageNameList)
-        pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel)
+        pastRecord(scoreNode: highScoreLabel, comboNode: maxComboLabel, frame: frame)
         changeStageSprite(index: numberOfPiece-2, nodes: pieceSprites)
         patternPiecePositionSetterAsCircleType(circleRadius: self.circleRadius, frame: frame, patternSprites: patternSprites)
     }

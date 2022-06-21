@@ -33,11 +33,49 @@ func changeStageName(node: SKLabelNode, nameList: [String]) {
     node.run(sequence)
 }
 
-func pastRecord(scoreNode: SKLabelNode, comboNode: SKLabelNode) {
+func pastRecord(scoreNode: SKLabelNode, comboNode: SKLabelNode, frame: CGRect) {
+    let formal = frame.maxY * 0.08
     let highScoreValue = dataGet(key: highScoreNameList[numberOfPiece - 2])
     let maxComboValue = dataGet(key: maxComboNameList[numberOfPiece - 2])
-    scoreNode.text = String(highScoreValue)
-    comboNode.text = String(maxComboValue)
+    
+    print(highScoreValue)
+    print(maxComboValue)
+    let sHS = String(highScoreValue)
+    let sMC = String(maxComboValue)
+    
+    if (sHS.count < 7) {
+        scoreNode.fontSize = formal
+    } else if (sHS.count == 7) {
+        scoreNode.fontSize = formal * 0.8
+    } else if (sHS.count == 8) {
+        scoreNode.fontSize = formal * 0.75
+    } else {
+        scoreNode.fontSize = formal * 0.7
+    }
+    
+    
+    if (sMC.count < 7) {
+        scoreNode.fontSize = formal
+    } else if (sMC.count == 7) {
+        scoreNode.fontSize = formal * 0.8
+    } else if (sMC.count == 8) {
+        scoreNode.fontSize = formal * 0.75
+    } else {
+        scoreNode.fontSize = formal * 0.7
+    }
+    
+    if (highScoreValue == 0) {
+        scoreNode.text = "---"
+        scoreNode.fontSize = formal
+    } else {
+        scoreNode.text = String(highScoreValue)
+    }
+    if (maxComboValue == 0) {
+        comboNode.text = "---"
+        comboNode.fontSize = formal
+    } else {
+        comboNode.text = String(maxComboValue)
+    }
 }
 
 func changeStageSprite(index: Int, nodes: [SKSpriteNode]) {
