@@ -362,7 +362,6 @@ class GameScene: SKScene {
 //                    print("YES!")
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
-                    HapticManager.instance.impact(style: .soft)
 
                     if(scoreValue > highScoreValue) {
                         highScoreValue = scoreValue
@@ -380,6 +379,8 @@ class GameScene: SKScene {
                     if (comboValue % 50 == 0 && comboValue > 0) {
                         timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
+                    } else {
+                        HapticManager.instance.impact(style: .soft)
                     }
 
                     if(comboValue > maxComboValue) {
@@ -448,6 +449,8 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
+            let haptic = HapticProperty(count: 1, interval: [0], intensity: [0.5], sharpness: [0.35])
+            playCustomHaptic(hapticType: Haptic.transient, hapticProperty: haptic)
         }
         let finalSequence = SKAction.sequence([waitSec, nodeOpenAction, repeater])
         node.run(finalSequence)
