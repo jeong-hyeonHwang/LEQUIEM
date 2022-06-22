@@ -32,6 +32,7 @@ enum Haptic {
     case dynamic
 }
 
+
 class HapticProperty {
     private(set) var count: Int
     private(set) var interval: [CGFloat]
@@ -44,6 +45,10 @@ class HapticProperty {
         hapticIntensity = intensity
         hapticSharpness = sharpness
     }
+}
+
+func playCustomHaptic(hapticType: Haptic, hapticProperty: HapticProperty) {
+    CustomizeHaptic.instance.haptic(hapticCase: hapticType, hapticProperty: hapticProperty)
 }
 
 class CustomizeHaptic {
