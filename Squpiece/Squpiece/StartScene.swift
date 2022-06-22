@@ -13,7 +13,7 @@ class StartScene: SKScene {
 
     let tapToStartLabel = SKLabelNode()
     let background = SKSpriteNode()
-    
+    let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375
@@ -76,6 +76,8 @@ class StartScene: SKScene {
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
         
+        self.addChild(backgroundMusic)
+        backgroundMusicPlay(node: backgroundMusic)
         CustomizeHaptic.instance.prepareHaptics()
     }
     
@@ -100,6 +102,19 @@ class StartScene: SKScene {
         }
         let sequence = SKAction.sequence([wait, action])
         background.run(sequence)
+    }
+    
+    func backgroundMusicPlay(node: SKAudioNode) {
+        let waitASec = SKAction.wait(forDuration: 1)
+        let play = SKAction.run {
+            self.backgroundMusic.run(SKAction.play())
+        }
+        let wait = SKAction.wait(forDuration: 65)
+        let sequence = SKAction.sequence([play, wait])
+        let repeatSequence = SKAction.repeatForever(sequence)
+        let lastResult = SKAction.sequence([waitASec, repeatSequence])
+        
+        node.run(lastResult)
     }
 }
 
