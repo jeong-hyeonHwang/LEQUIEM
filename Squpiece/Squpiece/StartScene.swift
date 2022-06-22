@@ -42,7 +42,7 @@ class StartScene: SKScene {
         nodelineWidthSetting(node: symbolBackground, width: 3)
         addChild(symbolBackground)
         
-        let symbolPattern = SKSpriteNode(imageNamed: "Pattern.png")
+        let symbolPattern = SKSpriteNode(imageNamed: "TestPattern.png")
         symbolPattern.size = CGSize(width: radius * 2, height: frame.width * 0.75)
         addChild(symbolPattern)
         
@@ -100,8 +100,8 @@ class StartScene: SKScene {
         let wait = SKAction.wait(forDuration: 0.5)
         let action = SKAction.run {
             if let scene = SKScene(fileNamed: "SelectScene") {
-                //let fade = SKTransition.fade(withDuration: 1)
-                let fade = SKTransition.doorsOpenHorizontal(withDuration: 3)
+                let fade = SKTransition.fade(withDuration: 1)
+                //let fade = SKTransition.doorsOpenHorizontal(withDuration: 3)
                 
                 self.view?.presentScene(scene, transition: fade)
             }

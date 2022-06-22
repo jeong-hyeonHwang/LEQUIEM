@@ -21,4 +21,4 @@ var numberOfPiece: Int = 2
 
 let bgColor = UIColor(.bgColor)
 
-let pieceName: [String] = ["Pattern_D", "Pattern_EH", "Pattern_S", "Pattern_F", "Pattern_T", "Pattern_A"]
+let pieceName: [String] = ["Pattern_D3", "Pattern_EH", "Pattern_S", "Pattern_F", "Pattern_T", "Pattern_A"]
