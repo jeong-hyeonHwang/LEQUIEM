@@ -56,7 +56,8 @@ class SelectScene: SKScene {
     }
     
     private let hapticProperties: [HapticProperty] = [
-               HapticProperty(count: 1, interval: [0.06], intensity: [0.5], sharpness: [0.5])]
+        HapticProperty(count: 1, interval: [0], intensity: [0.6], sharpness: [0.6]),
+        HapticProperty(count: 1, interval: [0.04], intensity: [0.5], sharpness: [0.5])]
     
     override func didMove(to view: SKView) {
         
@@ -207,6 +208,8 @@ class SelectScene: SKScene {
 //        topReturnButton.physicsBody = SKPhysicsBody(polygonFrom: topReturnButton.path ?? UIBezierPath(rect: CGRect(x: 0, y: 0, width: 0, height: 0)).cgPath)
 //        topReturnButton.physicsBody?.isDynamic = false
 //        addChild(topReturnButton)
+        
+        CustomizeHaptic.instance.prepareHaptics()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,7 +217,7 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
-                CustomizeHaptic.instance.haptic(hapticCase: Haptic.dynamic, hapticProperty: hapticProperties[0])
+                playCustomHaptic(hapticType: Haptic.dynamic, index: 1)
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
@@ -242,6 +245,7 @@ class SelectScene: SKScene {
 //                return
 //            }
         }
+        playCustomHaptic(hapticType: Haptic.transient, index: 0)
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
         } else {
@@ -262,6 +266,10 @@ class SelectScene: SKScene {
     func stageLock() {
         shadow.isHidden = false
         stageInactiveNoticer.isHidden = false
+    }
+    
+    func playCustomHaptic(hapticType: Haptic, index: Int) {
+        CustomizeHaptic.instance.haptic(hapticCase: hapticType, hapticProperty: self.hapticProperties[index])
     }
 }
 
