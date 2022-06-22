@@ -55,10 +55,6 @@ class SelectScene: SKScene {
         return false
     }
     
-    private let hapticProperties: [HapticProperty] = [
-        HapticProperty(count: 1, interval: [0], intensity: [0.6], sharpness: [0.6]),
-        HapticProperty(count: 1, interval: [0.04], intensity: [0.5], sharpness: [0.5])]
-    
     override func didMove(to view: SKView) {
         
         circleRadius = frame.maxX * 0.8
@@ -217,13 +213,13 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
-                playCustomHaptic(hapticType: Haptic.dynamic, index: 1)
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
                         node.removeAllActions()
                         node.removeAllChildren()
                     }
+                    haptic_GoGameScene()
                     // Present the scene
                     self.view?.presentScene(scene, transition: fade)
                 }
@@ -245,7 +241,6 @@ class SelectScene: SKScene {
 //                return
 //            }
         }
-        playCustomHaptic(hapticType: Haptic.transient, index: 0)
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
         } else {
@@ -266,10 +261,6 @@ class SelectScene: SKScene {
     func stageLock() {
         shadow.isHidden = false
         stageInactiveNoticer.isHidden = false
-    }
-    
-    func playCustomHaptic(hapticType: Haptic, index: Int) {
-        CustomizeHaptic.instance.haptic(hapticCase: hapticType, hapticProperty: self.hapticProperties[index])
     }
 }
 

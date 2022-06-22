@@ -24,12 +24,15 @@ func pieceRotation(node: [SKShapeNode], num: Int) {
 }
 
 func changeStageName(node: SKLabelNode, nameList: [String]) {
+    let hapticSoundPlay = SKAction.run {
+        haptic_ChangeStage()
+    }
     let fadeOut = SKAction.fadeOut(withDuration: 0.1)
     let labelChange = SKAction.run {
         node.text = String(nameList[numberOfPiece-2])
     }
     let fadeIn = SKAction.fadeIn(withDuration: 0.1)
-    let sequence = SKAction.sequence([fadeOut, labelChange, fadeIn])
+    let sequence = SKAction.sequence([hapticSoundPlay, fadeOut, labelChange, fadeIn])
     node.run(sequence)
 }
 
