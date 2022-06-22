@@ -12,6 +12,7 @@ import AVFoundation
 class StartScene: SKScene {
 
     let tapToStartLabel = SKLabelNode()
+    let background = SKSpriteNode()
     
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
@@ -19,7 +20,6 @@ class StartScene: SKScene {
         let img = UIImage(named: "background.jpg")!
         let data = img.pngData()
         let newImage = UIImage(data:data!)
-        let background = SKSpriteNode()
         background.texture = SKTexture(image: newImage!)
         background.size = CGSize(width: frame.width, height: frame.height)
         background.zPosition = -1.5
@@ -42,7 +42,7 @@ class StartScene: SKScene {
         nodelineWidthSetting(node: symbolBackground, width: 3)
         addChild(symbolBackground)
         
-        let symbolPattern = SKSpriteNode(imageNamed: "Pattern.png")
+        let symbolPattern = SKSpriteNode(imageNamed: "TestPattern.png")
         symbolPattern.size = CGSize(width: radius * 2, height: frame.width * 0.75)
         addChild(symbolPattern)
         
@@ -60,6 +60,7 @@ class StartScene: SKScene {
         tapToStartLabel.verticalAlignmentMode = .center
         addChild(tapToStartLabel)
         blinkEffect(node: tapToStartLabel, duration: 0.8)
+        
 //        let patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
 //        for i in 0..<patternSprites.count {
 //            patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: radius * 0.12)
@@ -74,18 +75,31 @@ class StartScene: SKScene {
 //            addChild(patternSprites[i])
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
+        
+        CustomizeHaptic.instance.prepareHaptics()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let scene = SKScene(fileNamed: "SelectScene") {
-            for node in children {
-                node.removeAllActions()
-                node.removeAllChildren()
-            }
-            //let fade = SKTransition.fade(withDuration: 1)
-            let fade = SKTransition.doorsOpenHorizontal(withDuration: 1)
-            self.view?.presentScene(scene, transition: fade)
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        waitAndSceneChange()
+    }
+    
+    func waitAndSceneChange() {
+        haptic_GoSelectScene()
+        for node in children {
+            node.removeAllActions()
+            node.removeAllChildren()
         }
+        let wait = SKAction.wait(forDuration: 0.5)
+        let action = SKAction.run {
+            if let scene = SKScene(fileNamed: "SelectScene") {
+                let fade = SKTransition.fade(withDuration: 1)
+                //let fade = SKTransition.doorsOpenHorizontal(withDuration: 3)
+                
+                self.view?.presentScene(scene, transition: fade)
+            }
+        }
+        let sequence = SKAction.sequence([wait, action])
+        background.run(sequence)
     }
 }
 

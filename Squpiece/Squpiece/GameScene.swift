@@ -95,7 +95,9 @@ class GameScene: SKScene {
     var touchCount: Int = 0
     var nodeOpen: Bool = false
 
+    var stageEnd: Bool = false
     var firstCall: Date?
+    
     override func didMove(to view: SKView) {
         firstCall = Date()
         circleRadius = frame.maxX * 0.8
@@ -290,6 +292,7 @@ class GameScene: SKScene {
         timerAnimation(node: self.circleTimer, shadow: self.shadow)
         endGameButtonDisable()
         
+        CustomizeHaptic.instance.prepareHaptics()
     }
     
     //https://developer.apple.com/forums/thread/107653
@@ -298,6 +301,7 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
+                haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "GameScene") {
@@ -311,6 +315,7 @@ class GameScene: SKScene {
                 }
 
             } else if (touchedNode.name == "returnHomeButton") {
+                haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
                 if let scene = SKScene(fileNamed: "SelectScene") {
@@ -357,7 +362,6 @@ class GameScene: SKScene {
 //                    print("YES!")
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
-                    HapticManager.instance.impact(style: .soft)
 
                     if(scoreValue > highScoreValue) {
                         highScoreValue = scoreValue
@@ -365,12 +369,18 @@ class GameScene: SKScene {
                     }
 
                     comboValue += 1
-                    comboLabel.text = "\(String(comboValue)) COMBO"
-                    labelScaleAction(node: comboLabel)
+                    if(comboValue >= 3) {
+                        comboLabel.text = "\(String(comboValue)) COMBO"
+                        labelScaleAction(node: comboLabel)
+                    } else {
+                        comboLabel.text = ""
+                    }
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
                         timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
+                    } else {
+                        HapticManager.instance.impact(style: .soft)
                     }
 
                     if(comboValue > maxComboValue) {
@@ -420,9 +430,14 @@ class GameScene: SKScene {
             }
             
             if(self.timerRadius > self.circleRadius) {
+                
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
-//                print(DateInterval(start: self.firstCall ?? Date(), end: Date()))
+                if (self.stageEnd == false) {
+                    let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
+                    playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
+                    self.stageEnd = true
+                }
                 node.isHidden = true
                 self.nodeOpen = false
                 shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
@@ -434,6 +449,8 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
+            let haptic = HapticProperty(count: 1, interval: [0], intensity: [0.5], sharpness: [0.35])
+            playCustomHaptic(hapticType: Haptic.transient, hapticProperty: haptic)
         }
         let finalSequence = SKAction.sequence([waitSec, nodeOpenAction, repeater])
         node.run(finalSequence)
