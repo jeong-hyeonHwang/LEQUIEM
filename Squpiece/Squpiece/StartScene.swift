@@ -60,6 +60,7 @@ class StartScene: SKScene {
         tapToStartLabel.verticalAlignmentMode = .center
         addChild(tapToStartLabel)
         blinkEffect(node: tapToStartLabel, duration: 0.8)
+        
 //        let patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
 //        for i in 0..<patternSprites.count {
 //            patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: radius * 0.12)
@@ -74,25 +75,16 @@ class StartScene: SKScene {
 //            addChild(patternSprites[i])
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
+        
+        CustomizeHaptic.instance.prepareHaptics()
     }
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        if let scene = SKScene(fileNamed: "SelectScene") {
-//            //let fade = SKTransition.fade(withDuration: 1)
-//            let fade = SKTransition.doorsOpenHorizontal(withDuration: 3)
-//            for node in children {
-//                node.removeAllActions()
-//                node.removeAllChildren()
-//            }
-//            self.view?.presentScene(scene, transition: fade)
-//        }
-//    }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         waitAndSceneChange()
     }
     
     func waitAndSceneChange() {
+        haptic_GoSelectScene()
         for node in children {
             node.removeAllActions()
             node.removeAllChildren()
