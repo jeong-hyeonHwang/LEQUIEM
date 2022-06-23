@@ -14,6 +14,8 @@ class StartScene: SKScene {
     let tapToStartLabel = SKLabelNode()
     let background = SKSpriteNode()
     let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
+    private var startButtonPressed = false
+    
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375
@@ -84,7 +86,10 @@ class StartScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        waitAndSceneChange()
+        if(startButtonPressed == false) {
+            startButtonPressed = true
+            waitAndSceneChange()
+        }
     }
     
     func waitAndSceneChange() {
