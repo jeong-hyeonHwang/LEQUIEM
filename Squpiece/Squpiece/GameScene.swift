@@ -98,6 +98,8 @@ class GameScene: SKScene {
     var stageEnd: Bool = false
     var firstCall: Date?
     
+    private var buttonPressed = false
+    
     override func didMove(to view: SKView) {
         firstCall = Date()
         circleRadius = frame.maxX * 0.8
@@ -297,10 +299,12 @@ class GameScene: SKScene {
     
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (buttonPressed == true) { return }
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
+                buttonPressed = true
                 sfxPlay(soundFileName: "SFX_GameRestart", scene: self)
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
@@ -318,6 +322,7 @@ class GameScene: SKScene {
                 })]))
                 
             } else if (touchedNode.name == "returnHomeButton") {
+                buttonPressed = true
                 sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
