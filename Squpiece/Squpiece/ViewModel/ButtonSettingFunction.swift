@@ -9,6 +9,7 @@ import Foundation
 import SpriteKit
 
 func setSettingButton(settingButton: SKSpriteNode, frame: CGRect) {
+    //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
     let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
     let image = UIImage(systemName: "gearshape.fill", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
     let data_ = image.pngData()

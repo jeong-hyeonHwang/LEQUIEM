@@ -229,31 +229,6 @@ class GameScene: SKScene {
         shadow.zPosition = 0
         addChild(shadow)
 
-        //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-//        let config1 = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
-        //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-        //Restart Button : VER.SPRITE NODE
-//        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config1)!.withTintColor(.white)
-//        let data = image.pngData()
-//        let rImage = UIImage(data:data!)
-//        restartButton.texture = SKTexture(image: rImage!)
-//        nodeNameSetting(node: restartButton, name: "restartButton")
-//        restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
-//        restartButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.12)
-//        restartButton.zPosition = 2
-//        restartButton.isHidden = true
-//        addChild(restartButton)
-        
-        //Return Button : VER.SPRITE NODE
-//        let houseImg = UIImage(systemName: "house", withConfiguration: config1)!.withTintColor(.white)
-//        let hData = houseImg.pngData()
-//        let hImage = UIImage(data:hData!)
-//        returnHomeButton.texture = SKTexture(image: hImage!)
-//        nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
-//        returnHomeButton.size = hImage?.size ?? CGSize(width: 45, height: 45)
-//        returnHomeButton.position = CGPoint(x: frame.midX, y: frame.midY + circleRadius * 0.5)
-//        returnHomeButton.zPosition = 2
-//        addChild(returnHomeButton)
         
         restartButtonBackground.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(-180), clockwise: true, radius: circleRadius)
         restartButtonBackground.zPosition = 1

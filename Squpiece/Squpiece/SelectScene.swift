@@ -201,16 +201,7 @@ class SelectScene: SKScene {
         labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
-        
-//        topReturnButton.path = Arc(center: CGPoint(x: 0, y: frame.maxY * 1.1), startAngle: .degrees(-45), endAngle: .degrees(-135), clockwise: false, radius: frame.maxY * 0.8)
-//        shapeNodeColorSetting(node: topReturnButton, fillColor: UIColor(.parchmentColor), strokeColor: UIColor.clear)
-//        topReturnButton.blendMode = .add
-//        topReturnButton.alpha = 0.3
-//        topReturnButton.name = "returnMainButton"
-//        topReturnButton.physicsBody = SKPhysicsBody(polygonFrom: topReturnButton.path ?? UIBezierPath(rect: CGRect(x: 0, y: 0, width: 0, height: 0)).cgPath)
-//        topReturnButton.physicsBody?.isDynamic = false
-//        addChild(topReturnButton)
-        
+
         setSettingButton(settingButton: settingButton, frame: frame)
         addChild(settingButton)
         
@@ -246,22 +237,6 @@ class SelectScene: SKScene {
                 })]))
                 return
             }
-//            else if(touchedNode.name == "returnMainButton") {
-//                if(topReturnButton.path?.contains(location) == false) {
-//                    break
-//                }
-//                if let scene = SKScene(fileNamed: "StartScene") {
-//                    let fade = SKTransition.doorsCloseHorizontal(withDuration: 1)
-//                    for node in children {
-//                        node.removeAllActions()
-//                        node.removeAllChildren()
-//                    }
-//                    // Present the scene
-//                    self.view?.presentScene(scene, transition: fade)
-//                }
-//                return
-//            }
-        }
         
         sfxPlay(soundFileName: "SFX_StageChange", scene: self)
         
