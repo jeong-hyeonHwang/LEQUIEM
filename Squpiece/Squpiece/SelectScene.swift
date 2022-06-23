@@ -48,6 +48,7 @@ class SelectScene: SKScene {
     var circleRadius: CGFloat = 0
     
     var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
+    private var startButtonPressed = false
     
 //    let topReturnButton = SKShapeNode()
     //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
@@ -218,10 +219,12 @@ class SelectScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if(startButtonPressed == true) { return }
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
+                startButtonPressed = true
                 backgroundMusic.removeFromParent()
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
                 haptic_GoGameScene()
