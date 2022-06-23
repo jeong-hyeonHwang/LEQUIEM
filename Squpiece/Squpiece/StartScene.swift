@@ -16,6 +16,8 @@ class StartScene: SKScene {
     let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
     private var startButtonPressed = false
     
+    let settingButton = SKSpriteNode()
+
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375
@@ -78,6 +80,9 @@ class StartScene: SKScene {
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
         
+        setSettingButton(settingButton: settingButton, frame: frame)
+        addChild(settingButton)
+        
         CustomizeHaptic.instance.prepareHaptics()
         //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
         self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
@@ -91,7 +96,7 @@ class StartScene: SKScene {
             waitAndSceneChange()
         }
     }
-    
+
     func waitAndSceneChange() {
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()

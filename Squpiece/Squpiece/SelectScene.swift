@@ -50,6 +50,8 @@ class SelectScene: SKScene {
     var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     private var startButtonPressed = false
     
+    let settingButton = SKSpriteNode()
+    
 //    let topReturnButton = SKShapeNode()
     //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
     var hasTopNotch: Bool {
@@ -209,6 +211,9 @@ class SelectScene: SKScene {
 //        topReturnButton.physicsBody?.isDynamic = false
 //        addChild(topReturnButton)
         
+        setSettingButton(settingButton: settingButton, frame: frame)
+        addChild(settingButton)
+        
         CustomizeHaptic.instance.prepareHaptics()
         
         //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
@@ -228,7 +233,7 @@ class SelectScene: SKScene {
                 backgroundMusic.removeFromParent()
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
                 haptic_GoGameScene()
-                self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                            self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                     if let scene = SKScene(fileNamed: "GameScene") {
                         let fade = SKTransition.fade(withDuration: 1)
                         for node in self.children {
