@@ -16,8 +16,20 @@ class StartScene: SKScene {
     let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
     private var startButtonPressed = false
     
+    // MARK: Setting Panel Components
     let settingButton = SKSpriteNode()
-
+    let closeButton = SKSpriteNode()
+    let shadow = SKShapeNode()
+    let bgmBoolButton = SKShapeNode()
+    let sfxBoolButton = SKShapeNode()
+    let bgmLabel = SKLabelNode()
+    let bgmBoolLabel = SKLabelNode()
+    let sfxLabel = SKLabelNode()
+    let sfxBoolLabel = SKLabelNode()
+    
+    private var bgmBool = true
+    private var sfxBool = true
+    
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375
@@ -65,23 +77,80 @@ class StartScene: SKScene {
         addChild(tapToStartLabel)
         blinkEffect(node: tapToStartLabel, duration: 0.8)
         
-//        let patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
-//        for i in 0..<patternSprites.count {
-//            patternSprites[i].path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: radius * 0.12)
-//            shapeNodeColorSetting(node: patternSprites[i], fillColor: UIColor(.selectLineColor).withAlphaComponent(0.8), strokeColor: UIColor(.selectLineColor))
-//            patternSprites[i].lineWidth = 2
-//            patternSprites[i].zPosition = 1
-//            let tempSize = radius * 0.08
-//            let temp = SKShapeNode(path: Rect(startPosition: CGPoint(x: frame.midX - tempSize, y: frame.midY - tempSize), xSize: tempSize * 2, ySize: tempSize * 2))
-//            temp.fillTexture = SKTexture(imageNamed: "\(pieceName[i]).png")
-//            shapeNodeColorSetting(node: temp, fillColor: UIColor.white, strokeColor: UIColor.clear)
-//            patternSprites[i].addChild(temp)
-//            addChild(patternSprites[i])
-//        }
-//        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
-        
         setSettingButton(settingButton: settingButton, frame: frame)
         addChild(settingButton)
+
+
+        //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
+        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
+        let image = UIImage(systemName: "xmark", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
+        let data_ = image.pngData()
+        let rImage = UIImage(data:data_!)
+        closeButton.texture = SKTexture(image: rImage!)
+        nodeNameSetting(node: closeButton, name: "closeButton")
+        closeButton.size = rImage?.size ?? CGSize(width: 10, height: 10)
+        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: frame.maxY - frame.maxX * 0.24)
+        closeButton.zPosition = 6
+        shadow.addChild(closeButton)
+        
+        // Setting: Shadow
+        shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor.opacity(0.8)), strokeColor: UIColor(.shadowColor.opacity(0.8)))
+        shadow.name = "shadow"
+        shadow.zPosition = 5.5
+        addChild(shadow)
+
+        bgmBoolButton.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(180), clockwise: false, radius: circleRadius)
+        bgmBoolButton.zPosition = 7
+        bgmBoolButton.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        bgmBoolButton.fillColor = .white
+        bgmBoolButton.strokeColor = UIColor(.parchmentColor)
+        nodelineWidthSetting(node: bgmBoolButton, width: 3)
+        nodeNameSetting(node: bgmBoolButton, name: "bgmBoolButton")
+//        bgmBoolButton.physicsBody = SKPhysicsBody(polygonFrom: bgmBoolButton.path ?? UIBezierPath(rect: CGRect()).cgPath)
+//        bgmBoolButton.physicsBody?.isDynamic = false
+        shadow.addChild(bgmBoolButton)
+
+        sfxBoolButton.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(-180), clockwise: true, radius: circleRadius)
+        sfxBoolButton.zPosition = 7
+        sfxBoolButton.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
+        sfxBoolButton.fillColor = .white
+        sfxBoolButton.strokeColor = UIColor(.parchmentColor)
+        nodelineWidthSetting(node: sfxBoolButton, width: 3)
+        nodeNameSetting(node: sfxBoolButton, name: "sfxBoolButton")
+//        sfxBoolButton.physicsBody = SKPhysicsBody(polygonFrom: bgmBoolButton.path ?? UIBezierPath(rect: CGRect()).cgPath)
+//        sfxBoolButton.physicsBody?.isDynamic = false
+        shadow.addChild(sfxBoolButton)
+
+        labelSetting(node: bgmLabel, str: "BGM", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x: frame.midX - frame.maxX * 0.25, y: frame.midY+circleRadius * 0.45))
+        bgmLabel.verticalAlignmentMode = .center
+        labelNodeColor(node: bgmLabel, color: UIColor.white)
+        nodeNameSetting(node: bgmLabel, name: "bgmBoolButton")
+        bgmLabel.zPosition = 7
+        shadow.addChild(bgmLabel)
+
+        labelSetting(node: sfxLabel, str: "SFX", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x: frame.midX - frame.maxX * 0.25, y: frame.midY-circleRadius * 0.45))
+        sfxLabel.verticalAlignmentMode = .center
+        labelNodeColor(node: sfxLabel, color: UIColor.white)
+        sfxLabel.zPosition = 7
+        nodeNameSetting(node: sfxLabel, name: "sfxBoolButton")
+        shadow.addChild(sfxLabel)
+        
+        labelSetting(node: bgmBoolLabel, str: SoundActiveStatus(status: bgmBool), align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX + frame.maxX * 0.25, y: frame.midY+circleRadius * 0.45))
+        bgmBoolLabel.verticalAlignmentMode = .center
+        labelNodeColor(node: bgmBoolLabel, color: UIColor.white)
+        bgmBoolLabel.zPosition = 7
+        nodeNameSetting(node: bgmBoolLabel, name: "bgmBoolButton")
+        shadow.addChild(bgmBoolLabel)
+
+        labelSetting(node: sfxBoolLabel, str: SoundActiveStatus(status: sfxBool), align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX + frame.maxX * 0.25, y: frame.midY-circleRadius * 0.45))
+        sfxBoolLabel.verticalAlignmentMode = .center
+        labelNodeColor(node: sfxBoolLabel, color: UIColor.white)
+        sfxBoolLabel.zPosition = 7
+        nodeNameSetting(node: sfxBoolLabel, name: "sfxBoolButton")
+        shadow.addChild(sfxBoolLabel)
+
+        settingPanelDisactive(shadow: shadow, status: true)
         
         CustomizeHaptic.instance.prepareHaptics()
         //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
@@ -90,10 +159,29 @@ class StartScene: SKScene {
         })]))
     }
     
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if(startButtonPressed == false) {
-            startButtonPressed = true
-            waitAndSceneChange()
+        for touch in touches {
+            let location = touch.location(in: self)
+            let touchedNode = atPoint(location)
+            if (touchedNode.name == "settingButton") {
+                settingPanelDisactive(shadow: shadow, status: false)
+            } else if (touchedNode.name == "closeButton") {
+                settingPanelDisactive(shadow: shadow, status: true)
+            } else if (shadow.isHidden == true) {
+                if(startButtonPressed == false) {
+                    startButtonPressed = true
+                    waitAndSceneChange()
+                }
+            } else if (shadow.isHidden == false) {
+                if (touchedNode.name == "bgmBoolButton" && bgmBoolButton.contains(location)) {
+                    bgmBool = !bgmBool
+                    boolButtonStatusChangeTo(node: bgmBoolLabel, status: bgmBool)
+                } else if (touchedNode.name == "sfxBoolButton" && sfxBoolButton.contains(location)) {
+                    sfxBool = !sfxBool
+                    boolButtonStatusChangeTo(node: sfxBoolLabel, status: sfxBool)
+                }
+            }
         }
     }
 

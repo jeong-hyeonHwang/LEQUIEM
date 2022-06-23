@@ -237,6 +237,7 @@ class SelectScene: SKScene {
                 })]))
                 return
             }
+        }
         
         sfxPlay(soundFileName: "SFX_StageChange", scene: self)
         

@@ -20,3 +20,14 @@ func setSettingButton(settingButton: SKSpriteNode, frame: CGRect) {
     settingButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: frame.maxY - frame.maxX * 0.24)
     settingButton.zPosition = 5
 }
+
+func settingPanelDisactive(shadow: SKShapeNode, status: Bool) {
+    shadow.isHidden = status
+}
+
+func boolButtonStatusChangeTo(node: SKLabelNode, status: Bool) {
+    node.text = SoundActiveStatus(status: status)
+}
+func SoundActiveStatus(status: Bool) -> String {
+    return status == true ? "ON" : "OFF"
+}
