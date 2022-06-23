@@ -18,6 +18,6 @@ func haptic_GoSelectScene() {
 }
 
 func haptic_GoGameScene() {
-    let haptic = HapticProperty(count: 1, interval: [0.04], intensity: [0.5], sharpness: [0.5])
+    let haptic = HapticProperty(count: 1, interval: [0.02], intensity: [0.5], sharpness: [0.5])
     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
 }

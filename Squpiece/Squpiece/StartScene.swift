@@ -76,9 +76,11 @@ class StartScene: SKScene {
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
         
-        addChild(backgroundMusic)
-        backgroundMusicPlay(node: backgroundMusic)
         CustomizeHaptic.instance.prepareHaptics()
+        //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
+                self.addChild(self.backgroundMusic)
+        })]))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

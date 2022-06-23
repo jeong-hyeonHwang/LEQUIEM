@@ -8,6 +8,7 @@
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import SwiftUI
 
 class SelectScene: SKScene {
 
@@ -45,6 +46,8 @@ class SelectScene: SKScene {
     let centerFontColor = UIColor(.parchmentColor)
     let centerImageColor = UIColor(.pieceColor)
     var circleRadius: CGFloat = 0
+    
+    var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     
 //    let topReturnButton = SKShapeNode()
     //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
@@ -206,6 +209,12 @@ class SelectScene: SKScene {
 //        addChild(topReturnButton)
         
         CustomizeHaptic.instance.prepareHaptics()
+        
+        //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                self.addChild(self.backgroundMusic)
+        })]))
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -213,17 +222,20 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
-                haptic_GoGameScene()
+                backgroundMusic.removeFromParent()
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
-                if let scene = SKScene(fileNamed: "GameScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                haptic_GoGameScene()
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                    if let scene = SKScene(fileNamed: "GameScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
+                })]))
                 return
             }
 //            else if(touchedNode.name == "returnMainButton") {

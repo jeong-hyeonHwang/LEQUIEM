@@ -305,30 +305,35 @@ class GameScene: SKScene {
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                if let scene = SKScene(fileNamed: "GameScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
+                    if let scene = SKScene(fileNamed: "GameScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
-
+                })]))
+                
             } else if (touchedNode.name == "returnHomeButton") {
                 sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                if let scene = SKScene(fileNamed: "SelectScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                    if let scene = SKScene(fileNamed: "SelectScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
+                })]))
+                
             }
 
             if (nodeOpen == false) {
