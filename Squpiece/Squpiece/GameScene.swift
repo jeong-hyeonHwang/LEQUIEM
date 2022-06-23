@@ -301,6 +301,7 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
+                sfxPlay(soundFileName: "SFX_GameRestart", scene: self)
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
@@ -315,6 +316,7 @@ class GameScene: SKScene {
                 }
 
             } else if (touchedNode.name == "returnHomeButton") {
+                sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
@@ -377,9 +379,11 @@ class GameScene: SKScene {
                     }
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
+                        sfxPlay(soundFileName: "SFX_Combo_", scene: self)
                         timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
                     } else {
+                        //sfxPlay(soundFileName: "SFX_Touch", scene: self)
                         HapticManager.instance.impact(style: .soft)
                     }
 
@@ -416,7 +420,7 @@ class GameScene: SKScene {
             }
         }
     }
-    
+
     func timerAnimation (node: SKShapeNode, shadow: SKNode) {
         let wait = SKAction.wait(forDuration: 0.1)
         let hold = SKAction.run({
@@ -434,6 +438,7 @@ class GameScene: SKScene {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 if (self.stageEnd == false) {
+                    sfxPlay(soundFileName: "SFX_GameEnd", scene: self)
                     let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
                     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
                     self.stageEnd = true
@@ -449,6 +454,7 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
+            //sfxPlay(soundFileName: "SFX_GameStart", scene: self)
             let haptic = HapticProperty(count: 1, interval: [0], intensity: [0.5], sharpness: [0.35])
             playCustomHaptic(hapticType: Haptic.transient, hapticProperty: haptic)
         }

@@ -213,13 +213,14 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
+                haptic_GoGameScene()
+                sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
                 if let scene = SKScene(fileNamed: "GameScene") {
                     let fade = SKTransition.fade(withDuration: 1)
                     for node in children {
                         node.removeAllActions()
                         node.removeAllChildren()
                     }
-                    haptic_GoGameScene()
                     // Present the scene
                     self.view?.presentScene(scene, transition: fade)
                 }
@@ -241,6 +242,9 @@ class SelectScene: SKScene {
 //                return
 //            }
         }
+        
+        sfxPlay(soundFileName: "SFX_StageChange", scene: self)
+        
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
         } else {

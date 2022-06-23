@@ -47,7 +47,7 @@ class StartScene: SKScene {
         addChild(symbolPattern)
         
         let title = SKLabelNode()
-        labelSetting(node: title, str: "LULLABY", align: .center, fontSize: frame.maxY * 0.14, fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: 0))
+        labelSetting(node: title, str: "LEQUIEM", align: .center, fontSize: frame.maxY * 0.14, fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: 0))
         title.verticalAlignmentMode = .center
         addChild(title)
         let subTitle = SKLabelNode()
@@ -76,7 +76,7 @@ class StartScene: SKScene {
 //        }
 //        patternPiecePositionSetter(circleRadius: radius, frame: frame, patternSprites: patternSprites)
         
-        self.addChild(backgroundMusic)
+        addChild(backgroundMusic)
         backgroundMusicPlay(node: backgroundMusic)
         CustomizeHaptic.instance.prepareHaptics()
     }
@@ -86,35 +86,22 @@ class StartScene: SKScene {
     }
     
     func waitAndSceneChange() {
+        sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()
-        for node in children {
-            node.removeAllActions()
-            node.removeAllChildren()
-        }
         let wait = SKAction.wait(forDuration: 0.5)
         let action = SKAction.run {
             if let scene = SKScene(fileNamed: "SelectScene") {
-                let fade = SKTransition.fade(withDuration: 1)
-                //let fade = SKTransition.doorsOpenHorizontal(withDuration: 3)
+                let fade = SKTransition.fade(withDuration: 2)
+                for node in self.children {
+                    node.removeAllActions()
+                    node.removeAllChildren()
+                }
                 
                 self.view?.presentScene(scene, transition: fade)
             }
         }
         let sequence = SKAction.sequence([wait, action])
         background.run(sequence)
-    }
-    
-    func backgroundMusicPlay(node: SKAudioNode) {
-        let waitASec = SKAction.wait(forDuration: 1)
-        let play = SKAction.run {
-            self.backgroundMusic.run(SKAction.play())
-        }
-        let wait = SKAction.wait(forDuration: 65)
-        let sequence = SKAction.sequence([play, wait])
-        let repeatSequence = SKAction.repeatForever(sequence)
-        let lastResult = SKAction.sequence([waitASec, repeatSequence])
-        
-        node.run(lastResult)
     }
 }
 
