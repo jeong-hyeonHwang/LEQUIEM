@@ -21,6 +21,18 @@ func backgroundMusicPlay(node: SKAudioNode) {
 }
 
 func sfxPlay(soundFileName: String, scene: SKScene) {
-    let gotoGameSceneSFX = SKAction.playSoundFileNamed("\(soundFileName).mp3", waitForCompletion: false)
-    scene.run(gotoGameSceneSFX)
+    if(sfxBool == true) {
+        let gotoGameSceneSFX = SKAction.playSoundFileNamed("\(soundFileName).mp3", waitForCompletion: false)
+        scene.run(gotoGameSceneSFX)
+    }
+}
+
+func soundVolumeOn(node: SKAudioNode, status: Bool) {
+    var value: Float?
+    if (status == true) {
+        value = 1
+    } else {
+        value = 0
+    }
+    node.run(SKAction.changeVolume(to: value ?? 0.5, duration: 0))
 }

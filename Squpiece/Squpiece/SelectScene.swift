@@ -205,6 +205,7 @@ class SelectScene: SKScene {
         self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                 self.addChild(self.backgroundMusic)
         })]))
+        soundVolumeOn(node: backgroundMusic, status: bgmBool)
         
     }
     

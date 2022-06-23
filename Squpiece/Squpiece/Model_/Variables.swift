@@ -31,5 +31,5 @@ var hasTopNotch: Bool {
     return false
 }
 
-var bgmBool = true
-var sfxBool = true
+var bgmBool = dataGetB(key: "bgmBool")
+var sfxBool = dataGetB(key: "sfxBool")

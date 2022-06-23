@@ -155,6 +155,7 @@ class StartScene: SKScene {
         self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                 self.addChild(self.backgroundMusic)
         })]))
+        soundVolumeOn(node: backgroundMusic, status: bgmBool)
     }
     
     
@@ -174,9 +175,12 @@ class StartScene: SKScene {
             } else if (shadow.isHidden == false) {
                 if (touchedNode.name == "bgmBoolButton" && bgmBoolButton.contains(location)) {
                     bgmBool = !bgmBool
+                    dataSetB(value: bgmBool, key: "bgmBool")
+                    soundVolumeOn(node: backgroundMusic, status: bgmBool)
                     boolButtonStatusChangeTo(node: bgmBoolLabel, status: bgmBool)
                 } else if (touchedNode.name == "sfxBoolButton" && sfxBoolButton.contains(location)) {
                     sfxBool = !sfxBool
+                    dataSetB(value: sfxBool, key: "sfxBool")
                     boolButtonStatusChangeTo(node: sfxBoolLabel, status: sfxBool)
                 }
             }
@@ -184,6 +188,7 @@ class StartScene: SKScene {
     }
 
     func waitAndSceneChange() {
+        backgroundMusic.removeFromParent()
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()
         let wait = SKAction.wait(forDuration: 0.5)
