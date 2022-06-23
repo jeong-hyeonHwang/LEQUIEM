@@ -50,16 +50,10 @@ class SelectScene: SKScene {
     var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     private var startButtonPressed = false
     
-    let settingButton = SKSpriteNode()
+    //let settingButton = SKSpriteNode()
     
 //    let topReturnButton = SKShapeNode()
-    //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
-    var hasTopNotch: Bool {
-        if #available(iOS 11.0, tvOS 11.0, *) {
-            return UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 20
-        }
-        return false
-    }
+    
     
     override func didMove(to view: SKView) {
         
@@ -202,8 +196,8 @@ class SelectScene: SKScene {
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
 
-        setSettingButton(settingButton: settingButton, frame: frame)
-        addChild(settingButton)
+//        setSettingButton(settingButton: settingButton, frame: frame)
+//        addChild(settingButton)
         
         CustomizeHaptic.instance.prepareHaptics()
         

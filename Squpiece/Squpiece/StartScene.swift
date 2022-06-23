@@ -26,9 +26,7 @@ class StartScene: SKScene {
     let bgmBoolLabel = SKLabelNode()
     let sfxLabel = SKLabelNode()
     let sfxBoolLabel = SKLabelNode()
-    
-    private var bgmBool = true
-    private var sfxBool = true
+
     
     override func didMove(to view: SKView) {
         let circleRadius = frame.maxX * 0.8
@@ -82,14 +80,14 @@ class StartScene: SKScene {
 
 
         //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
+        let config = UIImage.SymbolConfiguration(pointSize: hasTopNotch == true ? 10 : 14, weight: .semibold, scale: .default)
         let image = UIImage(systemName: "xmark", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
         let data_ = image.pngData()
         let rImage = UIImage(data:data_!)
         closeButton.texture = SKTexture(image: rImage!)
         nodeNameSetting(node: closeButton, name: "closeButton")
         closeButton.size = rImage?.size ?? CGSize(width: 10, height: 10)
-        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: frame.maxY - frame.maxX * 0.24)
+        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.3 : frame.maxY - frame.maxX * 0.24)
         closeButton.zPosition = 6
         shadow.addChild(closeButton)
         
