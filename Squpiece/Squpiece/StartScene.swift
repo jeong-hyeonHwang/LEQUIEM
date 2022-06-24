@@ -188,7 +188,8 @@ class StartScene: SKScene {
     }
 
     func waitAndSceneChange() {
-        backgroundMusic.removeFromParent()
+//        backgroundMusic.removeFromParent()
+        backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0.4))
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()
         let wait = SKAction.wait(forDuration: 0.5)

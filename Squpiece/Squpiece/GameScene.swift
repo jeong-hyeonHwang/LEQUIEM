@@ -100,6 +100,7 @@ class GameScene: SKScene {
     
     private var buttonPressed = false
     
+    var backgroundMusic = SKAudioNode(fileNamed: "Cradle.mp3")
     override func didMove(to view: SKView) {
         firstCall = Date()
         circleRadius = frame.maxX * 0.8
@@ -270,6 +271,12 @@ class GameScene: SKScene {
         endGameButtonDisable()
         
         CustomizeHaptic.instance.prepareHaptics()
+        
+        //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                self.addChild(self.backgroundMusic)
+        })]))
+        soundVolumeOn(node: backgroundMusic, status: bgmBool)
     }
     
     //https://developer.apple.com/forums/thread/107653
@@ -385,6 +392,7 @@ class GameScene: SKScene {
                     currentPieceSprite.name = "Xp_\(pieceName[self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
                 } else {
+                    sfxPlay(soundFileName: "SFX_ComboBreak", scene: self)
 //                    print("NO...")
                     timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
@@ -423,6 +431,7 @@ class GameScene: SKScene {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 if (self.stageEnd == false) {
+                    self.backgroundMusic.removeFromParent()
                     sfxPlay(soundFileName: "SFX_GameEnd", scene: self)
                     let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
                     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
