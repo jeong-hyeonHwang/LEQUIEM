@@ -8,6 +8,7 @@
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import SwiftUI
 
 class SelectScene: SKScene {
 
@@ -46,14 +47,13 @@ class SelectScene: SKScene {
     let centerImageColor = UIColor(.pieceColor)
     var circleRadius: CGFloat = 0
     
+    var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
+    private var startButtonPressed = false
+    
+    //let settingButton = SKSpriteNode()
+    
 //    let topReturnButton = SKShapeNode()
-    //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
-    var hasTopNotch: Bool {
-        if #available(iOS 11.0, tvOS 11.0, *) {
-            return UIApplication.shared.delegate?.window??.safeAreaInsets.top ?? 0 > 20
-        }
-        return false
-    }
+    
     
     override func didMove(to view: SKView) {
         
@@ -195,52 +195,47 @@ class SelectScene: SKScene {
         labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
-        
-//        topReturnButton.path = Arc(center: CGPoint(x: 0, y: frame.maxY * 1.1), startAngle: .degrees(-45), endAngle: .degrees(-135), clockwise: false, radius: frame.maxY * 0.8)
-//        shapeNodeColorSetting(node: topReturnButton, fillColor: UIColor(.parchmentColor), strokeColor: UIColor.clear)
-//        topReturnButton.blendMode = .add
-//        topReturnButton.alpha = 0.3
-//        topReturnButton.name = "returnMainButton"
-//        topReturnButton.physicsBody = SKPhysicsBody(polygonFrom: topReturnButton.path ?? UIBezierPath(rect: CGRect(x: 0, y: 0, width: 0, height: 0)).cgPath)
-//        topReturnButton.physicsBody?.isDynamic = false
-//        addChild(topReturnButton)
+
+//        setSettingButton(settingButton: settingButton, frame: frame)
+//        addChild(settingButton)
         
         CustomizeHaptic.instance.prepareHaptics()
+        
+        //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                self.addChild(self.backgroundMusic)
+        })]))
+        soundVolumeOn(node: backgroundMusic, status: bgmBool)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if(startButtonPressed == true) { return }
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "startButton") {
-                if let scene = SKScene(fileNamed: "GameScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                startButtonPressed = true
+                backgroundMusic.removeFromParent()
+                sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
+                haptic_GoGameScene()
+                            self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                    if let scene = SKScene(fileNamed: "GameScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    haptic_GoGameScene()
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
+                })]))
                 return
             }
-//            else if(touchedNode.name == "returnMainButton") {
-//                if(topReturnButton.path?.contains(location) == false) {
-//                    break
-//                }
-//                if let scene = SKScene(fileNamed: "StartScene") {
-//                    let fade = SKTransition.doorsCloseHorizontal(withDuration: 1)
-//                    for node in children {
-//                        node.removeAllActions()
-//                        node.removeAllChildren()
-//                    }
-//                    // Present the scene
-//                    self.view?.presentScene(scene, transition: fade)
-//                }
-//                return
-//            }
         }
+        
+        sfxPlay(soundFileName: "SFX_StageChange", scene: self)
+        
         if(numberOfPiece != pieces.count) {
             numberOfPiece += 1
         } else {

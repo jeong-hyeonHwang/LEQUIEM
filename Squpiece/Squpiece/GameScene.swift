@@ -98,6 +98,9 @@ class GameScene: SKScene {
     var stageEnd: Bool = false
     var firstCall: Date?
     
+    private var buttonPressed = false
+    
+    var backgroundMusic = SKAudioNode(fileNamed: "Cradle.mp3")
     override func didMove(to view: SKView) {
         firstCall = Date()
         circleRadius = frame.maxX * 0.8
@@ -227,31 +230,6 @@ class GameScene: SKScene {
         shadow.zPosition = 0
         addChild(shadow)
 
-        //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-//        let config1 = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold, scale: .default)
-        //https://stackoverflow.com/questions/59886426/creating-an-skspritenode-from-the-sf-symbols-font-in-a-different-color
-        //Restart Button : VER.SPRITE NODE
-//        let image = UIImage(systemName: "arrow.clockwise", withConfiguration: config1)!.withTintColor(.white)
-//        let data = image.pngData()
-//        let rImage = UIImage(data:data!)
-//        restartButton.texture = SKTexture(image: rImage!)
-//        nodeNameSetting(node: restartButton, name: "restartButton")
-//        restartButton.size = rImage?.size ?? CGSize(width: 45, height: 45)
-//        restartButton.position = CGPoint(x: frame.midX, y: frame.minY + frame.height * 0.12)
-//        restartButton.zPosition = 2
-//        restartButton.isHidden = true
-//        addChild(restartButton)
-        
-        //Return Button : VER.SPRITE NODE
-//        let houseImg = UIImage(systemName: "house", withConfiguration: config1)!.withTintColor(.white)
-//        let hData = houseImg.pngData()
-//        let hImage = UIImage(data:hData!)
-//        returnHomeButton.texture = SKTexture(image: hImage!)
-//        nodeNameSetting(node: returnHomeButton, name: "returnHomeButton")
-//        returnHomeButton.size = hImage?.size ?? CGSize(width: 45, height: 45)
-//        returnHomeButton.position = CGPoint(x: frame.midX, y: frame.midY + circleRadius * 0.5)
-//        returnHomeButton.zPosition = 2
-//        addChild(returnHomeButton)
         
         restartButtonBackground.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(-180), clockwise: true, radius: circleRadius)
         restartButtonBackground.zPosition = 1
@@ -293,40 +271,56 @@ class GameScene: SKScene {
         endGameButtonDisable()
         
         CustomizeHaptic.instance.prepareHaptics()
+        
+        //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                self.addChild(self.backgroundMusic)
+        })]))
+        soundVolumeOn(node: backgroundMusic, status: bgmBool)
     }
     
     //https://developer.apple.com/forums/thread/107653
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (buttonPressed == true) { return }
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "restartButton") {
+                buttonPressed = true
+                sfxPlay(soundFileName: "SFX_GameRestart", scene: self)
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                if let scene = SKScene(fileNamed: "GameScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
+                    if let scene = SKScene(fileNamed: "GameScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
-
+                })]))
+                
             } else if (touchedNode.name == "returnHomeButton") {
+                buttonPressed = true
+                sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                if let scene = SKScene(fileNamed: "SelectScene") {
-                    let fade = SKTransition.fade(withDuration: 1)
-                    for node in children {
-                        node.removeAllActions()
-                        node.removeAllChildren()
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
+                    if let scene = SKScene(fileNamed: "SelectScene") {
+                        let fade = SKTransition.fade(withDuration: 1)
+                        for node in self.children {
+                            node.removeAllActions()
+                            node.removeAllChildren()
+                        }
+                        // Present the scene
+                        self.view?.presentScene(scene, transition: fade)
                     }
-                    // Present the scene
-                    self.view?.presentScene(scene, transition: fade)
-                }
+                })]))
+                
             }
 
             if (nodeOpen == false) {
@@ -377,9 +371,11 @@ class GameScene: SKScene {
                     }
 
                     if (comboValue % 50 == 0 && comboValue > 0) {
+                        sfxPlay(soundFileName: "SFX_Combo_", scene: self)
                         timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
                     } else {
+                        //sfxPlay(soundFileName: "SFX_Touch", scene: self)
                         HapticManager.instance.impact(style: .soft)
                     }
 
@@ -396,6 +392,7 @@ class GameScene: SKScene {
                     currentPieceSprite.name = "Xp_\(pieceName[self.currentIndex])"
                     scaleAction(node: currentPieceSprite)
                 } else {
+                    sfxPlay(soundFileName: "SFX_ComboBreak", scene: self)
 //                    print("NO...")
                     timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
@@ -416,7 +413,7 @@ class GameScene: SKScene {
             }
         }
     }
-    
+
     func timerAnimation (node: SKShapeNode, shadow: SKNode) {
         let wait = SKAction.wait(forDuration: 0.1)
         let hold = SKAction.run({
@@ -434,6 +431,8 @@ class GameScene: SKScene {
                 node.path = Cir(center: CGPoint(x: self.frame.midX, y: self.frame.midY), radius: self.timerRadius)
             } else {
                 if (self.stageEnd == false) {
+                    self.backgroundMusic.removeFromParent()
+                    sfxPlay(soundFileName: "SFX_GameEnd", scene: self)
                     let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
                     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
                     self.stageEnd = true
@@ -449,6 +448,7 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
+            //sfxPlay(soundFileName: "SFX_GameStart", scene: self)
             let haptic = HapticProperty(count: 1, interval: [0], intensity: [0.5], sharpness: [0.35])
             playCustomHaptic(hapticType: Haptic.transient, hapticProperty: haptic)
         }

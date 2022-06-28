@@ -17,3 +17,17 @@ func dataSet(value: Int, key: String) {
 func dataGet(key: String) -> Int {
     return UserDefaults.standard.integer(forKey: key)
 }
+
+func dataSetB(value: Bool, key: String) {
+    UserDefaults.standard.set(value, forKey: key)
+}
+
+func dataGetB(key: String) -> Bool {
+    let status = UserDefaults.standard.bool(forKey: key)
+    if (UserDefaults.standard.object(forKey: key) != nil) {
+        print("NO EXISTING DATA")
+        return status
+    } else {
+        return true
+    }
+}
