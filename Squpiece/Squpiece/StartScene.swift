@@ -8,6 +8,7 @@
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import GameKit
 
 class StartScene: SKScene {
 
@@ -27,8 +28,15 @@ class StartScene: SKScene {
     let sfxLabel = SKLabelNode()
     let sfxBoolLabel = SKLabelNode()
 
+    let gameCenterTrigger = SKShapeNode()
     
     override func didMove(to view: SKView) {
+        
+        GameKitHelper.sharedInstance.authenticateLocalPlayer(view: self.view!)
+//        GKAccessPoint.shared.location = .topLeading
+//        GKAccessPoint.shared.showHighlights = true
+//        GKAccessPoint.shared.isActive = true
+        
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375
         let img = UIImage(named: "background.jpg")!
@@ -156,6 +164,9 @@ class StartScene: SKScene {
                 self.addChild(self.backgroundMusic)
         })]))
         soundVolumeOn(node: backgroundMusic, status: bgmBool)
+
+        gameCenterTriggerSetting(node: gameCenterTrigger, frame: frame)
+        addChild(gameCenterTrigger)
     }
     
     
@@ -163,7 +174,10 @@ class StartScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-            if (touchedNode.name == "settingButton") {
+            if (touchedNode.name == "GameCenterTrigger") {
+                GKAccessPoint.shared.trigger {}
+            }
+            else if (touchedNode.name == "settingButton") {
                 settingPanelDisactive(shadow: shadow, status: false)
             } else if (touchedNode.name == "closeButton") {
                 settingPanelDisactive(shadow: shadow, status: true)

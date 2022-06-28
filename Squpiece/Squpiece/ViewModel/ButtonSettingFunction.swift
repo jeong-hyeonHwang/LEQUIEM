@@ -17,7 +17,7 @@ func setSettingButton(settingButton: SKSpriteNode, frame: CGRect) {
     settingButton.texture = SKTexture(image: rImage!)
     nodeNameSetting(node: settingButton, name: "settingButton")
     settingButton.size = rImage?.size ?? CGSize(width: 10, height: 10)
-    settingButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.3 : frame.maxY - frame.maxX * 0.24)
+    settingButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.35 : frame.maxY - frame.maxX * 0.24)
     settingButton.zPosition = 5
 }
 
@@ -30,4 +30,11 @@ func boolButtonStatusChangeTo(node: SKLabelNode, status: Bool) {
 }
 func SoundActiveStatus(status: Bool) -> String {
     return status == true ? "ON" : "OFF"
+}
+
+func gameCenterTriggerSetting(node: SKShapeNode, frame: CGRect) {
+    node.path = Cir(center: CGPoint(x: frame.minX + frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.35 : frame.maxY - frame.maxX * 0.24), radius: frame.maxY * 0.05)
+    node.name = "GameCenterTrigger"
+    node.fillColor = UIColor(.parchmentColor)
+    node.zPosition = 8
 }

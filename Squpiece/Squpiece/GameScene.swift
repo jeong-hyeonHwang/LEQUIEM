@@ -9,6 +9,7 @@
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import GameKit
 
 extension CGPath {
     static func arcWithWidth(center: CGPoint, start:CGFloat, end:CGFloat, radius:CGFloat, clockwise:Bool) -> UIBezierPath {
@@ -102,6 +103,8 @@ class GameScene: SKScene {
     
     var backgroundMusic = SKAudioNode(fileNamed: "Cradle.mp3")
     override func didMove(to view: SKView) {
+        GKAccessPoint.shared.isActive = false
+        
         firstCall = Date()
         circleRadius = frame.maxX * 0.8
         timerRadius = circleRadius * 2.3
@@ -291,6 +294,7 @@ class GameScene: SKScene {
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: "testRank")
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                     if let scene = SKScene(fileNamed: "GameScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -309,6 +313,7 @@ class GameScene: SKScene {
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: "testRank")
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                     if let scene = SKScene(fileNamed: "SelectScene") {
                         let fade = SKTransition.fade(withDuration: 1)

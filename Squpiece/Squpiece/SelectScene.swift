@@ -9,6 +9,7 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 import SwiftUI
+import GameKit
 
 class SelectScene: SKScene {
 
@@ -50,12 +51,10 @@ class SelectScene: SKScene {
     var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     private var startButtonPressed = false
     
-    //let settingButton = SKSpriteNode()
-    
-//    let topReturnButton = SKShapeNode()
-    
+    let gameCenterTrigger = SKShapeNode()
     
     override func didMove(to view: SKView) {
+        GKAccessPoint.shared.isActive = false
         
         circleRadius = frame.maxX * 0.8
         let labelPosition = hasTopNotch == true ? frame.maxY * 0.25 : frame.maxY * 0.17
@@ -195,9 +194,6 @@ class SelectScene: SKScene {
         labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
-
-//        setSettingButton(settingButton: settingButton, frame: frame)
-//        addChild(settingButton)
         
         CustomizeHaptic.instance.prepareHaptics()
         
@@ -206,7 +202,8 @@ class SelectScene: SKScene {
                 self.addChild(self.backgroundMusic)
         })]))
         soundVolumeOn(node: backgroundMusic, status: bgmBool)
-        
+        gameCenterTriggerSetting(node: gameCenterTrigger, frame: frame)
+        addChild(gameCenterTrigger)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,7 +211,10 @@ class SelectScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-            if (touchedNode.name == "startButton") {
+            if (touchedNode.name == "GameCenterTrigger") {
+                GKAccessPoint.shared.trigger {}
+                return
+            } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true
                 backgroundMusic.removeFromParent()
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
