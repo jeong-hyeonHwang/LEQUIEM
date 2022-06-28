@@ -28,7 +28,7 @@ class StartScene: SKScene {
     let sfxLabel = SKLabelNode()
     let sfxBoolLabel = SKLabelNode()
 
-    let gameCenterTrigger = SKShapeNode()
+    let gameCenterTrigger = SKSpriteNode()
     
     override func didMove(to view: SKView) {
         
@@ -92,7 +92,7 @@ class StartScene: SKScene {
         closeButton.texture = SKTexture(image: rImage!)
         nodeNameSetting(node: closeButton, name: "closeButton")
         closeButton.size = rImage?.size ?? CGSize(width: 10, height: 10)
-        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.3 : frame.maxY - frame.maxX * 0.24)
+        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.35 : frame.maxY - frame.maxX * 0.24)
         closeButton.zPosition = 6
         shadow.addChild(closeButton)
         
@@ -103,54 +103,15 @@ class StartScene: SKScene {
         shadow.zPosition = 5.5
         addChild(shadow)
 
-        bgmBoolButton.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(180), clockwise: false, radius: circleRadius)
-        bgmBoolButton.zPosition = 7
-        bgmBoolButton.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
-        bgmBoolButton.fillColor = .white
-        bgmBoolButton.strokeColor = UIColor(.parchmentColor)
-        nodelineWidthSetting(node: bgmBoolButton, width: 3)
-        nodeNameSetting(node: bgmBoolButton, name: "bgmBoolButton")
-//        bgmBoolButton.physicsBody = SKPhysicsBody(polygonFrom: bgmBoolButton.path ?? UIBezierPath(rect: CGRect()).cgPath)
-//        bgmBoolButton.physicsBody?.isDynamic = false
-        shadow.addChild(bgmBoolButton)
-
-        sfxBoolButton.path = Arc(center: CGPoint(x: 0, y: 0), startAngle: .degrees(0), endAngle: .degrees(-180), clockwise: true, radius: circleRadius)
-        sfxBoolButton.zPosition = 7
-        sfxBoolButton.fillTexture = SKTexture(imageNamed: "PieceBackground.png")
-        sfxBoolButton.fillColor = .white
-        sfxBoolButton.strokeColor = UIColor(.parchmentColor)
-        nodelineWidthSetting(node: sfxBoolButton, width: 3)
-        nodeNameSetting(node: sfxBoolButton, name: "sfxBoolButton")
-//        sfxBoolButton.physicsBody = SKPhysicsBody(polygonFrom: bgmBoolButton.path ?? UIBezierPath(rect: CGRect()).cgPath)
-//        sfxBoolButton.physicsBody?.isDynamic = false
-        shadow.addChild(sfxBoolButton)
-
-        labelSetting(node: bgmLabel, str: "BGM", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x: frame.midX - frame.maxX * 0.25, y: frame.midY+circleRadius * 0.45))
-        bgmLabel.verticalAlignmentMode = .center
-        labelNodeColor(node: bgmLabel, color: UIColor.white)
-        nodeNameSetting(node: bgmLabel, name: "bgmBoolButton")
-        bgmLabel.zPosition = 7
-        shadow.addChild(bgmLabel)
-
-        labelSetting(node: sfxLabel, str: "SFX", align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Regular", pos: CGPoint(x: frame.midX - frame.maxX * 0.25, y: frame.midY-circleRadius * 0.45))
-        sfxLabel.verticalAlignmentMode = .center
-        labelNodeColor(node: sfxLabel, color: UIColor.white)
-        sfxLabel.zPosition = 7
-        nodeNameSetting(node: sfxLabel, name: "sfxBoolButton")
-        shadow.addChild(sfxLabel)
+        setSoundButton(bgmBoolButton: bgmBoolButton, sfxBoolButton: sfxBoolButton, circleRadius: circleRadius)
+        setSoundLabel(bgmLabel: bgmLabel, sfxLabel: sfxLabel, circleRadius: circleRadius, frame: frame)
+        setSoundBoolLabel(bgmBoolLabel: bgmBoolLabel, sfxBoolLabel: sfxBoolLabel, circleRadius: circleRadius, frame: frame)
         
-        labelSetting(node: bgmBoolLabel, str: SoundActiveStatus(status: bgmBool), align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX + frame.maxX * 0.25, y: frame.midY+circleRadius * 0.45))
-        bgmBoolLabel.verticalAlignmentMode = .center
-        labelNodeColor(node: bgmBoolLabel, color: UIColor.white)
-        bgmBoolLabel.zPosition = 7
-        nodeNameSetting(node: bgmBoolLabel, name: "bgmBoolButton")
+        shadow.addChild(bgmBoolButton)
+        shadow.addChild(sfxBoolButton)
+        shadow.addChild(bgmLabel)
+        shadow.addChild(sfxLabel)
         shadow.addChild(bgmBoolLabel)
-
-        labelSetting(node: sfxBoolLabel, str: SoundActiveStatus(status: sfxBool), align: .center, fontSize: CGFloat(frame.maxX * 0.15), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: frame.midX + frame.maxX * 0.25, y: frame.midY-circleRadius * 0.45))
-        sfxBoolLabel.verticalAlignmentMode = .center
-        labelNodeColor(node: sfxBoolLabel, color: UIColor.white)
-        sfxBoolLabel.zPosition = 7
-        nodeNameSetting(node: sfxBoolLabel, name: "sfxBoolButton")
         shadow.addChild(sfxBoolLabel)
 
         settingPanelDisactive(shadow: shadow, status: true)

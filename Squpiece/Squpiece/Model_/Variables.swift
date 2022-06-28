@@ -22,6 +22,7 @@ var numberOfPiece: Int = 2
 let bgColor = UIColor(.bgColor)
 
 let pieceName: [String] = ["Pattern_D3", "Pattern_EH", "Pattern_S", "Pattern_F", "Pattern_T", "Pattern_A"]
+let leaderBoardName: [String] = ["I_Record", "T_Record", "A_Record", "E_Record", "T_Record"]
 
 //https://stackoverflow.com/questions/52402477/ios-detect-if-the-device-is-iphone-x-family-frameless
 var hasTopNotch: Bool {
