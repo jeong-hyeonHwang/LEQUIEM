@@ -33,9 +33,6 @@ class StartScene: SKScene {
     override func didMove(to view: SKView) {
         
         GameKitHelper.sharedInstance.authenticateLocalPlayer(view: self.view!)
-//        GKAccessPoint.shared.location = .topLeading
-//        GKAccessPoint.shared.showHighlights = true
-//        GKAccessPoint.shared.isActive = true
         
         let circleRadius = frame.maxX * 0.8
         let radius = frame.width * 0.375

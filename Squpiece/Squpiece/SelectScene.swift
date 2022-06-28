@@ -53,6 +53,14 @@ class SelectScene: SKScene {
     
     let gameCenterTrigger = SKShapeNode()
     
+    var test: String {
+        let random = Int.random(in: 0...1)
+        if random == 0 {
+            return "testRank"
+        } else {
+            return "testRank2"
+        }
+    }
     override func didMove(to view: SKView) {
         GKAccessPoint.shared.isActive = false
         
@@ -212,7 +220,8 @@ class SelectScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "GameCenterTrigger") {
-                GKAccessPoint.shared.trigger {}
+
+                GameKitHelper.sharedInstance.showSpecificLeaderBoard(lbName: test, view: self.view!.window!.rootViewController as! GameViewController, scene: self)
                 return
             } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true

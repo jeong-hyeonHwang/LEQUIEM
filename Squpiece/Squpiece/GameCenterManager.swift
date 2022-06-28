@@ -84,6 +84,24 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
                 let gc = GKGameCenterViewController()
                 gc.gameCenterDelegate = self
                 vc.present(gc, animated: true, completion: nil)
+                
+                            
+            }
+        }
+    }
+    
+    func showSpecificLeaderBoard(lbName: String, view: UIViewController, scene: SKScene) {
+        
+        if GKLocalPlayer.local.isAuthenticated {
+                  
+            let localPlayer = GKLocalPlayer.local
+                   
+            if localPlayer.isAuthenticated {
+        
+                let vc = view
+                let gc = GKGameCenterViewController(leaderboardID: lbName, playerScope: .global, timeScope: .allTime)
+                gc.gameCenterDelegate = self
+                vc.present(gc, animated: true, completion: nil)
                             
             }
         }
