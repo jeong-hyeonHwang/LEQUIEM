@@ -55,14 +55,8 @@ class StartScene: SKScene {
         bottomDecoPattern.position = CGPoint(x: 0, y: frame.minY + frame.width * 0.25)
         addChild(bottomDecoPattern)
         
-        let symbolBackground = SKShapeNode()
-        symbolBackground.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: circleRadius)
-        shapeNodeColorSetting(node: symbolBackground, fillColor: UIColor.clear, strokeColor: UIColor(.parchmentColor))
-        nodelineWidthSetting(node: symbolBackground, width: 3)
-        addChild(symbolBackground)
-        
-        let symbolPattern = SKSpriteNode(imageNamed: "TestPattern.png")
-        symbolPattern.size = CGSize(width: radius * 2, height: frame.width * 0.75)
+        let symbolPattern = SKSpriteNode(imageNamed: "Pattern_.png")
+        symbolPattern.size = CGSize(width: frame.width * 0.9, height: frame.width * 0.9)
         addChild(symbolPattern)
         
         let title = SKLabelNode()
