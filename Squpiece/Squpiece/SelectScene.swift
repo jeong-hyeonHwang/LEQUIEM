@@ -263,7 +263,7 @@ class SelectScene: SKScene {
                 return
             } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true
-                backgroundMusic.removeFromParent()
+                backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0))
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
                 haptic_GoGameScene()
                             self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
