@@ -63,7 +63,7 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
                        }
                        else if localPlayer.isAuthenticated {
                            self.gameCenterEnabled = true
-                           print((GKLocalPlayer.local.isAuthenticated))
+                           //print((GKLocalPlayer.local.isAuthenticated))
                        } else {
                            self.gameCenterEnabled = false
                            print("User not authenticated")

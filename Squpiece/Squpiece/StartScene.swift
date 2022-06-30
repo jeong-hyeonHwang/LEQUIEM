@@ -35,7 +35,6 @@ class StartScene: SKScene {
         GameKitHelper.sharedInstance.authenticateLocalPlayer(view: self.view!)
         
         let circleRadius = frame.maxX * 0.8
-        let radius = frame.width * 0.375
         let img = UIImage(named: "background.jpg")!
         let data = img.pngData()
         let newImage = UIImage(data:data!)
