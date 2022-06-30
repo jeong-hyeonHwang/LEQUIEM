@@ -7,8 +7,8 @@
 
 import Foundation
 
-let highScoreNameList: [String] = ["I_HighScore", "T_HighScore", "A_HighScore", "E_HighScore", "T_HighScore"]
-let maxComboNameList: [String] = ["I_MaxCombo", "T_MaxCombo", "A_MaxCombo", "E_MaxCombo", "T_MaxCombo"]
+let highScoreNameList: [String] = ["I_HighScore", "T_HighScore", "A_HighScore", "E_HighScore", "TT_HighScore"]
+let maxComboNameList: [String] = ["I_MaxCombo", "T_MaxCombo", "A_MaxCombo", "E_MaxCombo", "TT_MaxCombo"]
 
 func dataSet(value: Int, key: String) {
     UserDefaults.standard.set(value, forKey: key)

@@ -164,7 +164,6 @@ class StartScene: SKScene {
                     node.removeAllActions()
                     node.removeAllChildren()
                 }
-                
                 self.view?.presentScene(scene, transition: fade)
             }
         }
