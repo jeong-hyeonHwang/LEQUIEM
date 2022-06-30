@@ -113,8 +113,8 @@ class StartScene: SKScene {
         //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
         self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                 self.addChild(self.backgroundMusic)
+            soundVolumeOn(node: self.backgroundMusic, status: bgmBool)
         })]))
-        soundVolumeOn(node: backgroundMusic, status: bgmBool)
 
         gameCenterTriggerSetting(node: gameCenterTrigger, frame: frame)
         addChild(gameCenterTrigger)
