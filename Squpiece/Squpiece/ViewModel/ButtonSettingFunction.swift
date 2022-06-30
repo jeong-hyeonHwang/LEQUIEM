@@ -87,5 +87,5 @@ func gameCenterTriggerSetting(node: SKSpriteNode, frame: CGRect) {
     nodeNameSetting(node: node, name: "GameCenterTrigger")
     node.size = rImage?.size ?? CGSize(width: 10, height: 10)
     node.position = CGPoint(x: frame.minX + frame.maxX * 0.2, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.35 : frame.maxY - frame.maxX * 0.24)
-    node.zPosition = 8
+    node.zPosition = 4
 }
