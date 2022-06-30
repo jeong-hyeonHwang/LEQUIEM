@@ -259,7 +259,7 @@ class SelectScene: SKScene {
             if (touchedNode.name == "GameCenterTrigger") {
 
                 //https://stackoverflow.com/questions/21827783/how-to-reference-the-current-viewcontroller-from-a-sprite-kit-scene
-                GameKitHelper.sharedInstance.showSpecificLeaderBoard(lbName: test, view: self.view!.window!.rootViewController as! GameViewController, scene: self)
+                GameKitHelper.sharedInstance.showSpecificLeaderBoard(lbName: leaderBoardName[numberOfPiece-2], view: self.view!.window!.rootViewController as! GameViewController, scene: self)
                 return
             } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true

@@ -294,7 +294,7 @@ class GameScene: SKScene {
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: "testRank")
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[currentIndex])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                     if let scene = SKScene(fileNamed: "GameScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -313,7 +313,7 @@ class GameScene: SKScene {
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: "testRank")
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[currentIndex])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                     if let scene = SKScene(fileNamed: "SelectScene") {
                         let fade = SKTransition.fade(withDuration: 1)
