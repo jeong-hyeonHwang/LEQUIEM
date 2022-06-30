@@ -8,11 +8,15 @@
 import UIKit
 import SpriteKit
 import GameplayKit
-
+import AVFAudio
 class GameViewController: UIViewController {
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //https://stackoverflow.com/questions/29024320/how-can-i-allow-background-music-to-continue-playing-while-my-app-still-plays-it
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
+        try? AVAudioSession.sharedInstance().setActive(true)
         
         //https://stackoverflow.com/questions/66037782/swiftui-how-do-i-lock-a-particular-view-in-portrait-mode-whilst-allowing-others
         UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
