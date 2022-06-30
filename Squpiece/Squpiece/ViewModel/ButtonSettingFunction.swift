@@ -10,7 +10,7 @@ import SpriteKit
 
 func setSettingButton(settingButton: SKSpriteNode, frame: CGRect) {
     //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-    let config = UIImage.SymbolConfiguration(pointSize: hasTopNotch == true ? 10 : 14, weight: .semibold, scale: .default)
+    let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold, scale: .default)
     let image = UIImage(systemName: "gearshape.fill", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
     let data_ = image.pngData()
     let rImage = UIImage(data:data_!)
@@ -79,7 +79,7 @@ func SoundActiveStatus(status: Bool) -> String {
 }
 
 func gameCenterTriggerSetting(node: SKSpriteNode, frame: CGRect) {
-    let config = UIImage.SymbolConfiguration(pointSize: hasTopNotch == true ? 10 : 14, weight: .semibold, scale: .default)
+    let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold, scale: .default)
     let image = UIImage(systemName: "crown", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
     let data_ = image.pngData()
     let rImage = UIImage(data:data_!)

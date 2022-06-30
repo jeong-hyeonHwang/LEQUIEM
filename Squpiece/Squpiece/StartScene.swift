@@ -78,7 +78,7 @@ class StartScene: SKScene {
 
 
         //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton
-        let config = UIImage.SymbolConfiguration(pointSize: hasTopNotch == true ? 10 : 14, weight: .semibold, scale: .default)
+        let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold, scale: .default)
         let image = UIImage(systemName: "xmark", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
         let data_ = image.pngData()
         let rImage = UIImage(data:data_!)

@@ -211,7 +211,7 @@ class SelectScene: SKScene {
         setSettingButton(settingButton: settingButton, frame: frame)
         addChild(settingButton)
         
-        let config = UIImage.SymbolConfiguration(pointSize: hasTopNotch == true ? 10 : 14, weight: .semibold, scale: .default)
+        let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold, scale: .default)
         let image = UIImage(systemName: "xmark", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
         let data = image.pngData()
         let rImage = UIImage(data:data!)
