@@ -380,7 +380,6 @@ class GameScene: SKScene {
                         timerRadius += circleRadius * 0.15
                         HapticManager.instance.impact(style: .medium)
                     } else {
-                        //sfxPlay(soundFileName: "SFX_Touch", scene: self)
                         HapticManager.instance.impact(style: .soft)
                     }
 
