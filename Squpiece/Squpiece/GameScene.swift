@@ -436,6 +436,7 @@ class GameScene: SKScene {
             } else {
                 if (self.stageEnd == false) {
                     self.backgroundMusic.removeFromParent()
+                    self.labelBringToFront()
                     sfxPlay(soundFileName: "SFX_GameEnd", scene: self)
                     let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
                     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
@@ -452,7 +453,6 @@ class GameScene: SKScene {
         let waitSec = SKAction.wait(forDuration: waitSec)
         let nodeOpenAction = SKAction.run {
             self.nodeOpen = true
-            //sfxPlay(soundFileName: "SFX_GameStart", scene: self)
             let haptic = HapticProperty(count: 1, interval: [0], intensity: [0.5], sharpness: [0.35])
             playCustomHaptic(hapticType: Haptic.transient, hapticProperty: haptic)
         }
@@ -465,5 +465,14 @@ class GameScene: SKScene {
         restartButtonBackground.isHidden = true
         returnHomeButton.isHidden = true
         restartButton.isHidden = true
+    }
+    
+    func labelBringToFront() {
+        self.scoreLabel.zPosition = 6
+        self.scoreMark.zPosition = 6
+        self.highScoreLabel.zPosition = 6
+        self.highScoreMark.zPosition = 6
+        self.maxComboLabel.zPosition = 6
+        self.maxComboMark.zPosition = 6
     }
 }
