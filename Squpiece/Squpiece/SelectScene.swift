@@ -9,6 +9,7 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 import SwiftUI
+import GameKit
 
 class SelectScene: SKScene {
 
@@ -50,12 +51,29 @@ class SelectScene: SKScene {
     var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     private var startButtonPressed = false
     
-    //let settingButton = SKSpriteNode()
+    // MARK: Setting Panel Components
+    let settingButton = SKSpriteNode()
+    let closeButton = SKSpriteNode()
+    let bgmBoolButton = SKShapeNode()
+    let sfxBoolButton = SKShapeNode()
+    let bgmLabel = SKLabelNode()
+    let bgmBoolLabel = SKLabelNode()
+    let sfxLabel = SKLabelNode()
+    let sfxBoolLabel = SKLabelNode()
     
-//    let topReturnButton = SKShapeNode()
+    let gameCenterTrigger = SKSpriteNode()
     
+    var test: String {
+        let random = Int.random(in: 0...1)
+        if random == 0 {
+            return "testRank"
+        } else {
+            return "testRank2"
+        }
+    }
     
     override func didMove(to view: SKView) {
+        GKAccessPoint.shared.isActive = false
         
         circleRadius = frame.maxX * 0.8
         let labelPosition = hasTopNotch == true ? frame.maxY * 0.25 : frame.maxY * 0.17
@@ -63,12 +81,6 @@ class SelectScene: SKScene {
         let markYPosition = hasTopNotch == true ? frame.minY * 0.17 : frame.minY * 0.2
         let scoreYPosition = hasTopNotch == true ? frame.minY * 0.25 : frame.minY * 0.28
         self.backgroundColor = bgColor
-        
-        shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
-        shapeNodeColorSetting(node: shadow, fillColor: UIColor.black, strokeColor: UIColor.black)
-        shadow.alpha = 0.5
-        shadow.zPosition = 5
-        addChild(shadow)
         
         labelSetting(node: stageInactiveNoticer, str: "LOCKED STAGE", align: .center, fontSize: frame.maxY * 0.1, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: 0, y: 0))
         stageInactiveNoticer.zPosition = 6
@@ -195,9 +207,38 @@ class SelectScene: SKScene {
         labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
-
-//        setSettingButton(settingButton: settingButton, frame: frame)
-//        addChild(settingButton)
+        
+        setSettingButton(settingButton: settingButton, frame: frame)
+        addChild(settingButton)
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold, scale: .default)
+        let image = UIImage(systemName: "xmark", withConfiguration: config)!.withTintColor(UIColor(.parchmentColor))
+        let data = image.pngData()
+        let rImage = UIImage(data:data!)
+        closeButton.texture = SKTexture(image: rImage!)
+        nodeNameSetting(node: closeButton, name: "closeButton")
+        closeButton.size = rImage?.size ?? CGSize(width: 10, height: 10)
+        closeButton.position = CGPoint(x: frame.maxX - frame.maxX * 0.16, y: hasTopNotch == true ? frame.maxY - frame.maxX * 0.35 : frame.maxY - frame.maxX * 0.24)
+        closeButton.zPosition = 6
+        shadow.addChild(closeButton)
+        
+        // Setting: Shadow
+        shadow.path = Rect(startPosition: CGPoint(x: frame.minX, y: frame.minY), xSize: frame.width, ySize: frame.height)
+        shapeNodeColorSetting(node: shadow, fillColor: UIColor(.shadowColor.opacity(0.8)), strokeColor: UIColor(.shadowColor.opacity(0.8)))
+        shadow.name = "shadow"
+        shadow.zPosition = 5.5
+        addChild(shadow)
+        
+        setSoundButton(bgmBoolButton: bgmBoolButton, sfxBoolButton: sfxBoolButton, circleRadius: circleRadius)
+        setSoundLabel(bgmLabel: bgmLabel, sfxLabel: sfxLabel, circleRadius: circleRadius, frame: frame)
+        setSoundBoolLabel(bgmBoolLabel: bgmBoolLabel, sfxBoolLabel: sfxBoolLabel, circleRadius: circleRadius, frame: frame)
+        
+        shadow.addChild(bgmBoolButton)
+        shadow.addChild(sfxBoolButton)
+        shadow.addChild(bgmLabel)
+        shadow.addChild(sfxLabel)
+        shadow.addChild(bgmBoolLabel)
+        shadow.addChild(sfxBoolLabel)
         
         CustomizeHaptic.instance.prepareHaptics()
         
@@ -206,7 +247,8 @@ class SelectScene: SKScene {
                 self.addChild(self.backgroundMusic)
         })]))
         soundVolumeOn(node: backgroundMusic, status: bgmBool)
-        
+        gameCenterTriggerSetting(node: gameCenterTrigger, frame: frame)
+        addChild(gameCenterTrigger)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,7 +256,12 @@ class SelectScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-            if (touchedNode.name == "startButton") {
+            if (touchedNode.name == "GameCenterTrigger") {
+
+                //https://stackoverflow.com/questions/21827783/how-to-reference-the-current-viewcontroller-from-a-sprite-kit-scene
+                GameKitHelper.sharedInstance.showSpecificLeaderBoard(lbName: leaderBoardName[numberOfPiece-2], view: self.view!.window!.rootViewController as! GameViewController, scene: self)
+                return
+            } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true
                 backgroundMusic.removeFromParent()
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
@@ -230,6 +277,24 @@ class SelectScene: SKScene {
                         self.view?.presentScene(scene, transition: fade)
                     }
                 })]))
+                return
+            } else if (touchedNode.name == "settingButton") {
+                settingPanelDisactive(shadow: shadow, status: false)
+                return
+            } else if (touchedNode.name == "closeButton") {
+                settingPanelDisactive(shadow: shadow, status: true)
+                return
+            } else if (shadow.isHidden == false) {
+                if (touchedNode.name == "bgmBoolButton" && bgmBoolButton.contains(location)) {
+                    bgmBool = !bgmBool
+                    dataSetB(value: bgmBool, key: "bgmBool")
+                    soundVolumeOn(node: backgroundMusic, status: bgmBool)
+                    boolButtonStatusChangeTo(node: bgmBoolLabel, status: bgmBool)
+                } else if (touchedNode.name == "sfxBoolButton" && sfxBoolButton.contains(location)) {
+                    sfxBool = !sfxBool
+                    dataSetB(value: sfxBool, key: "sfxBool")
+                    boolButtonStatusChangeTo(node: sfxBoolLabel, status: sfxBool)
+                }
                 return
             }
         }

@@ -58,13 +58,10 @@ class CustomizeHaptic {
     func haptic(hapticCase: Haptic, hapticProperty: HapticProperty) {
         switch hapticCase {
         case .transient:
-            print("transient")
             transientHaptic(hapticProperty: hapticProperty)
         case .continuous:
-            print("continuous")
             continuousHaptic(hapticProperty: hapticProperty)
         case .dynamic:
-            print("dynamic")
             dynamicHaptic(hapticProperty: hapticProperty)
         }
     }
