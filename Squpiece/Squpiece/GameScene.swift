@@ -204,12 +204,14 @@ class GameScene: SKScene {
         currentPiece.path = Cir(center: CGPoint(x: frame.midX, y: frame.midY), radius: frame.width * 0.1)
         shapeNodeColorSetting(node: currentPiece, fillColor: UIColor(.parchmentColor), strokeColor: UIColor(.parchmentColor))
         nodelineWidthSetting(node: currentPiece, width: 5)
+        nodeNameSetting(node: currentPiece, name: "CurrentPiece")
         addChild(currentPiece)
 
         // Setting: Current Piece Sprite
         currentPieceSprite.texture = SKTexture(imageNamed: "\(pieceName[0]).png")
         nodeNameSetting(node: currentPieceSprite, name: "Xp_\(pieceName[currentIndex])")
         currentPieceSprite.size = CGSize(width: frame.maxX * 0.18, height: frame.maxX * 0.18)
+        nodeNameSetting(node: currentPieceSprite, name: "CurrentPiece")
         addChild(currentPieceSprite)
 
         // Setting: Rotation Stop Button
@@ -294,7 +296,7 @@ class GameScene: SKScene {
                 haptic_GoGameScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[currentIndex])
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[numberOfPiece - 2])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                     if let scene = SKScene(fileNamed: "GameScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -313,7 +315,7 @@ class GameScene: SKScene {
                 haptic_GoSelectScene()
                 dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
                 dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[currentIndex])
+                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[numberOfPiece - 2])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                     if let scene = SKScene(fileNamed: "SelectScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -325,7 +327,8 @@ class GameScene: SKScene {
                         self.view?.presentScene(scene, transition: fade)
                     }
                 })]))
-                
+            } else if (touchedNode.name == "CurrentPiece") {
+                return
             }
 
             if (nodeOpen == false) {
@@ -358,7 +361,6 @@ class GameScene: SKScene {
                 let eAngle = currentZR + angle + 90
                 let temp = Donut(center: CGPoint(x: frame.midX, y: frame.midY), startAngle: sAngle , endAngle: eAngle, clockwise: false, radius: circleRadius, width: circleRadius - frame.width * 0.1)
                 if(temp.contains(location)) {
-//                    print("YES!")
                     scoreValue += 125
                     scoreLabel.text = String(scoreValue)
 
@@ -397,7 +399,6 @@ class GameScene: SKScene {
                     scaleAction(node: currentPieceSprite)
                 } else {
                     sfxPlay(soundFileName: "SFX_ComboBreak", scene: self)
-//                    print("NO...")
                     timerRadius -= circleRadius * 0.32
                     HapticManager.instance.impact(style: .heavy)
                     comboValue = 0

@@ -30,6 +30,7 @@ class StartScene: SKScene {
 
     let gameCenterTrigger = SKSpriteNode()
     
+    private var buttonEnabled = false
     override func didMove(to view: SKView) {
         
         GameKitHelper.sharedInstance.authenticateLocalPlayer(view: self.view!)
@@ -71,7 +72,6 @@ class StartScene: SKScene {
         labelSetting(node: tapToStartLabel, str: "TAP TO START", align: .center, fontSize: frame.maxY * 0.065, fontName: "AppleSDGothicNeo-SemiBold", pos: CGPoint(x: 0, y: frame.minY * 0.7))
         tapToStartLabel.verticalAlignmentMode = .center
         addChild(tapToStartLabel)
-        blinkEffect(node: tapToStartLabel, duration: 0.8)
         
         setSettingButton(settingButton: settingButton, frame: frame)
         addChild(settingButton)
@@ -113,13 +113,28 @@ class StartScene: SKScene {
         //https://stackoverflow.com/questions/36380327/addchild-after-2-seconds
         self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                 self.addChild(self.backgroundMusic)
+            soundVolumeOn(node: self.backgroundMusic, status: bgmBool)
         })]))
-        soundVolumeOn(node: backgroundMusic, status: bgmBool)
 
         gameCenterTriggerSetting(node: gameCenterTrigger, frame: frame)
         addChild(gameCenterTrigger)
+        
+        appear(startButton: tapToStartLabel)
+        
+        
     }
     
+    func appear(startButton: SKLabelNode) {
+        startButton.alpha = 0
+        let wait = SKAction.wait(forDuration: 1.3)
+        let fadeIn = SKAction.fadeIn(withDuration: 0.3)
+        let blinkAction = SKAction.run {
+            self.buttonEnabled = true
+            blinkEffect(node: startButton, duration: 0.8)
+        }
+        let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
+        startButton.run(sequence)
+    }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -132,7 +147,7 @@ class StartScene: SKScene {
                 settingPanelDisactive(shadow: shadow, status: false)
             } else if (touchedNode.name == "closeButton") {
                 settingPanelDisactive(shadow: shadow, status: true)
-            } else if (shadow.isHidden == true) {
+            } else if (shadow.isHidden == true && buttonEnabled == true) {
                 if(startButtonPressed == false) {
                     startButtonPressed = true
                     waitAndSceneChange()
@@ -153,7 +168,6 @@ class StartScene: SKScene {
     }
 
     func waitAndSceneChange() {
-//        backgroundMusic.removeFromParent()
         backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0.4))
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()
@@ -165,7 +179,6 @@ class StartScene: SKScene {
                     node.removeAllActions()
                     node.removeAllChildren()
                 }
-                
                 self.view?.presentScene(scene, transition: fade)
             }
         }

@@ -98,8 +98,8 @@ class SelectScene: SKScene {
         addChild(background)
         
         labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.5))
-        stageNameLabel.fontColor = UIColor.black
-        labelNodeColor(node: stageNameLabel, color: UIColor.black.withAlphaComponent(0.8))
+        labelNodeColor(node: stageNameLabel, color:
+                        UIColor(.parchmentColor))
         addChild(stageNameLabel)
 
         for i in 0..<pieces.count {
@@ -204,7 +204,8 @@ class SelectScene: SKScene {
         startButton.name = "startButton"
         addChild(startButton)
         labelSetting(node: startButtonLabel, str: "START", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + labelPosition))
-        labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
+        labelNodeColor(node: startButtonLabel, color:
+                        UIColor(.parchmentColor))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
         
@@ -263,7 +264,7 @@ class SelectScene: SKScene {
                 return
             } else if (touchedNode.name == "startButton") {
                 startButtonPressed = true
-                backgroundMusic.removeFromParent()
+                backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0))
                 sfxPlay(soundFileName: "SFX_GoToGameScene", scene: self)
                 haptic_GoGameScene()
                             self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
