@@ -98,8 +98,9 @@ class SelectScene: SKScene {
         addChild(background)
         
         labelSetting(node: stageNameLabel, str: String(stageNameList[numberOfPiece-2]), align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.maxY - frame.maxY * 0.5))
-        stageNameLabel.fontColor = UIColor.black
-        labelNodeColor(node: stageNameLabel, color: UIColor.black.withAlphaComponent(0.8))
+        labelNodeColor(node: stageNameLabel, color:
+                        //UIColor(.parchmentColor))
+        UIColor.black.withAlphaComponent(0.8))
         addChild(stageNameLabel)
 
         for i in 0..<pieces.count {
@@ -204,7 +205,9 @@ class SelectScene: SKScene {
         startButton.name = "startButton"
         addChild(startButton)
         labelSetting(node: startButtonLabel, str: "START", align: .center, fontSize: CGFloat(frame.maxX * 0.2), fontName: "AppleSDGothicNeo-Bold", pos: CGPoint(x: 0, y: frame.minY + labelPosition))
-        labelNodeColor(node: startButtonLabel, color: UIColor.black.withAlphaComponent(0.8))
+        labelNodeColor(node: startButtonLabel, color:
+                        //UIColor(.parchmentColor))
+                        UIColor.black.withAlphaComponent(0.8))
         nodeNameSetting(node: startButtonLabel, name: "startButton")
         startButton.addChild(startButtonLabel)
         
