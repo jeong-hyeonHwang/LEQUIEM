@@ -294,9 +294,6 @@ class GameScene: SKScene {
                 buttonPressed = true
                 sfxPlay(soundFileName: "SFX_GameRestart", scene: self)
                 haptic_GoGameScene()
-                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
-                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[numberOfPiece - 2])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run({
                     if let scene = SKScene(fileNamed: "GameScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -313,9 +310,6 @@ class GameScene: SKScene {
                 buttonPressed = true
                 sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
                 haptic_GoSelectScene()
-                dataSet(value: highScoreValue, key: highScoreNameList[numberOfPiece - 2])
-                dataSet(value: maxComboValue, key: maxComboNameList[numberOfPiece - 2])
-                GameKitHelper.sharedInstance.reportScore(highScoreValue: highScoreValue, leaderboardIDs: leaderBoardName[numberOfPiece - 2])
                 self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0), SKAction.run({
                     if let scene = SKScene(fileNamed: "SelectScene") {
                         let fade = SKTransition.fade(withDuration: 1)
@@ -438,6 +432,9 @@ class GameScene: SKScene {
                 if (self.stageEnd == false) {
                     self.backgroundMusic.removeFromParent()
                     self.labelBringToFront()
+                    dataSet(value: self.highScoreValue, key: highScoreNameList[numberOfPiece - 2])
+                    dataSet(value: self.maxComboValue, key: maxComboNameList[numberOfPiece - 2])
+                    GameKitHelper.sharedInstance.reportScore(highScoreValue: self.highScoreValue, leaderboardIDs: leaderBoardName[numberOfPiece - 2])
                     sfxPlay(soundFileName: "SFX_GameEnd", scene: self)
                     let haptic = HapticProperty(count: 1, interval: [0.15], intensity: [0.4], sharpness: [0.45])
                     playCustomHaptic(hapticType: Haptic.dynamic, hapticProperty: haptic)
