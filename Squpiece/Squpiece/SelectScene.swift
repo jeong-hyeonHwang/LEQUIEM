@@ -15,7 +15,6 @@ final class SelectScene: SKScene {
     private let stageInactiveNoticer = SKLabelNode()
     private let background = SKSpriteNode()
     
-    private var pieceNumberLabel = SKLabelNode()
     private var stageNameLabel = SKLabelNode()
     
     private var startButton = SKShapeNode()
