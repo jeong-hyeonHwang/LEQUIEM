@@ -5,11 +5,9 @@
 //  Created by 황정현 on 2022/06/05.
 //
 
-import SpriteKit
-import GameplayKit
-import AVFoundation
-import SwiftUI
 import GameKit
+import SpriteKit
+
 
 final class SelectScene: SKScene {
 

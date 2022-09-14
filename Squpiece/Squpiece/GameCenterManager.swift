@@ -6,7 +6,6 @@
 //
 
 import GameKit
-import Foundation
 
 //https://www.johndav.com/zer0ed/adding-game-center-integration-to-spritekit-game
 let singleton = GameKitHelper()

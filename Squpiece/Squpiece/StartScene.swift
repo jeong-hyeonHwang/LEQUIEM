@@ -5,10 +5,8 @@
 //  Created by 황정현 on 2022/06/21.
 //
 
-import SpriteKit
-import GameplayKit
-import AVFoundation
 import GameKit
+import SpriteKit
 
 final class StartScene: SKScene {
 

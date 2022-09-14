@@ -5,11 +5,8 @@
 //  Created by 황정현 on 2022/05/28.
 //
 
-//import SwiftUI
-import SpriteKit
-import GameplayKit
-import AVFoundation
 import GameKit
+import SpriteKit
 
 extension CGPath {
     static func arcWithWidth(center: CGPoint, start:CGFloat, end:CGFloat, radius:CGFloat, clockwise:Bool) -> UIBezierPath {
