@@ -5,7 +5,6 @@
 //  Created by 황정현 on 2022/05/31.
 //
 
-import Foundation
 import SwiftUI
 
 var change = false

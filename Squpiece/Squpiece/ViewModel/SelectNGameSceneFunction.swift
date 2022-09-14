@@ -5,8 +5,21 @@
 //  Created by 황정현 on 2022/06/23.
 //
 
-import Foundation
 import SpriteKit
+
+func pieceRotation(node: [SKShapeNode], num: Int) {
+    let rotateAngle = CGFloat(Double(2) * CGFloat.pi / Double(num))
+    var currentAngle: CGFloat = 0
+    for i in 0..<num {
+        node[i].isHidden = false
+        //node[i].angle
+        node[i].zRotation = currentAngle
+        currentAngle += rotateAngle
+    }
+    for i in num..<node.count {
+        node[i].isHidden = true
+    }
+}
 
 func setSettingButton(settingButton: SKSpriteNode, frame: CGRect) {
     //https://stackoverflow.com/questions/60641048/change-a-sf-symbol-size-inside-a-uibutton

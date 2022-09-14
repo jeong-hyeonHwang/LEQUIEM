@@ -6,13 +6,15 @@
 //
 
 import GameKit
-import Foundation
 
 //https://www.johndav.com/zer0ed/adding-game-center-integration-to-spritekit-game
 let singleton = GameKitHelper()
 
 
-class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
+final class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
+    
+    static var sharedInstance = GameKitHelper()
+    
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
         gameCenterViewController.dismiss(animated: true, completion: nil)
     }
@@ -152,12 +154,8 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
                 player: GKLocalPlayer.local,
                 leaderboardIDs: [leaderboardIDs]
             ) { error in
-                print(error)
+                print(error as Any)
             }
         }
-    }
-    
-   
-    class var sharedInstance: GameKitHelper { return singleton
     }
 }

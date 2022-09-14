@@ -5,32 +5,31 @@
 //  Created by 황정현 on 2022/06/21.
 //
 
-import SpriteKit
-import GameplayKit
-import AVFoundation
 import GameKit
+import SpriteKit
 
-class StartScene: SKScene {
+final class StartScene: SKScene {
 
-    let tapToStartLabel = SKLabelNode()
-    let background = SKSpriteNode()
-    let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
+    private let tapToStartLabel = SKLabelNode()
+    private let background = SKSpriteNode()
+    private let backgroundMusic = SKAudioNode(fileNamed: "Lequiem.mp3")
     private var startButtonPressed = false
     
     // MARK: Setting Panel Components
-    let settingButton = SKSpriteNode()
-    let closeButton = SKSpriteNode()
-    let shadow = SKShapeNode()
-    let bgmBoolButton = SKShapeNode()
-    let sfxBoolButton = SKShapeNode()
-    let bgmLabel = SKLabelNode()
-    let bgmBoolLabel = SKLabelNode()
-    let sfxLabel = SKLabelNode()
-    let sfxBoolLabel = SKLabelNode()
+    private let settingButton = SKSpriteNode()
+    private let closeButton = SKSpriteNode()
+    private let shadow = SKShapeNode()
+    private let bgmBoolButton = SKShapeNode()
+    private let sfxBoolButton = SKShapeNode()
+    private let bgmLabel = SKLabelNode()
+    private let bgmBoolLabel = SKLabelNode()
+    private let sfxLabel = SKLabelNode()
+    private let sfxBoolLabel = SKLabelNode()
 
-    let gameCenterTrigger = SKSpriteNode()
+    private let gameCenterTrigger = SKSpriteNode()
     
     private var buttonEnabled = false
+    
     override func didMove(to view: SKView) {
         
         GameKitHelper.sharedInstance.authenticateLocalPlayer(view: self.view!)
@@ -120,20 +119,6 @@ class StartScene: SKScene {
         addChild(gameCenterTrigger)
         
         appear(startButton: tapToStartLabel)
-        
-        
-    }
-    
-    func appear(startButton: SKLabelNode) {
-        startButton.alpha = 0
-        let wait = SKAction.wait(forDuration: 1.3)
-        let fadeIn = SKAction.fadeIn(withDuration: 0.3)
-        let blinkAction = SKAction.run {
-            self.buttonEnabled = true
-            blinkEffect(node: startButton, duration: 0.8)
-        }
-        let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
-        startButton.run(sequence)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -168,8 +153,22 @@ class StartScene: SKScene {
             }
         }
     }
+    
+    private func appear(startButton: SKLabelNode) {
+        startButton.alpha = 0
+        let wait = SKAction.wait(forDuration: 1.3)
+        let fadeIn = SKAction.fadeIn(withDuration: 0.3)
+        let blinkAction = SKAction.run { [self] in
+            buttonEnabled = true
+            blinkEffect(node: startButton, duration: 0.8)
+        }
+        let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
+        startButton.run(sequence)
+    }
+}
 
-    func waitAndSceneChange() {
+extension StartScene {
+    private func waitAndSceneChange() {
         backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0.4))
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
         haptic_GoSelectScene()
@@ -187,6 +186,7 @@ class StartScene: SKScene {
         let sequence = SKAction.sequence([wait, action])
         background.run(sequence)
     }
+
 }
 
 

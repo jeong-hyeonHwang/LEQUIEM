@@ -5,107 +5,84 @@
 //  Created by 황정현 on 2022/05/28.
 //
 
-//import SwiftUI
-import SpriteKit
-import GameplayKit
-import AVFoundation
 import GameKit
+import SpriteKit
 
-extension CGPath {
-    static func arcWithWidth(center: CGPoint, start:CGFloat, end:CGFloat, radius:CGFloat, clockwise:Bool) -> UIBezierPath {
-        // The radius parameter specifies the middle of the arc; adjust this as needed
-
-        // Note the arc is upside down because CGPath uses UIKit coordinates
-        let path = UIBezierPath()
-        // Add inner ring.
-        path.addArc(withCenter: center, radius: radius, startAngle: start, endAngle: end, clockwise: true)
-        path.addLine(to: center)
-        path.close()
-
-        return path
-    }
-}
-
-class GameScene: SKScene {
+final class GameScene: SKScene {
     
     // Presetting Values
-    var circleRadius: CGFloat = 1
-    let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
-    let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
-    let pieceColor = UIColor(.pieceColor)
-    let timerStrokeColor = UIColor(.pieceColor)
-    var lastIndex : Int = numberOfPiece - 1
+    private var circleRadius: CGFloat = 1
+    private let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    private let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
+    private let pieceColor = UIColor(.pieceColor)
+    private var lastIndex : Int = numberOfPiece - 1
     
-    var returnButtonBackground = SKShapeNode()
-    var restartButtonBackground = SKShapeNode()
+    private var returnButtonBackground = SKShapeNode()
+    private var restartButtonBackground = SKShapeNode()
     
     // Current Object Information
-    var currentIndex: Int = 0
+    private var currentIndex: Int = 0
     
     // Past Value
-    var highScoreValue: Int = 0
-    var maxComboValue: Int = 0
+    private var highScoreValue: Int = 0
+    private var maxComboValue: Int = 0
     
     // Current Value
-    var scoreValue: Int = 0
-    var comboValue: Int = 0
+    private var scoreValue: Int = 0
+    private var comboValue: Int = 0
     
     // Scene Cover
-    var shadow = SKShapeNode()
+    private var shadow = SKShapeNode()
     
     // Past Information
-    var highScoreLabel = SKLabelNode()
-    var maxComboLabel = SKLabelNode()
+    private var highScoreLabel = SKLabelNode()
+    private var maxComboLabel = SKLabelNode()
     
     // Current Information
-    var scoreLabel = SKLabelNode()
-    var comboLabel = SKLabelNode()
-    let currentPiece = SKShapeNode()
-    var currentPieceSprite = SKSpriteNode()
+    private var scoreLabel = SKLabelNode()
+    private var comboLabel = SKLabelNode()
+    private let currentPiece = SKShapeNode()
+    private var currentPieceSprite = SKSpriteNode()
     
     // Place Holder
-    var scoreMark = SKLabelNode()
-    var highScoreMark = SKLabelNode()
-    var maxComboMark = SKLabelNode()
+    private var scoreMark = SKLabelNode()
+    private var highScoreMark = SKLabelNode()
+    private var maxComboMark = SKLabelNode()
     
     // About Time
-    var circleTimer = SKShapeNode()
-    var timerRadius : CGFloat = 5
+    private var circleTimer = SKShapeNode()
+    private var timerRadius : CGFloat = 5
     
     // InGame Button
-    let rotationStopButton = SKShapeNode()
-    let randomStopButton = SKShapeNode()
+    private let rotationStopButton = SKShapeNode()
+    private let randomStopButton = SKShapeNode()
     
-    let pieceBackground = SKShapeNode()
+    private let pieceBackground = SKShapeNode()
     
     // OutGame Button
-    //let restartButton = SKSpriteNode()
-    let restartButton = SKLabelNode()
-    //let returnHomeButton = SKSpriteNode()
-    let returnHomeButton = SKLabelNode()
+    private let restartButton = SKLabelNode()
+    private let returnHomeButton = SKLabelNode()
     
-    let fontColor = UIColor(.fontColor)
+    private let fontColor = UIColor(.fontColor)
     
-    let patternColor = UIColor(.fontColor)
-    let centerPatternColor = UIColor(.pieceColor)
-    let timerBackgroundColor = UIColor(.timerColor)
+    private let patternColor = UIColor(.fontColor)
+    private let timerBackgroundColor = UIColor(.timerColor)
     
-    let background = SKSpriteNode()
-    let zen = SKSpriteNode()
+    private let background = SKSpriteNode()
+    private let zen = SKSpriteNode()
     
-    var touchCount: Int = 0
-    var nodeOpen: Bool = false
+    private var touchCount: Int = 0
+    private var nodeOpen: Bool = false
 
-    var stageEnd: Bool = false
-    var firstCall: Date?
+    private var stageEnd: Bool = false
     
     private var buttonPressed = false
     
-    var backgroundMusic = SKAudioNode(fileNamed: "Cradle.mp3")
+    private var backgroundMusic = SKAudioNode(fileNamed: "Cradle.mp3")
+    
     override func didMove(to view: SKView) {
         GKAccessPoint.shared.isActive = false
         
-        firstCall = Date()
         circleRadius = frame.maxX * 0.8
         timerRadius = circleRadius * 2.3
         
@@ -349,7 +326,7 @@ class GameScene: SKScene {
                     touchCount += 1
                 }
                 
-                let currentZR = rad2deg(pieces[currentIndex].zRotation)
+                let currentZR = pieces[currentIndex].zRotation.rad2deg()
                 let angle = CGFloat(180/(self.lastIndex+1))
                 let sAngle = currentZR - angle + 90
                 let eAngle = currentZR + angle + 90
@@ -442,7 +419,7 @@ class GameScene: SKScene {
                 }
                 node.isHidden = true
                 self.nodeOpen = false
-                shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
+                self.shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
             }
         })
         

@@ -5,12 +5,11 @@
 //  Created by 황정현 on 2022/05/30.
 //
 
-import SwiftUI
-import UIKit
 import CoreHaptics
+import UIKit
 
 //https://seons-dev.tistory.com/entry/SwiftUI-Haptic-Feedback-haptics-vibrations
-class HapticManager {
+final class HapticManager {
     
     static let instance = HapticManager()
     

@@ -5,72 +5,60 @@
 //  Created by 황정현 on 2022/06/05.
 //
 
-import SpriteKit
-import GameplayKit
-import AVFoundation
-import SwiftUI
 import GameKit
+import SpriteKit
 
-class SelectScene: SKScene {
 
-    let shadow = SKShapeNode()
-    let stageInactiveNoticer = SKLabelNode()
-    let background = SKSpriteNode()
+final class SelectScene: SKScene {
+
+    private let shadow = SKShapeNode()
+    private let stageInactiveNoticer = SKLabelNode()
+    private let background = SKSpriteNode()
     
-    var pieceNumberLabel = SKLabelNode()
-    var stageNameLabel = SKLabelNode()
+    private var stageNameLabel = SKLabelNode()
     
-    var startButton = SKShapeNode()
-    var startButtonLabel = SKLabelNode()
+    private var startButton = SKShapeNode()
+    private var startButtonLabel = SKLabelNode()
     
-    var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
+    private var pieces: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     
-    var pieceSprites: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Incar_0.png"), SKSpriteNode(imageNamed: "Incar_1.png"), SKSpriteNode(imageNamed: "Incar_2.png"), SKSpriteNode(imageNamed: "Incar_3.png"), SKSpriteNode(imageNamed: "Incar_4.png")]
-    var pieceSpriteLine = SKShapeNode()
-    var pieceSpriteLineBackground = SKShapeNode()
+    private var pieceSprites: [SKSpriteNode] = [SKSpriteNode(imageNamed: "Incar_0.png"), SKSpriteNode(imageNamed: "Incar_1.png"), SKSpriteNode(imageNamed: "Incar_2.png"), SKSpriteNode(imageNamed: "Incar_3.png"), SKSpriteNode(imageNamed: "Incar_4.png")]
+    private var pieceSpriteLine = SKShapeNode()
+    private var pieceSpriteLineBackground = SKShapeNode()
    
-    var patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
+    private var patternSprites: [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(),  SKShapeNode()]
     
-    let stageNameList: [String] = ["Incarnation", "Tranquility", "Agony", "Enlightenment", "Transcendence"]
+    private let stageNameList: [String] = ["Incarnation", "Tranquility", "Agony", "Enlightenment", "Transcendence"]
    
-    let stageImageLine = SKShapeNode()
-    let stageImageUnderArea = SKShapeNode()
-    let highScoreMark = SKLabelNode()
-    let maxComboMark = SKLabelNode()
-    var highScoreLabel = SKLabelNode()
-    var maxComboLabel = SKLabelNode()
-    let gameCenterImageLine = SKShapeNode()
+    private let stageImageLine = SKShapeNode()
+    private let stageImageUnderArea = SKShapeNode()
+    private let highScoreMark = SKLabelNode()
+    private let maxComboMark = SKLabelNode()
+    private var highScoreLabel = SKLabelNode()
+    private var maxComboLabel = SKLabelNode()
+    private let gameCenterImageLine = SKShapeNode()
     
-    let pieceAngle: Double = 30
+    private let pieceAngle: Double = 30
     
-    let fontColor = UIColor(.fontColor)
-    let centerFontColor = UIColor(.parchmentColor)
-    let centerImageColor = UIColor(.pieceColor)
-    var circleRadius: CGFloat = 0
+    private let fontColor = UIColor(.fontColor)
+    private let centerFontColor = UIColor(.parchmentColor)
+    private let centerImageColor = UIColor(.pieceColor)
+    private var circleRadius: CGFloat = 0
     
-    var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
+    private var backgroundMusic = SKAudioNode(fileNamed: "Dream.mp3")
     private var startButtonPressed = false
     
     // MARK: Setting Panel Components
-    let settingButton = SKSpriteNode()
-    let closeButton = SKSpriteNode()
-    let bgmBoolButton = SKShapeNode()
-    let sfxBoolButton = SKShapeNode()
-    let bgmLabel = SKLabelNode()
-    let bgmBoolLabel = SKLabelNode()
-    let sfxLabel = SKLabelNode()
-    let sfxBoolLabel = SKLabelNode()
+    private let settingButton = SKSpriteNode()
+    private let closeButton = SKSpriteNode()
+    private let bgmBoolButton = SKShapeNode()
+    private let sfxBoolButton = SKShapeNode()
+    private let bgmLabel = SKLabelNode()
+    private let bgmBoolLabel = SKLabelNode()
+    private let sfxLabel = SKLabelNode()
+    private let sfxBoolLabel = SKLabelNode()
     
-    let gameCenterTrigger = SKSpriteNode()
-    
-    var test: String {
-        let random = Int.random(in: 0...1)
-        if random == 0 {
-            return "testRank"
-        } else {
-            return "testRank2"
-        }
-    }
+    private let gameCenterTrigger = SKSpriteNode()
     
     override func didMove(to view: SKView) {
         GKAccessPoint.shared.isActive = false

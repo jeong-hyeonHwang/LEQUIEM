@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-//func timerBar(center: CGPoint, value: Angle, radius: CGFloat) -> CGPath {
-//    var path = Path()
-//    path.addLines([center])
-//    path.addArc(center: center, radius: radius, startAngle: .degrees(90) - value, endAngle: .degrees(90) + value, clockwise: false)
-//    path.addLine(to: center)
-//    return path.cgPath
-//}
-
-func timerBar(center: CGPoint, startAngle: Angle, radius: CGFloat) -> CGPath {
-    var path = Path()
-    path.addLines([center])
-    path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: .degrees(125), clockwise: false)
-    path.addLine(to: center)
-    return path.cgPath
-}
-
 //https://gist.github.com/KanshuYokoo/a78223ffec27319a548d52dc09b660e4
 func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, radius: CGFloat) -> CGPath {
     var path = Path()
@@ -32,12 +16,6 @@ func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, r
     return path.cgPath
 }
 
-func Arc2(radius: CGFloat, angle: CGFloat) -> CGPath {
-    var path = Path()
-    path.addArc(center: CGPoint(x: 0, y: 0), radius: radius, startAngle: .degrees(270 - angle), endAngle: .degrees(270 + angle), clockwise: false)
-    path.closeSubpath()
-    return path.cgPath
-}
 func Donut_(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, radius: CGFloat, width: CGFloat) -> CGPath {
     var path = Path()
     let s: CGFloat = CGFloat(startAngle) * .pi / 180
