@@ -15,7 +15,6 @@ final class GameScene: SKScene {
     private let pieces : [SKShapeNode] = [SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode(), SKShapeNode()]
     private let pieceSprite : [SKSpriteNode] = [SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode(), SKSpriteNode()]
     private let pieceColor = UIColor(.pieceColor)
-    private let timerStrokeColor = UIColor(.pieceColor)
     private var lastIndex : Int = numberOfPiece - 1
     
     private var returnButtonBackground = SKShapeNode()
@@ -61,15 +60,12 @@ final class GameScene: SKScene {
     private let pieceBackground = SKShapeNode()
     
     // OutGame Button
-    //let restartButton = SKSpriteNode()
     private let restartButton = SKLabelNode()
-    //let returnHomeButton = SKSpriteNode()
     private let returnHomeButton = SKLabelNode()
     
     private let fontColor = UIColor(.fontColor)
     
     private let patternColor = UIColor(.fontColor)
-    private let centerPatternColor = UIColor(.pieceColor)
     private let timerBackgroundColor = UIColor(.timerColor)
     
     private let background = SKSpriteNode()
@@ -79,7 +75,6 @@ final class GameScene: SKScene {
     private var nodeOpen: Bool = false
 
     private var stageEnd: Bool = false
-    private var firstCall: Date?
     
     private var buttonPressed = false
     
@@ -88,7 +83,6 @@ final class GameScene: SKScene {
     override func didMove(to view: SKView) {
         GKAccessPoint.shared.isActive = false
         
-        firstCall = Date()
         circleRadius = frame.maxX * 0.8
         timerRadius = circleRadius * 2.3
         
