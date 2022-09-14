@@ -11,7 +11,7 @@ import AVFoundation
 import SwiftUI
 import GameKit
 
-class SelectScene: SKScene {
+final class SelectScene: SKScene {
 
     let shadow = SKShapeNode()
     let stageInactiveNoticer = SKLabelNode()

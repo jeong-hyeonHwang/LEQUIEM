@@ -26,7 +26,7 @@ extension CGPath {
     }
 }
 
-class GameScene: SKScene {
+final class GameScene: SKScene {
     
     // Presetting Values
     var circleRadius: CGFloat = 1

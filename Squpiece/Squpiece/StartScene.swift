@@ -10,7 +10,7 @@ import GameplayKit
 import AVFoundation
 import GameKit
 
-class StartScene: SKScene {
+final class StartScene: SKScene {
 
     let tapToStartLabel = SKLabelNode()
     let background = SKSpriteNode()
