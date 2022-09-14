@@ -121,7 +121,6 @@ final class StartScene: SKScene {
         addChild(gameCenterTrigger)
         
         appear(startButton: tapToStartLabel)
-        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -156,7 +155,7 @@ final class StartScene: SKScene {
             }
         }
     }
-
+    
     private func appear(startButton: SKLabelNode) {
         startButton.alpha = 0
         let wait = SKAction.wait(forDuration: 1.3)

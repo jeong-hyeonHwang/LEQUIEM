@@ -349,7 +349,7 @@ final class GameScene: SKScene {
                     touchCount += 1
                 }
                 
-                let currentZR = rad2deg(pieces[currentIndex].zRotation)
+                let currentZR = pieces[currentIndex].zRotation.rad2deg()
                 let angle = CGFloat(180/(self.lastIndex+1))
                 let sAngle = currentZR - angle + 90
                 let eAngle = currentZR + angle + 90
@@ -442,7 +442,7 @@ final class GameScene: SKScene {
                 }
                 node.isHidden = true
                 self.nodeOpen = false
-                shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
+                self.shadowAppear(node: self.shadow, hiddenNodes: [self.restartButtonBackground, self.returnButtonBackground, self.returnHomeButton, self.restartButton])
             }
         })
         

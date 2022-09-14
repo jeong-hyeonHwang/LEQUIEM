@@ -130,21 +130,21 @@ func patternPiecePositionSetterAsCircleType(circleRadius: CGFloat, frame: CGRect
     if numberOfPiece % 2 == 0 {
         let value: CGFloat = CGFloat(numberOfPiece/2 - 1) + 0.5
         let startAngle : CGFloat = -90-(angleFloat * value)
-        var radianValue = deg2rad(startAngle)
+        var radianValue = startAngle.deg2rad()
         for i in 0..<numberOfPiece {
             patternSprites[i].isHidden = false
             patternSprites[i].position = CGPoint(x: radius * cos(radianValue), y: radius * sin(radianValue))
-            radianValue += deg2rad(angleFloat)
+            radianValue += angleFloat.deg2rad()
         }
     }
     else {
         let value: CGFloat = CGFloat(numberOfPiece/2)
         let startAngle : CGFloat = -90-(angleFloat * value)
-        var radianValue = deg2rad(startAngle)
+        var radianValue = startAngle.deg2rad()
         for i in 0..<numberOfPiece {
             patternSprites[i].isHidden = false
             patternSprites[i].position = CGPoint(x: radius * cos(radianValue), y: radius * sin(radianValue))
-            radianValue += deg2rad(angleFloat)
+            radianValue += angleFloat.deg2rad()
         }
     }
     for i in numberOfPiece ..< patternSprites.count {
