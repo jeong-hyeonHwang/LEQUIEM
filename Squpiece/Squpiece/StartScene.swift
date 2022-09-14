@@ -122,19 +122,6 @@ final class StartScene: SKScene {
         
         appear(startButton: tapToStartLabel)
         
-        
-    }
-    
-    private func appear(startButton: SKLabelNode) {
-        startButton.alpha = 0
-        let wait = SKAction.wait(forDuration: 1.3)
-        let fadeIn = SKAction.fadeIn(withDuration: 0.3)
-        let blinkAction = SKAction.run {
-            self.buttonEnabled = true
-            blinkEffect(node: startButton, duration: 0.8)
-        }
-        let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
-        startButton.run(sequence)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -170,6 +157,20 @@ final class StartScene: SKScene {
         }
     }
 
+    private func appear(startButton: SKLabelNode) {
+        startButton.alpha = 0
+        let wait = SKAction.wait(forDuration: 1.3)
+        let fadeIn = SKAction.fadeIn(withDuration: 0.3)
+        let blinkAction = SKAction.run {
+            self.buttonEnabled = true
+            blinkEffect(node: startButton, duration: 0.8)
+        }
+        let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
+        startButton.run(sequence)
+    }
+}
+
+extension StartScene {
     private func waitAndSceneChange() {
         backgroundMusic.run(SKAction.changeVolume(to: 0, duration: 0.4))
         sfxPlay(soundFileName: "SFX_GoToSelectScene", scene: self)
@@ -188,6 +189,7 @@ final class StartScene: SKScene {
         let sequence = SKAction.sequence([wait, action])
         background.run(sequence)
     }
+
 }
 
 
