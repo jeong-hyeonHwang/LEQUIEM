@@ -151,7 +151,7 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
                 player: GKLocalPlayer.local,
                 leaderboardIDs: [leaderboardIDs]
             ) { error in
-                print(error)
+                print(error as Any)
             }
         }
     }
