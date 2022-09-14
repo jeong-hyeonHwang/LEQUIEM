@@ -141,7 +141,9 @@ class StartScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             if (touchedNode.name == "GameCenterTrigger") {
-                GKAccessPoint.shared.trigger {}
+                if GKLocalPlayer.local.isAuthenticated {
+                    GKAccessPoint.shared.trigger {}
+                }
             }
             else if (touchedNode.name == "settingButton") {
                 settingPanelDisactive(shadow: shadow, status: false)
