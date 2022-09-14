@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import SwiftUI
 
 extension SelectScene {
     func patternPiecePositionSetter(circleRadius: CGFloat, frame: CGRect, patternSprites: [SKShapeNode]) {
@@ -147,5 +148,12 @@ extension SelectScene {
         for i in numberOfPiece ..< patternSprites.count {
             patternSprites[i].isHidden = true
         }
+    }
+    
+    func Arc2(radius: CGFloat, angle: CGFloat) -> CGPath {
+        var path = Path()
+        path.addArc(center: CGPoint(x: 0, y: 0), radius: radius, startAngle: .degrees(270 - angle), endAngle: .degrees(270 + angle), clockwise: false)
+        path.closeSubpath()
+        return path.cgPath
     }
 }

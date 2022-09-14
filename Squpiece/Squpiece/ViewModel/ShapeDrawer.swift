@@ -16,12 +16,6 @@ func Arc(center: CGPoint, startAngle: Angle, endAngle: Angle, clockwise: Bool, r
     return path.cgPath
 }
 
-func Arc2(radius: CGFloat, angle: CGFloat) -> CGPath {
-    var path = Path()
-    path.addArc(center: CGPoint(x: 0, y: 0), radius: radius, startAngle: .degrees(270 - angle), endAngle: .degrees(270 + angle), clockwise: false)
-    path.closeSubpath()
-    return path.cgPath
-}
 func Donut_(center: CGPoint, startAngle: CGFloat, endAngle: CGFloat, clockwise: Bool, radius: CGFloat, width: CGFloat) -> CGPath {
     var path = Path()
     let s: CGFloat = CGFloat(startAngle) * .pi / 180
