@@ -160,8 +160,8 @@ final class StartScene: SKScene {
         startButton.alpha = 0
         let wait = SKAction.wait(forDuration: 1.3)
         let fadeIn = SKAction.fadeIn(withDuration: 0.3)
-        let blinkAction = SKAction.run {
-            self.buttonEnabled = true
+        let blinkAction = SKAction.run { [self] in
+            buttonEnabled = true
             blinkEffect(node: startButton, duration: 0.8)
         }
         let sequence = SKAction.sequence([wait, fadeIn, blinkAction])
