@@ -11,7 +11,10 @@ import GameKit
 let singleton = GameKitHelper()
 
 
-class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
+final class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
+    
+    static var sharedInstance = GameKitHelper()
+    
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
         gameCenterViewController.dismiss(animated: true, completion: nil)
     }
@@ -154,9 +157,5 @@ class GameKitHelper: NSObject, GKGameCenterControllerDelegate {
                 print(error as Any)
             }
         }
-    }
-    
-   
-    class var sharedInstance: GameKitHelper { return singleton
     }
 }

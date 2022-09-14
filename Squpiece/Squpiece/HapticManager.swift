@@ -9,7 +9,7 @@ import CoreHaptics
 import UIKit
 
 //https://seons-dev.tistory.com/entry/SwiftUI-Haptic-Feedback-haptics-vibrations
-class HapticManager {
+final class HapticManager {
     
     static let instance = HapticManager()
     
