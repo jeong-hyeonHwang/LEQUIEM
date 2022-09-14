@@ -5,11 +5,12 @@
 //  Created by 황정현 on 2022/05/28.
 //
 
-import UIKit
-import SpriteKit
-import GameplayKit
 import AVFAudio
-class GameViewController: UIViewController {
+import GameplayKit
+import SpriteKit
+import UIKit
+
+final class GameViewController: UIViewController {
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,23 +31,10 @@ class GameViewController: UIViewController {
                 view.presentScene(scene, transition: fade)
             }
             
-            //view.ignoresSiblingOrder = true
             view.showsFPS = false
             view.showsNodeCount = false
             view.showsPhysics = false
             
-        }
-    }
-
-    override var shouldAutorotate: Bool {
-        return true
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
         }
     }
 
